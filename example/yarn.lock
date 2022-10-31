@@ -3885,10 +3885,10 @@
     "setimmediate" "^1.0.5"
     "string-hash-64" "^1.0.3"
 
-"react-native-vision-camera@^2.15.1":
-  "integrity" "sha512-mvz9T6DRfHSee52dpwZxyIdhED8ebmMbVoIpAC2MwkAv1tAV2iZhScRNhpf3Pj9pbh9hpO7Kan0Kc+k7GQGhpw=="
-  "resolved" "https://registry.npmmirror.com/react-native-vision-camera/-/react-native-vision-camera-2.15.1.tgz"
-  "version" "2.15.1"
+"react-native-vision-camera@^2.14.1":
+  "integrity" "sha512-zs8HAuD3pL+T/ngaDUxbvhoqR90b85ab3nm4tO4OCSBDUFhzgDoDXDm+BDhsyQaF0p05Kaskf+rkqCVBI0WEgg=="
+  "resolved" "https://registry.npmmirror.com/react-native-vision-camera/-/react-native-vision-camera-2.14.1.tgz"
+  "version" "2.14.1"
 
 "react-native@*", "react-native@0.68.2":
   "integrity" "sha512-qNMz+mdIirCEmlrhapAtAG+SWVx6MAiSfCbFNhfHqiqu1xw1OKXdzIrjaBEPihRC2pcORCoCHduHGQe/Pz9Yuw=="
