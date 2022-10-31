@@ -3861,6 +3861,11 @@
   "resolved" "https://registry.npmmirror.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.6.tgz"
   "version" "0.0.6"
 
+"react-native-vision-camera@^2.15.1":
+  "integrity" "sha512-mvz9T6DRfHSee52dpwZxyIdhED8ebmMbVoIpAC2MwkAv1tAV2iZhScRNhpf3Pj9pbh9hpO7Kan0Kc+k7GQGhpw=="
+  "resolved" "https://registry.npmmirror.com/react-native-vision-camera/-/react-native-vision-camera-2.15.1.tgz"
+  "version" "2.15.1"
+
 "react-native@*", "react-native@0.68.2":
   "integrity" "sha512-qNMz+mdIirCEmlrhapAtAG+SWVx6MAiSfCbFNhfHqiqu1xw1OKXdzIrjaBEPihRC2pcORCoCHduHGQe/Pz9Yuw=="
   "resolved" "https://registry.npmmirror.com/react-native/-/react-native-0.68.2.tgz"
@@ -3912,7 +3917,7 @@
     "object-assign" "^4.1.1"
     "react-is" "^16.12.0 || ^17.0.0"
 
-"react@^16.0.0 || ^17.0.0", "react@^16.8.0 || ^17.0.0", "react@17.0.2":
+"react@*", "react@^16.0.0 || ^17.0.0", "react@^16.8.0 || ^17.0.0", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmmirror.com/react/-/react-17.0.2.tgz"
   "version" "17.0.2"

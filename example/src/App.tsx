@@ -1,31 +1,36 @@
 import * as React from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { Camera, useCameraDevices } from 'react-native-vision-camera';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'vision-camera-dynamsoft-document-normalizer';
-
-export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+export default function BarcodeScanner() {
+  const [hasPermission, setHasPermission] = React.useState(false);
+  const devices = useCameraDevices();
+  const device = devices.back;
 
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+    (async () => {
+      const status = await Camera.requestCameraPermission();
+      setHasPermission(status === 'authorized');
+    })();
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+      <SafeAreaView style={styles.container}>
+        {device != null &&
+        hasPermission && (
+        <>
+            <Camera
+            style={StyleSheet.absoluteFill}
+            device={device}
+            isActive={true}
+            />
+        </>)}
+      </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+    flex: 1
   },
 });
