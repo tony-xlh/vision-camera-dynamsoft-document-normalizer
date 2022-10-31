@@ -138,7 +138,7 @@ dependencies {
   // From node_modules
   implementation project(path: ':react-native-vision-camera')
   // DDN
-  implementation 'com.dynamsoft:dynamsoftdocumentnormalizer:1.0.1'
+  implementation 'com.dynamsoft:dynamsoftdocumentnormalizer:1.0.10'
 }
 
 if (isNewArchitectureEnabled()) {
