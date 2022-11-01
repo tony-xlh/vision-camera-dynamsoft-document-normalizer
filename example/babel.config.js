@@ -15,6 +15,9 @@ module.exports = {
     ],
     [
       'react-native-reanimated/plugin',
+      {
+        globals: ['__detect', '__normalize'],
+      },
     ],
   ],
 };
