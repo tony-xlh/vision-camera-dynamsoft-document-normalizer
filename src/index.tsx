@@ -20,6 +20,19 @@ export function initLicense(license:string): Promise<boolean> {
   return VisionCameraDynamsoftDocumentNormalizer.initLicense(license);
 }
 
+
+
+export function detectBase64(base64:string): Promise<number> {
+  return VisionCameraDynamsoftDocumentNormalizer.detectBase64(base64);
+}
+
+export function detect(frame: Frame): DetectedQuadResult {
+  'worklet'
+  // @ts-ignore
+  // eslint-disable-next-line no-undef
+  return __detect(frame)
+}
+
 export function normalizeFile(url:string, config: NormalizationConfig): Promise<NormalizedImageResult> {
   return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, config);
 }
@@ -33,17 +46,6 @@ export function normalize(frame: Frame, config: NormalizationConfig): Normalized
   // @ts-ignore
   // eslint-disable-next-line no-undef
   return __normalize(frame, config)
-}
-
-export function detectBase64(base64:string): Promise<number> {
-  return VisionCameraDynamsoftDocumentNormalizer.detectBase64(base64);
-}
-
-export function detect(frame: Frame): DetectedQuadResult {
-  'worklet'
-  // @ts-ignore
-  // eslint-disable-next-line no-undef
-  return __detect(frame, config)
 }
 
 export interface NormalizationConfig{

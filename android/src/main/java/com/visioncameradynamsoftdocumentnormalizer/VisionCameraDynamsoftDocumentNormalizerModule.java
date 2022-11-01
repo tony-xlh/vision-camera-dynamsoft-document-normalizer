@@ -29,7 +29,6 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
         return NAME;
     }
 
-
     @ReactMethod
     public void initLicense(String license, Promise promise) {
         LicenseManager.initLicense(license, mContext, new LicenseVerificationListener() {
@@ -44,6 +43,18 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
                 }
             }
         });
+    }
+
+    @ReactMethod
+    public void normalizeFile(String license, Promise promise) {
+    }
+
+    @ReactMethod
+    public void normalizeBase64(String license, Promise promise) {
+    }
+
+    @ReactMethod
+    public void detectBase64(String license, Promise promise) {
     }
 
 }
