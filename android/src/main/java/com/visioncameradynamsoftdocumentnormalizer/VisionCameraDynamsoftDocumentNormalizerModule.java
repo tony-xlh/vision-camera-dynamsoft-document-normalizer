@@ -1,7 +1,13 @@
 package com.visioncameradynamsoftdocumentnormalizer;
 
+import android.content.Context;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.dynamsoft.core.CoreException;
+import com.dynamsoft.core.LicenseManager;
+import com.dynamsoft.core.LicenseVerificationListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -11,9 +17,10 @@ import com.facebook.react.module.annotations.ReactModule;
 @ReactModule(name = VisionCameraDynamsoftDocumentNormalizerModule.NAME)
 public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextBaseJavaModule {
     public static final String NAME = "VisionCameraDynamsoftDocumentNormalizer";
-
+    private Context mContext;
     public VisionCameraDynamsoftDocumentNormalizerModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        mContext = reactContext;
     }
 
     @Override
@@ -23,11 +30,20 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
     }
 
 
-    // Example method
-    // See https://reactnative.dev/docs/native-modules-android
     @ReactMethod
-    public void multiply(double a, double b, Promise promise) {
-        promise.resolve(a * b);
+    public void initLicense(String license, Promise promise) {
+        LicenseManager.initLicense(license, mContext, new LicenseVerificationListener() {
+            @Override
+            public void licenseVerificationCallback(boolean isSuccess, CoreException error) {
+                if(!isSuccess){
+                    error.printStackTrace();
+                    promise.resolve(false);
+                }else{
+                    Log.d("DDN","license valid");
+                    promise.resolve(true);
+                }
+            }
+        });
     }
 
 }

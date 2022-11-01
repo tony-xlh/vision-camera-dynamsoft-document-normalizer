@@ -16,7 +16,7 @@ const VisionCameraDynamsoftDocumentNormalizer = NativeModules.VisionCameraDynams
       }
     );
 
-export function initLicense(license:string): Promise<NormalizedImageResult> {
+export function initLicense(license:string): Promise<boolean> {
   return VisionCameraDynamsoftDocumentNormalizer.initLicense(license);
 }
 
