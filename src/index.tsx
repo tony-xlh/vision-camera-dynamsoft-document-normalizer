@@ -16,6 +16,9 @@ const VisionCameraDynamsoftDocumentNormalizer = NativeModules.VisionCameraDynams
       }
     );
 
+export function initLicense(license:string): Promise<NormalizedImageResult> {
+  return VisionCameraDynamsoftDocumentNormalizer.initLicense(license);
+}
 
 export function normalizeFile(url:string, config: NormalizationConfig): Promise<NormalizedImageResult> {
   return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, config);
@@ -32,11 +35,11 @@ export function normalize(frame: Frame, config: NormalizationConfig): Normalized
   return __normalize(frame, config)
 }
 
-export function detectBase64(base64:string, config: DetectionConfig): Promise<number> {
-  return VisionCameraDynamsoftDocumentNormalizer.detectBase64(base64, config);
+export function detectBase64(base64:string): Promise<number> {
+  return VisionCameraDynamsoftDocumentNormalizer.detectBase64(base64);
 }
 
-export function detect(frame: Frame, config: DetectionConfig): DetectedQuadResult {
+export function detect(frame: Frame): DetectedQuadResult {
   'worklet'
   // @ts-ignore
   // eslint-disable-next-line no-undef
@@ -44,13 +47,8 @@ export function detect(frame: Frame, config: DetectionConfig): DetectedQuadResul
 }
 
 export interface NormalizationConfig{
-  license?: string;
   saveNormalizationResult?: boolean;
   includeNormalizationResultAsBase64: boolean;
-}
-
-export interface DetectionConfig{
-  license?: string;
 }
 
 export interface NormalizedImageResult {
