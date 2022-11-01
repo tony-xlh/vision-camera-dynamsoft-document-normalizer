@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import com.dynamsoft.core.CoreException;
 import com.dynamsoft.core.LicenseManager;
 import com.dynamsoft.core.LicenseVerificationListener;
+import com.dynamsoft.ddn.DocumentNormalizer;
+import com.dynamsoft.ddn.DocumentNormalizerException;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -18,9 +20,23 @@ import com.facebook.react.module.annotations.ReactModule;
 public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextBaseJavaModule {
     public static final String NAME = "VisionCameraDynamsoftDocumentNormalizer";
     private Context mContext;
+    private DocumentNormalizer ddn;
     public VisionCameraDynamsoftDocumentNormalizerModule(ReactApplicationContext reactContext) {
         super(reactContext);
         mContext = reactContext;
+        initDDN();
+    }
+
+    private void initDDN(){
+        try {
+            ddn = new DocumentNormalizer();
+        } catch (DocumentNormalizerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public DocumentNormalizer getDDN(){
+        return ddn;
     }
 
     @Override

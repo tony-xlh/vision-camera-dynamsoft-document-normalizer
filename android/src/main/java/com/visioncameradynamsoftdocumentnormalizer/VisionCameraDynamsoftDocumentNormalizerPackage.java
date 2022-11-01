@@ -17,9 +17,10 @@ public class VisionCameraDynamsoftDocumentNormalizerPackage implements ReactPack
     @Override
     public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new VisionCameraDynamsoftDocumentNormalizerModule(reactContext));
-        VisionCameraDetectionPlugin detectionPlugin = new VisionCameraDetectionPlugin();
-        VisionCameraNormalizationPlugin normalizationPlugin = new VisionCameraNormalizationPlugin();
+        VisionCameraDynamsoftDocumentNormalizerModule module = new VisionCameraDynamsoftDocumentNormalizerModule(reactContext);
+        modules.add(module);
+        VisionCameraDetectionPlugin detectionPlugin = new VisionCameraDetectionPlugin(module);
+        VisionCameraNormalizationPlugin normalizationPlugin = new VisionCameraNormalizationPlugin(module);
         FrameProcessorPlugin.register(detectionPlugin);
         FrameProcessorPlugin.register(normalizationPlugin);
         return modules;

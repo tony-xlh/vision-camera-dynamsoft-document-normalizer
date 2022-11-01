@@ -3,14 +3,15 @@ import androidx.camera.core.ImageProxy;
 import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin;
 
 public class VisionCameraDetectionPlugin extends FrameProcessorPlugin {
-
+    private VisionCameraDynamsoftDocumentNormalizerModule mModule;
     @Override
     public Object callback(ImageProxy image, Object[] params) {
         // code goes here
         return null;
     }
 
-    VisionCameraDetectionPlugin() {
+    VisionCameraDetectionPlugin(VisionCameraDynamsoftDocumentNormalizerModule module) {
         super("detect");
+        mModule = module;
     }
 }
