@@ -11,6 +11,7 @@ export default function App() {
   const detectionResults = REA.useSharedValue([] as DetectedQuadResult[]);
   const frameWidth = REA.useSharedValue(0);
   const frameHeight = REA.useSharedValue(0);
+  const [pointsText, setPointsText] = React.useState("default");
   const viewBox = REA.useDerivedValue(() => {
     console.log("update viewbox");
     let viewBox = "";
@@ -32,6 +33,7 @@ export default function App() {
         data = pointsData;
       }
     }
+    REA.runOnJS(setPointsText)(data);
     console.log(data);
     return data;
   }, [detectionResults]);
@@ -67,7 +69,8 @@ export default function App() {
             frameProcessor={frameProcessor}
             frameProcessorFps={5}
             />
-            {frameWidth.value != 0 && (
+
+              <>
               <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox.value}>
                 <Polygon
                   points={pointsData.value}
@@ -77,7 +80,7 @@ export default function App() {
                   strokeWidth="1"
                 />
               </Svg>
-            )}
+              </>
         </>)}
       </SafeAreaView>
   );
@@ -86,5 +89,10 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  text: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
