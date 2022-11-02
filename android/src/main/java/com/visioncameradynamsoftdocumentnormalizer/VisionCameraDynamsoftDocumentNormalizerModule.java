@@ -91,7 +91,7 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
     }
 
     @SuppressLint("UnsafeOptInUsageError")
-    public DetectedQuadResult[] detectImageProxy(ImageProxy image) throws DocumentNormalizerException {
+    public DetectedQuadResult[] detectImageProxy(ImageProxy image) throws Exception {
         Bitmap bitmap = BitmapUtils.getBitmap(image);
         DetectedQuadResult[] results = ddn.detectQuad(bitmap);
         return results;
