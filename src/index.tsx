@@ -24,7 +24,7 @@ export function initRuntimeSettingsFromString(template:string): Promise<boolean>
   return VisionCameraDynamsoftDocumentNormalizer.initRuntimeSettingsFromString(template);
 }
 
-export function detect(frame: Frame): DetectionResult {
+export function detect(frame: Frame): DetectedQuadResult[] {
   'worklet'
   // @ts-ignore
   // eslint-disable-next-line no-undef
@@ -55,10 +55,6 @@ export interface NormalizationConfig{
 export interface NormalizedImageResult {
   imageURL?: string;
   imageBase64?: string;
-}
-
-export interface DetectionResult {
-  quadResults: DetectedQuadResult[];
 }
 
 export interface DetectedQuadResult {
