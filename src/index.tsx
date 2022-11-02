@@ -30,7 +30,7 @@ export function detect(frame: Frame): DetectedQuadResult {
   'worklet'
   // @ts-ignore
   // eslint-disable-next-line no-undef
-  return __detect(frame)
+  return __detect(frame, {})
 }
 
 export function normalizeFile(url:string, config: NormalizationConfig): Promise<NormalizedImageResult> {
