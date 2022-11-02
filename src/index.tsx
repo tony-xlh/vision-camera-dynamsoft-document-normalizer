@@ -20,13 +20,11 @@ export function initLicense(license:string): Promise<boolean> {
   return VisionCameraDynamsoftDocumentNormalizer.initLicense(license);
 }
 
-
-
-export function detectBase64(base64:string): Promise<number> {
-  return VisionCameraDynamsoftDocumentNormalizer.detectBase64(base64);
+export function initRuntimeSettingsFromString(template:string): Promise<boolean> {
+  return VisionCameraDynamsoftDocumentNormalizer.initRuntimeSettingsFromString(template);
 }
 
-export function detect(frame: Frame): DetectedQuadResult {
+export function detect(frame: Frame): DetectionResult {
   'worklet'
   // @ts-ignore
   // eslint-disable-next-line no-undef
@@ -37,10 +35,6 @@ export function normalizeFile(url:string, config: NormalizationConfig): Promise<
   return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, config);
 }
 
-export function normalizeBase64(base64:string, config: NormalizationConfig): Promise<NormalizedImageResult> {
-  return VisionCameraDynamsoftDocumentNormalizer.normalizeBase64(base64, config);
-}
-
 export function normalize(frame: Frame, config: NormalizationConfig): NormalizedImageResult {
   'worklet'
   // @ts-ignore
@@ -49,13 +43,18 @@ export function normalize(frame: Frame, config: NormalizationConfig): Normalized
 }
 
 export interface NormalizationConfig{
-  saveNormalizationResult?: boolean;
-  includeNormalizationResultAsBase64: boolean;
+  quad: Quadrilateral;
+  saveNormalizationResultAsFile?: boolean;
+  includeNormalizationResultAsBase64?: boolean;
 }
 
 export interface NormalizedImageResult {
   imageURL?: string;
   imageBase64?: string;
+}
+
+export interface DetectionResult {
+  quadResults: DetectedQuadResult[];
 }
 
 export interface DetectedQuadResult {
@@ -66,7 +65,6 @@ export interface DetectedQuadResult {
 export interface Point {
   x:number;
   y:number;
-  coordinate: [number, number];
 }
 
 export interface Quadrilateral {

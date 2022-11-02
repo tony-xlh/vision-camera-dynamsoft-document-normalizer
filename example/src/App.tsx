@@ -10,17 +10,16 @@ export default function App() {
   const device = devices.back;
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
-    const detect = DDN.detect(frame);
-    const normalize = DDN.normalize(frame,{includeNormalizationResultAsBase64:false});
-    console.log(detect);
-    console.log(normalize);
+    const detectionResult = DDN.detect(frame);
+    console.log(detectionResult);
+    //console.log(normalize);
   }, [])
 
   React.useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'authorized');
-      let result = await DDN.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==");
+      let result = await DDN.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAwMjI3NzYzLVRYbE5iMkpwYkdWUWNtOXFYMlJrYmciLCJvcmdhbml6YXRpb25JRCI6IjEwMDIyNzc2MyIsImNoZWNrQ29kZSI6MTM0ODY2MDUyMn0=");
       console.log(result);
     })();
   }, []);

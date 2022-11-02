@@ -1,15 +1,21 @@
 package com.visioncameradynamsoftdocumentnormalizer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.camera.core.ImageProxy;
 
 import com.dynamsoft.core.CoreException;
 import com.dynamsoft.core.LicenseManager;
 import com.dynamsoft.core.LicenseVerificationListener;
+import com.dynamsoft.core.Quadrilateral;
+import com.dynamsoft.ddn.DetectedQuadResult;
 import com.dynamsoft.ddn.DocumentNormalizer;
 import com.dynamsoft.ddn.DocumentNormalizerException;
+import com.dynamsoft.ddn.NormalizedImageResult;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -62,15 +68,33 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
     }
 
     @ReactMethod
+    public void initRuntimeSettingsFromString(String template, Promise promise) {
+        try {
+            ddn.initRuntimeSettingsFromFile(template);
+            promise.resolve(true);
+        } catch (DocumentNormalizerException e) {
+            e.printStackTrace();
+            promise.reject("DDN",e.getMessage());
+        }
+    }
+
+    @ReactMethod
     public void normalizeFile(String license, Promise promise) {
+
     }
 
-    @ReactMethod
-    public void normalizeBase64(String license, Promise promise) {
+    @SuppressLint("UnsafeOptInUsageError")
+    public Bitmap normalizeImageProxy(ImageProxy image, Quadrilateral quad) throws DocumentNormalizerException, CoreException {
+        Bitmap bitmap = BitmapUtils.getBitmap(image);
+        NormalizedImageResult result = ddn.normalize(bitmap, quad);
+        return result.image.toBitmap();
     }
 
-    @ReactMethod
-    public void detectBase64(String license, Promise promise) {
+    @SuppressLint("UnsafeOptInUsageError")
+    public DetectedQuadResult[] detectImageProxy(ImageProxy image) throws DocumentNormalizerException {
+        Bitmap bitmap = BitmapUtils.getBitmap(image);
+        DetectedQuadResult[] results = ddn.detectQuad(bitmap);
+        return results;
     }
 
 }
