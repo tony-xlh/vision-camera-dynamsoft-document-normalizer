@@ -79,7 +79,12 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
     }
 
     @ReactMethod
-    public void normalizeFile(String license, Promise promise) {
+    public void detectFile(String filePath, Promise promise) {
+
+    }
+
+    @ReactMethod
+    public void normalizeFile(String filePath, Promise promise) {
 
     }
 

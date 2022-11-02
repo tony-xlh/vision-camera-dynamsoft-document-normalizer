@@ -8,8 +8,6 @@ import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin;
 
-import java.nio.ByteBuffer;
-
 public class VisionCameraDetectionPlugin extends FrameProcessorPlugin {
     private VisionCameraDynamsoftDocumentNormalizerModule mModule;
     @Override

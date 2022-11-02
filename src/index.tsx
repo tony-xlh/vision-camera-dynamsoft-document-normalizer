@@ -31,6 +31,10 @@ export function detect(frame: Frame): DetectionResult {
   return __detect(frame, {})
 }
 
+export function detectFile(url:string): Promise<NormalizedImageResult> {
+  return VisionCameraDynamsoftDocumentNormalizer.detectFile(url);
+}
+
 export function normalizeFile(url:string, config: NormalizationConfig): Promise<NormalizedImageResult> {
   return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, config);
 }
