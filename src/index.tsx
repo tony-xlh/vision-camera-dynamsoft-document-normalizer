@@ -39,12 +39,12 @@ export function normalizeFile(url:string, config: NormalizationConfig): Promise<
   return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, config);
 }
 
-//export function normalize(frame: Frame, config: NormalizationConfig): NormalizedImageResult {
+export function normalize(frame: Frame, config: NormalizationConfig): NormalizedImageResult {
  // 'worklet'
   // @ts-ignore
   // eslint-disable-next-line no-undef
-//  return __normalize(frame, config)
-//}
+  return __normalize(frame, config)
+}
 
 export interface NormalizationConfig{
   quad: Quadrilateral;

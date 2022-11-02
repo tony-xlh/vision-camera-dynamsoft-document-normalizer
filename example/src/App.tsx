@@ -8,15 +8,42 @@ import type { DetectedQuadResult } from 'vision-camera-dynamsoft-document-normal
 
 export default function App() {
   const [hasPermission, setHasPermission] = React.useState(false);
-  const [frameWidth, setFrameWidth] = React.useState(0);
-  const [frameHeight, setFrameHeight] = React.useState(0);
-  const [detectionResults, setDetectionResults] = React.useState([] as DetectedQuadResult[]);
+  const detectionResults = REA.useSharedValue([] as DetectedQuadResult[]);
+  const frameWidth = REA.useSharedValue(0);
+  const frameHeight = REA.useSharedValue(0);
+  const viewBox = REA.useDerivedValue(() => {
+    console.log("update viewbox");
+    let viewBox = "";
+    viewBox = "0 0 "+frameHeight.value+" "+frameWidth.value;
+    console.log(viewBox);
+    return viewBox;
+  }, [frameWidth,frameHeight]);
+  const pointsData = REA.useDerivedValue(() => {
+    console.log("update pointsData");
+    let data = "";
+    if (detectionResults.value.length>0) {
+      let result = detectionResults.value[0]; 
+      if (result) {
+        let location = result.location;
+        let pointsData = location.points[0].x + "," + location.points[0].y + " ";
+        pointsData = pointsData + location.points[1].x + "," + location.points[1].y +" ";
+        pointsData = pointsData + location.points[2].x + "," + location.points[2].y +" ";
+        pointsData = pointsData + location.points[3].x + "," + location.points[3].y;
+        data = pointsData;
+      }
+    }
+    console.log(data);
+    return data;
+  }, [detectionResults]);
   const devices = useCameraDevices();
   const device = devices.back;
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
     const results = DDN.detect(frame);
     console.log(results);
+    frameWidth.value = frame.width;
+    frameHeight.value = frame.height;
+    detectionResults.value = results;
   }, [])
 
   React.useEffect(() => {
@@ -27,33 +54,6 @@ export default function App() {
       console.log(result);
     })();
   }, []);
-
-  const getViewBox = () => {
-    const viewBox = "0 0 "+frameWidth+" "+frameHeight;
-    return viewBox;
-  }
-
-  const callFromFrameProcessor = () => {
-    console.log("called");
-  }
-  const updateFrameSize = (width:number, height:number) => {
-    if (width != frameWidth && height != frameHeight) {
-      console.log("update frame size: "+width+"x"+height);
-      setFrameWidth(width);
-      setFrameHeight(height);
-    }
-  }
-
-  const getPointsData = (result:DetectedQuadResult) => {
-    let location = result.location;
-    let pointsData = location.points[0].x + "," + location.points[0].y + " ";
-    pointsData = pointsData + location.points[1].x + "," + location.points[1].y +" ";
-    pointsData = pointsData + location.points[2].x + "," + location.points[2].y +" ";
-    pointsData = pointsData + location.points[3].x + "," + location.points[3].x;
-    console.log("pointsData:");
-    console.log(pointsData);
-    return pointsData;
-  }
 
   return (
       <SafeAreaView style={styles.container}>
@@ -67,17 +67,15 @@ export default function App() {
             frameProcessor={frameProcessor}
             frameProcessorFps={5}
             />
-            {frameWidth != 0 && (
-              <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={getViewBox()}>
-               {detectionResults.map((result, idx) => (
-                  <Polygon key={idx}
-                  points={getPointsData(result)}
+            {frameWidth.value != 0 && (
+              <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox.value}>
+                <Polygon
+                  points={pointsData.value}
                   fill="lime"
                   stroke="green"
                   opacity="0.5"
                   strokeWidth="1"
                 />
-                ))}
               </Svg>
             )}
         </>)}
