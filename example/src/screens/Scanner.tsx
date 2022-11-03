@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import { Svg, Polygon } from 'react-native-svg';
@@ -122,6 +122,17 @@ export default function ScannerScreen() {
     return false;
   }
 
+  const retake = () => {
+    detectionResults.value = [];
+    previousResults.current = [];
+    setPhotoPath(undefined);
+    taken.value = false;
+  }
+
+  const okay = () => {
+    console.log("okay");
+  }
+
   return (
       <SafeAreaView style={styles.container}>
         {device != null &&
@@ -138,7 +149,6 @@ export default function ScannerScreen() {
             />
             {photoPath && (
               <>
-                <Text>Test</Text>
                 <Image
                   style={StyleSheet.absoluteFill}
                   source={{uri:"file://"+photoPath}}
@@ -154,6 +164,22 @@ export default function ScannerScreen() {
                 strokeWidth="1"
               />
             </Svg>
+            {photoPath && (
+              <>
+                <View style={styles.control}>
+                  <View style={{flex:0.5}}>
+                    <TouchableOpacity onPress={retake} style={styles.button}>
+                      <Text style={{fontSize: 15, color: "black", alignSelf: "center"}}>Retake</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{flex:0.5}}>
+                    <TouchableOpacity onPress={okay} style={styles.button}>
+                      <Text style={{fontSize: 15, color: "black", alignSelf: "center"}}>Okay</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </>
+            )}
         </>)}
       </SafeAreaView>
   );
@@ -167,5 +193,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
     fontWeight: 'bold',
+  },
+  control:{
+    flexDirection:"row",
+    position: 'absolute',
+    bottom: 0,
+    height: "15%",
+    width:"100%",
+    alignSelf:"flex-start",
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: "ghostwhite",
+    borderColor:"black", 
+    borderWidth:2, 
+    borderRadius:5,
+    padding: 8,
+    margin: 3,
   },
 });
