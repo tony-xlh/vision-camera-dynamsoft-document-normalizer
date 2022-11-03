@@ -8,14 +8,13 @@ import type { DetectedQuadResult } from 'vision-camera-dynamsoft-document-normal
 import { useEffect, useRef, useState } from 'react';
 import { intersectionOverUnion } from '../Utils';
 
-export default function ScannerScreen() {
+export default function ScannerScreen({route, navigation}) {
   const camera = useRef<Camera>(null)
   const [hasPermission, setHasPermission] = useState(false);
   const detectionResults = REA.useSharedValue([] as DetectedQuadResult[]);
   const frameWidth = REA.useSharedValue(0);
   const frameHeight = REA.useSharedValue(0);
   const [pointsText, setPointsText] = useState("default");
-  const [isActive, setIsActive] = useState(true);
   const taken = REA.useSharedValue(false);
   const [photoPath, setPhotoPath] = useState<undefined|string>(undefined);
   const previousResults = useRef([] as DetectedQuadResult[]);
@@ -131,6 +130,12 @@ export default function ScannerScreen() {
 
   const okay = () => {
     console.log("okay");
+    navigation.navigate(
+      {
+        params: {photoPath:photoPath, detectionResult:detectionResults.value[0]},
+        name: "ResultViewer"
+      }
+    );
   }
 
   return (
@@ -139,13 +144,13 @@ export default function ScannerScreen() {
         hasPermission && (
         <>
             <Camera
-            style={StyleSheet.absoluteFill}
-            ref={camera}
-            device={device}
-            isActive={isActive}
-            photo={true}
-            frameProcessor={frameProcessor}
-            frameProcessorFps={5}
+              style={StyleSheet.absoluteFill}
+              ref={camera}
+              isActive={true}
+              device={device}
+              photo={true}
+              frameProcessor={frameProcessor}
+              frameProcessorFps={5}
             />
             {photoPath && (
               <>

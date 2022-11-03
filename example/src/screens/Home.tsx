@@ -2,10 +2,10 @@ import React from "react";
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 export default function HomeScreen({route, navigation}) {
-  const onPressed = (target:string) => {
+  const onPressed = () => {
     navigation.navigate(
       {
-        name: target
+        name: "Scanner"
       }
     );
   }
@@ -14,9 +14,9 @@ export default function HomeScreen({route, navigation}) {
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => onPressed("Scanner")}
+        onPress={() => onPressed()}
       >
-        <Text style={styles.buttonText}>Live Scan</Text>
+        <Text style={styles.buttonText}>Scan Document</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
