@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import { Svg, Polygon } from 'react-native-svg';
@@ -16,6 +16,8 @@ export default function ScannerScreen() {
   const frameHeight = REA.useSharedValue(0);
   const [pointsText, setPointsText] = useState("default");
   const [isActive, setIsActive] = useState(true);
+  const taken = REA.useSharedValue(false);
+  const [photoPath, setPhotoPath] = useState<undefined|string>(undefined);
   const previousResults = useRef([] as DetectedQuadResult[]);
   const viewBox = REA.useDerivedValue(() => {
     console.log("update viewbox");
@@ -46,11 +48,13 @@ export default function ScannerScreen() {
   const device = devices.back;
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
-    const results = DDN.detect(frame);
-    console.log(results);
-    frameWidth.value = frame.width;
-    frameHeight.value = frame.height;
-    detectionResults.value = results;
+    if (taken.value === false) {
+      const results = DDN.detect(frame);
+      console.log(results);
+      frameWidth.value = frame.width;
+      frameHeight.value = frame.height;
+      detectionResults.value = results;
+    }
   }, [])
 
   useEffect(() => {
@@ -69,25 +73,25 @@ export default function ScannerScreen() {
 
 
   const takePhoto = async () => {
+    console.log("take photo");
     if (camera.current) {
+      taken.value = true;
+      console.log("using camera");
       const photo = await camera.current.takePhoto();
       console.log(photo);
+      setPhotoPath(photo.path);
+      //setIsActive(false);
     }
   }
 
-
-  const empty = () => {
-    console.log("test");
-  }
-
-  const checkIfSteady = () => {
+  const checkIfSteady = async () => {
     let result = detectionResults.value[0];
     console.log("previousResults");
     console.log(previousResults);
     if (result) {
       if (previousResults.current.length >= 3) {
         if (steady() == true) {
-          setIsActive(false);
+          await takePhoto();
           console.log("steady");
         }else{
           console.log("shift and add result");
@@ -125,24 +129,31 @@ export default function ScannerScreen() {
         <>
             <Camera
             style={StyleSheet.absoluteFill}
+            ref={camera}
             device={device}
             isActive={isActive}
             photo={true}
             frameProcessor={frameProcessor}
             frameProcessorFps={5}
             />
-
+            {photoPath && (
               <>
-              <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox.value}>
-                <Polygon
-                  points={pointsData.value}
-                  fill="lime"
-                  stroke="green"
-                  opacity="0.5"
-                  strokeWidth="1"
+                <Text>Test</Text>
+                <Image
+                  style={StyleSheet.absoluteFill}
+                  source={{uri:"file://"+photoPath}}
                 />
-              </Svg>
               </>
+            )}
+            <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox.value}>
+              <Polygon
+                points={pointsData.value}
+                fill="lime"
+                stroke="green"
+                opacity="0.5"
+                strokeWidth="1"
+              />
+            </Svg>
         </>)}
       </SafeAreaView>
   );
