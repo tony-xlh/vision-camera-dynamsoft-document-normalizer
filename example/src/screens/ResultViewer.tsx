@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Image, SafeAreaView, StyleSheet} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import RadioForm from 'react-native-simple-radio-button';
+
+const radio_props = [
+  {label: 'Binary', value: 0 },
+  {label: 'Gray', value: 1 },
+  {label: 'Color', value: 2 }
+];
 
 export default function ResultViewerScreen({route, navigation}) {
   const [normalizedImagePath, setNormalizedImagePath] = useState<undefined|string>(undefined);
@@ -8,8 +15,12 @@ export default function ResultViewerScreen({route, navigation}) {
     console.log(route.params);
   }, []);
 
-  const normalize = () => {
+  const save = () => {
+    console.log("save");
+  }
 
+  const normalize = (value:number) => {
+    console.log(value);
   }
 
 
@@ -19,8 +30,26 @@ export default function ResultViewerScreen({route, navigation}) {
         <Image
           style={StyleSheet.absoluteFill}
           source={{uri:"file://"+normalizedImagePath}}
-        />  
+        />
       )}
+      <View style={styles.control}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={save} style={styles.button}>
+            <Text style={{fontSize: 15, color: "black", alignSelf: "center"}}>Save</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.radioContainer}>
+          <RadioForm
+            radio_props={radio_props}
+            initial={0}
+            formHorizontal={true}
+            labelHorizontal={false}
+            
+            onPress={(value) => {normalize(value)}}
+          />
+        </View>
+        
+      </View>
     </SafeAreaView>
   );
 }
@@ -28,5 +57,32 @@ export default function ResultViewerScreen({route, navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex:1,
+  },
+  control:{
+    flexDirection:"row",
+    position: 'absolute',
+    bottom: 0,
+    height: "15%",
+    width:"100%",
+    alignSelf:"flex-start",
+    alignItems: 'center',
+  },
+  radioContainer:{
+    flex: 0.7,
+    padding: 5,
+    margin: 3,
+  },
+  buttonContainer:{
+    flex: 0.3,
+    padding: 5,
+    margin: 3,
+  },
+  button: {
+    backgroundColor: "ghostwhite",
+    borderColor:"black", 
+    borderWidth:2, 
+    borderRadius:5,
+    padding: 8,
+    margin: 3,
   },
 });
