@@ -70,3 +70,12 @@ export interface Point {
 export interface Quadrilateral {
   points: [Point, Point, Point, Point];
 }
+
+export interface Rect {
+  left:number;
+  right:number;
+  top:number;
+  bottom:number;
+  width:number;
+  height:number;
+}

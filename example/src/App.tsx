@@ -5,13 +5,18 @@ import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import { Svg, Polygon } from 'react-native-svg';
 import * as REA from 'react-native-reanimated';
 import type { DetectedQuadResult } from 'vision-camera-dynamsoft-document-normalizer';
+import { useEffect, useRef, useState } from 'react';
+import { intersectionOverUnion } from './Utils';
 
 export default function App() {
-  const [hasPermission, setHasPermission] = React.useState(false);
+  const camera = useRef<Camera>(null)
+  const [hasPermission, setHasPermission] = useState(false);
   const detectionResults = REA.useSharedValue([] as DetectedQuadResult[]);
   const frameWidth = REA.useSharedValue(0);
   const frameHeight = REA.useSharedValue(0);
-  const [pointsText, setPointsText] = React.useState("default");
+  const [pointsText, setPointsText] = useState("default");
+  const [isActive, setIsActive] = useState(true);
+  const previousResults = useRef([] as DetectedQuadResult[]);
   const viewBox = REA.useDerivedValue(() => {
     console.log("update viewbox");
     let viewBox = "";
@@ -48,7 +53,7 @@ export default function App() {
     detectionResults.value = results;
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'authorized');
@@ -56,6 +61,62 @@ export default function App() {
       console.log(result);
     })();
   }, []);
+
+  useEffect(() => {
+    console.log("pointsText changed");
+    checkIfSteady();
+  }, [pointsText]);
+
+
+  const takePhoto = async () => {
+    if (camera.current) {
+      const photo = await camera.current.takePhoto();
+      console.log(photo);
+    }
+  }
+
+
+  const empty = () => {
+    console.log("test");
+  }
+
+  const checkIfSteady = () => {
+    let result = detectionResults.value[0];
+    console.log("previousResults");
+    console.log(previousResults);
+    if (result) {
+      if (previousResults.current.length >= 3) {
+        if (steady() == true) {
+          setIsActive(false);
+          console.log("steady");
+        }else{
+          console.log("shift and add result");
+          previousResults.current.shift();
+          previousResults.current.push(result);
+        }
+      }else{
+        console.log("add result");
+        previousResults.current.push(result);
+      }
+    }
+  }
+
+  const steady = () => {
+    if (previousResults.current[0] && previousResults.current[1] && previousResults.current[2]) {
+      let iou1 = intersectionOverUnion(previousResults.current[0].location.points,previousResults.current[1].location.points);
+      let iou2 = intersectionOverUnion(previousResults.current[1].location.points,previousResults.current[2].location.points);
+      let iou3 = intersectionOverUnion(previousResults.current[2].location.points,previousResults.current[1].location.points);
+      console.log(iou1);
+      console.log(iou2);
+      console.log(iou3);
+      if (iou1>0.9 && iou2>0.9 && iou3>0.9) {
+        return true;
+      }else{
+        return false;
+      }
+    }
+    return false;
+  }
 
   return (
       <SafeAreaView style={styles.container}>
@@ -65,7 +126,8 @@ export default function App() {
             <Camera
             style={StyleSheet.absoluteFill}
             device={device}
-            isActive={true}
+            isActive={isActive}
+            photo={true}
             frameProcessor={frameProcessor}
             frameProcessorFps={5}
             />
