@@ -29,6 +29,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.module.annotations.ReactModule;
 
+import java.io.File;
 import java.io.IOException;
 
 @ReactModule(name = VisionCameraDynamsoftDocumentNormalizerModule.NAME)
@@ -50,6 +51,9 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
         }
     }
 
+    public Context getContext(){
+        return mContext;
+    }
     public DocumentNormalizer getDDN(){
         return ddn;
     }
@@ -98,8 +102,11 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
             NormalizedImageResult result = ddn.normalize(filePath,quadrilateral);
             if (config.hasKey("saveNormalizationResultAsFile")) {
                 if (config.getBoolean("saveNormalizationResultAsFile")) {
-                    String path = filePath+".jpg";
-                    result.saveToFile(path);
+                    //String path = filePath+".jpg";
+                    //result.saveToFile(path);
+                    File cacheDir = mContext.getCacheDir();
+                    String fileName = System.currentTimeMillis() + ".jpg";
+                    String path = BitmapUtils.saveImage(result.image.toBitmap(), cacheDir, fileName);
                     returnResult.putString("imageURL",path);
                 }
             }
@@ -111,6 +118,9 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
             }
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof DocumentNormalizerException) {
+                Log.d("DDN","Error code: "+((DocumentNormalizerException) e).getErrorCode());
+            }
             promise.reject("DDN",e.getMessage());
             return;
         }

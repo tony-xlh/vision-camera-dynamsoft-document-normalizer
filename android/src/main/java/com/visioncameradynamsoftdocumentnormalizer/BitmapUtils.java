@@ -18,6 +18,7 @@ package com.visioncameradynamsoftdocumentnormalizer;
 
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -226,13 +227,8 @@ public class BitmapUtils {
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
     }
 
-    public static String saveImage(Bitmap bmp) {
-        File appDir = new File(Environment.getExternalStorageDirectory(), "ddn");
-        if (!appDir.exists()) {
-            appDir.mkdir();
-        }
-        String fileName = System.currentTimeMillis() + ".jpg";
-        File file = new File(appDir, fileName);
+    public static String saveImage(Bitmap bmp, File dir, String fileName) {
+        File file = new File(dir, fileName);
         try {
             FileOutputStream fos = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);

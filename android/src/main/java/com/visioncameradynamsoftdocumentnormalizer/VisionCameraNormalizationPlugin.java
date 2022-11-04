@@ -13,6 +13,8 @@ import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin;
 
+import java.io.File;
+
 public class VisionCameraNormalizationPlugin extends FrameProcessorPlugin {
     private VisionCameraDynamsoftDocumentNormalizerModule mModule;
     @Override
@@ -30,7 +32,9 @@ public class VisionCameraNormalizationPlugin extends FrameProcessorPlugin {
                     Bitmap normalizedImage = normalizedImageResult.image.toBitmap();
                     if (config.hasKey("saveNormalizationResultAsFile")) {
                         if (config.getBoolean("saveNormalizationResultAsFile")) {
-                            String path = BitmapUtils.saveImage(normalizedImage);
+                            File cacheDir = mModule.getContext().getCacheDir();
+                            String fileName = System.currentTimeMillis() + ".jpg";
+                            String path = BitmapUtils.saveImage(normalizedImage,cacheDir,fileName);
                             result.putString("imageURL",path);
                         }
                     }

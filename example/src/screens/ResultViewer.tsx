@@ -26,6 +26,9 @@ export default function ResultViewerScreen({route, navigation}) {
     let photoPath = route.params.photoPath;
     let normalizedImageResult = await normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
     console.log(normalizedImageResult);
+    if (normalizedImageResult.imageURL) {
+      setNormalizedImagePath(normalizedImageResult.imageURL)
+    }
   }
 
 
