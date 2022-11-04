@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import RadioForm from 'react-native-simple-radio-button';
 import { DetectedQuadResult, normalizeFile } from "vision-camera-dynamsoft-document-normalizer";
+import Share, { ShareOptions } from 'react-native-share';
 
 const radio_props = [
   {label: 'Binary', value: 0 },
@@ -28,6 +29,9 @@ export default function ResultViewerScreen({route, navigation}) {
     console.log(normalizedImageResult);
     if (normalizedImageResult.imageURL) {
       setNormalizedImagePath(normalizedImageResult.imageURL)
+      let options:ShareOptions = {};
+      options.url = normalizedImageResult.imageURL;
+      Share.open(options);
     }
   }
 
@@ -36,7 +40,7 @@ export default function ResultViewerScreen({route, navigation}) {
     <SafeAreaView style={styles.container}>
       {normalizedImagePath && (
         <Image
-          style={StyleSheet.absoluteFill}
+          style={[StyleSheet.absoluteFill,styles.image]}
           source={{uri:"file://"+normalizedImagePath}}
         />
       )}
@@ -93,4 +97,7 @@ const styles = StyleSheet.create({
     padding: 8,
     margin: 3,
   },
+  image: {
+    resizeMode:"contain",
+  }
 });

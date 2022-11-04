@@ -4095,6 +4095,11 @@
     "react-freeze" "^1.0.0"
     "warn-once" "^0.1.0"
 
+"react-native-share@^8.0.0":
+  "integrity" "sha512-IFUKcWQ1/VgtsQmuC3EKaIPMhKqssTblwCojtTB4dehWJ2ZUPsIstPXJGqcmWqg7/S3cLNfCLvxf/tVaZvptxw=="
+  "resolved" "https://registry.npmmirror.com/react-native-share/-/react-native-share-8.0.0.tgz"
+  "version" "8.0.0"
+
 "react-native-simple-radio-button@^2.7.4":
   "integrity" "sha512-QOZNmJUn0ViBGU+at7wAG/uGzd5PfXi0kMHr9lfTCLXknW/f9f2fOVjxjdHvOCdf/zA/eMJBjGjtusSDzQf1+w=="
   "resolved" "https://registry.npmmirror.com/react-native-simple-radio-button/-/react-native-simple-radio-button-2.7.4.tgz"
