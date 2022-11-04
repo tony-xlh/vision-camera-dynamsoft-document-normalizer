@@ -83,7 +83,7 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
     @ReactMethod
     public void initRuntimeSettingsFromString(String template, Promise promise) {
         try {
-            ddn.initRuntimeSettingsFromFile(template);
+            ddn.initRuntimeSettingsFromString(template);
             promise.resolve(true);
         } catch (DocumentNormalizerException e) {
             e.printStackTrace();
