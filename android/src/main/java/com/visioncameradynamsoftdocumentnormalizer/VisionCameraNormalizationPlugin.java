@@ -1,10 +1,13 @@
 package com.visioncameradynamsoftdocumentnormalizer;
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.camera.core.ImageProxy;
 
 import com.dynamsoft.core.Quadrilateral;
+import com.dynamsoft.ddn.DetectedQuadResult;
+import com.dynamsoft.ddn.NormalizedImageResult;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -18,21 +21,25 @@ public class VisionCameraNormalizationPlugin extends FrameProcessorPlugin {
         WritableNativeMap result = new WritableNativeMap();
         try {
             ReadableNativeMap config = getConfig(params);
-            ReadableNativeMap quadMap = config.getMap("quad");
-            ReadableArray pointsArray = quadMap.getArray("points");
-            Quadrilateral quad = new Quadrilateral();
-            quad.points = Utils.convertPoints(pointsArray);
-            Bitmap bitmap = mModule.normalizeImageProxy(image,quad);
-            if (config.hasKey("saveNormalizationResultAsFile")) {
-                if (config.getBoolean("saveNormalizationResultAsFile")) {
-                    String path = BitmapUtils.saveImage(bitmap);
-                    result.putString("imageURL",path);
-                }
-            }
-            if (config.hasKey("includeNormalizationResultAsBase64")) {
-                if (config.getBoolean("includeNormalizationResultAsBase64")) {
-                    String base64 = BitmapUtils.bitmap2Base64(bitmap);
-                    result.putString("imageBase64",base64);
+            @SuppressLint("UnsafeOptInUsageError")
+            Bitmap bitmap = BitmapUtils.getBitmap(image);
+            DetectedQuadResult[] quadResults = mModule.getDDN().detectQuad(bitmap);
+            if (quadResults != null) {
+                if (quadResults.length>0) {
+                    NormalizedImageResult normalizedImageResult = mModule.getDDN().normalize(bitmap,quadResults[0].location);
+                    Bitmap normalizedImage = normalizedImageResult.image.toBitmap();
+                    if (config.hasKey("saveNormalizationResultAsFile")) {
+                        if (config.getBoolean("saveNormalizationResultAsFile")) {
+                            String path = BitmapUtils.saveImage(normalizedImage);
+                            result.putString("imageURL",path);
+                        }
+                    }
+                    if (config.hasKey("includeNormalizationResultAsBase64")) {
+                        if (config.getBoolean("includeNormalizationResultAsBase64")) {
+                            String base64 = BitmapUtils.bitmap2Base64(normalizedImage);
+                            result.putString("imageBase64",base64);
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
@@ -42,7 +49,7 @@ public class VisionCameraNormalizationPlugin extends FrameProcessorPlugin {
     }
 
     VisionCameraNormalizationPlugin(VisionCameraDynamsoftDocumentNormalizerModule module) {
-        super("normalize");
+        super("detectAndNormalize");
         mModule = module;
     }
 

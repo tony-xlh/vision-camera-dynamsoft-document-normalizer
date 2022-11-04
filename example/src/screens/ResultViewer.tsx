@@ -21,6 +21,8 @@ export default function ResultViewerScreen({route, navigation}) {
 
   const normalize = (value:number) => {
     console.log(value);
+    let photoPath = route.params.photoPath;
+    
   }
 
 

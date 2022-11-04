@@ -31,23 +31,18 @@ export function detect(frame: Frame): DetectedQuadResult[] {
   return __detect(frame, {})
 }
 
-export function detectFile(url:string): Promise<NormalizedImageResult> {
-  return VisionCameraDynamsoftDocumentNormalizer.detectFile(url);
-}
+export function detectAndNormalize(frame: Frame, config: NormalizationConfig): NormalizedImageResult {
+  // 'worklet'
+   // @ts-ignore
+   // eslint-disable-next-line no-undef
+   return __detectAndNormalize(frame, config)
+ }
 
-export function normalizeFile(url:string, config: NormalizationConfig): Promise<NormalizedImageResult> {
-  return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, config);
-}
-
-export function normalize(frame: Frame, config: NormalizationConfig): NormalizedImageResult {
- // 'worklet'
-  // @ts-ignore
-  // eslint-disable-next-line no-undef
-  return __normalize(frame, config)
+export function normalizeFile(url:string, quad:Quadrilateral, config: NormalizationConfig): Promise<NormalizedImageResult> {
+  return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, quad, config);
 }
 
 export interface NormalizationConfig{
-  quad: Quadrilateral;
   saveNormalizationResultAsFile?: boolean;
   includeNormalizationResultAsBase64?: boolean;
 }
