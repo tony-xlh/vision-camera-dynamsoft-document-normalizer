@@ -11,11 +11,14 @@ const radio_props = [
   {label: 'Color', value: 2 }
 ];
 
+let normalizedResult:any = {};
+
 export default function ResultViewerScreen({route, navigation}) {
   const [normalizedImagePath, setNormalizedImagePath] = useState<undefined|string>(undefined);
 
   useEffect(() => {
-    console.log(route.params);
+    normalizedResult = {};
+    normalize(0);
   }, []);
 
   const save = () => {
@@ -27,23 +30,27 @@ export default function ResultViewerScreen({route, navigation}) {
 
   const normalize = async (value:number) => {
     console.log(value);
-    if (value === 0) {
-      await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_BINARY\"}]}");
-    } else if (value === 1) {
-      await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_GRAYSCALE\"}]}");
-    } else {
-      await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_COLOUR\"}]}");
-    }
-    console.log("update settings done");
-    let detectionResult:DetectedQuadResult = route.params.detectionResult;
-    let photoPath = route.params.photoPath;
-    let normalizedImageResult = await DDN.normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
-    console.log(normalizedImageResult);
-    if (normalizedImageResult.imageURL) {
-      setNormalizedImagePath(normalizedImageResult.imageURL)
+    if (normalizedResult[value]) {
+      setNormalizedImagePath(normalizedResult[value]);
+    }else{
+      if (value === 0) {
+        await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_BINARY\"}]}");
+      } else if (value === 1) {
+        await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_GRAYSCALE\"}]}");
+      } else {
+        await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_COLOUR\"}]}");
+      }
+      console.log("update settings done");
+      let detectionResult:DetectedQuadResult = route.params.detectionResult;
+      let photoPath = route.params.photoPath;
+      let normalizedImageResult = await DDN.normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
+      console.log(normalizedImageResult);
+      if (normalizedImageResult.imageURL) {
+        normalizedResult[value] = normalizedImageResult.imageURL;
+        setNormalizedImagePath(normalizedImageResult.imageURL)
+      }
     }
   }
-
 
   return (
     <SafeAreaView style={styles.container}>
