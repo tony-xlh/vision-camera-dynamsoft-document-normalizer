@@ -88,12 +88,12 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
     }
 
     @ReactMethod
-    public void normalizeFile(String filePath, ReadableArray quad, ReadableMap config, Promise promise) {
+    public void normalizeFile(String filePath, ReadableMap quad, ReadableMap config, Promise promise) {
         WritableNativeMap returnResult = new WritableNativeMap();
         Log.d("DDN",quad.toString());
-        Log.d("DDN","asd"+quad.size());
+        ReadableArray points = quad.getArray("points");
         Quadrilateral quadrilateral = new Quadrilateral();
-        quadrilateral.points = convertPoints(quad);
+        quadrilateral.points = convertPoints(points);
         try {
             NormalizedImageResult result = ddn.normalize(filePath,quadrilateral);
             if (config.hasKey("saveNormalizationResultAsFile")) {
@@ -121,8 +121,8 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
         Point[] points = new Point[4];
         for (int i = 0; i < quadPoints.size(); i++) {
             Point p = new Point();
-            p.x = quadPoints.getMap(0).getInt("x");
-            p.y = quadPoints.getMap(0).getInt("y");
+            p.x = quadPoints.getMap(i).getInt("x");
+            p.y = quadPoints.getMap(i).getInt("y");
             points[i] = p;
         }
         return points;

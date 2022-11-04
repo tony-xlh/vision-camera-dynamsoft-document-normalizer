@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import RadioForm from 'react-native-simple-radio-button';
+import { DetectedQuadResult, normalizeFile } from "vision-camera-dynamsoft-document-normalizer";
 
 const radio_props = [
   {label: 'Binary', value: 0 },
@@ -19,10 +20,12 @@ export default function ResultViewerScreen({route, navigation}) {
     console.log("save");
   }
 
-  const normalize = (value:number) => {
+  const normalize = async (value:number) => {
     console.log(value);
+    let detectionResult:DetectedQuadResult = route.params.detectionResult;
     let photoPath = route.params.photoPath;
-    
+    let normalizedImageResult = await normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
+    console.log(normalizedImageResult);
   }
 
 
