@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import RadioForm from 'react-native-simple-radio-button';
-import { DetectedQuadResult, normalizeFile } from "vision-camera-dynamsoft-document-normalizer";
+import * as DDN from "vision-camera-dynamsoft-document-normalizer";
+import type { DetectedQuadResult } from "vision-camera-dynamsoft-document-normalizer";
 import Share, { ShareOptions } from 'react-native-share';
 
 const radio_props = [
@@ -19,19 +20,27 @@ export default function ResultViewerScreen({route, navigation}) {
 
   const save = () => {
     console.log("save");
+    let options:ShareOptions = {};
+    options.url = normalizedImagePath;
+    Share.open(options);
   }
 
   const normalize = async (value:number) => {
     console.log(value);
+    if (value === 0) {
+      await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_BINARY\"}]}");
+    } else if (value === 1) {
+      await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_GRAYSCALE\"}]}");
+    } else {
+      await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_COLOUR\"}]}");
+    }
+    console.log("update settings done");
     let detectionResult:DetectedQuadResult = route.params.detectionResult;
     let photoPath = route.params.photoPath;
-    let normalizedImageResult = await normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
+    let normalizedImageResult = await DDN.normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
     console.log(normalizedImageResult);
     if (normalizedImageResult.imageURL) {
       setNormalizedImagePath(normalizedImageResult.imageURL)
-      let options:ShareOptions = {};
-      options.url = normalizedImageResult.imageURL;
-      Share.open(options);
     }
   }
 
