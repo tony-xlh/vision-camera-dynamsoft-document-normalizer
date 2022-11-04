@@ -21,10 +21,10 @@ export default function ResultViewerScreen({route, navigation}) {
     normalize(0);
   }, []);
 
-  const save = () => {
+  const share = () => {
     console.log("save");
     let options:ShareOptions = {};
-    options.url = normalizedImagePath;
+    options.url = "file://"+normalizedImagePath;
     Share.open(options);
   }
 
@@ -62,8 +62,8 @@ export default function ResultViewerScreen({route, navigation}) {
       )}
       <View style={styles.control}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={save} style={styles.button}>
-            <Text style={{fontSize: 15, color: "black", alignSelf: "center"}}>Save</Text>
+          <TouchableOpacity onPress={share} style={styles.button}>
+            <Text style={{fontSize: 15, color: "black", alignSelf: "center"}}>Share</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.radioContainer}>
