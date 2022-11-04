@@ -1,27 +1,43 @@
 import * as React from 'react';
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import { Svg, Polygon } from 'react-native-svg';
 import * as REA from 'react-native-reanimated';
-import type { DetectedQuadResult } from 'vision-camera-dynamsoft-document-normalizer';
+import type { DetectedQuadResult, Point, Quadrilateral } from 'vision-camera-dynamsoft-document-normalizer';
 import { useEffect, useRef, useState } from 'react';
 import { intersectionOverUnion } from '../Utils';
 
 export default function ScannerScreen({route, navigation}) {
   const camera = useRef<Camera>(null)
+  const widthRatio = useRef(0);
+  const heightRatio = useRef(0);
   const [hasPermission, setHasPermission] = useState(false);
   const detectionResults = REA.useSharedValue([] as DetectedQuadResult[]);
   const frameWidth = REA.useSharedValue(0);
   const frameHeight = REA.useSharedValue(0);
+  const platform = REA.useSharedValue("");
+  const screenWidth = REA.useSharedValue(0);
+  const screenHeight = REA.useSharedValue(0);
   const [pointsText, setPointsText] = useState("default");
   const taken = REA.useSharedValue(false);
   const [photoPath, setPhotoPath] = useState<undefined|string>(undefined);
   const previousResults = useRef([] as DetectedQuadResult[]);
+
   const viewBox = REA.useDerivedValue(() => {
     console.log("update viewbox");
     let viewBox = "";
-    viewBox = "0 0 "+frameHeight.value+" "+frameWidth.value;
+    let rotated = false;
+    if (platform.value === "android") {
+      if (!(frameWidth.value>frameHeight.value && screenWidth.value>screenHeight.value)){
+        rotated = true;
+      }
+    }
+    if (rotated) {
+      viewBox = "0 0 "+frameHeight.value+" "+frameWidth.value;
+    }else{
+      viewBox = "0 0 "+frameWidth.value+" "+frameHeight.value;
+    }
     console.log(viewBox);
     return viewBox;
   }, [frameWidth,frameHeight]);
@@ -63,6 +79,9 @@ export default function ScannerScreen({route, navigation}) {
       let result = await DDN.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAwMjI3NzYzLVRYbE5iMkpwYkdWUWNtOXFYMlJrYmciLCJvcmdhbml6YXRpb25JRCI6IjEwMDIyNzc2MyIsImNoZWNrQ29kZSI6MTM0ODY2MDUyMn0=");
       console.log(result);
     })();
+    platform.value = Platform.OS;
+    screenWidth.value = Dimensions.get('window').width;
+    screenHeight.value = Dimensions.get('window').height;
   }, []);
 
   useEffect(() => {
@@ -78,6 +97,19 @@ export default function ScannerScreen({route, navigation}) {
       console.log("using camera");
       const photo = await camera.current.takePhoto();
       console.log(photo);
+      let rotated = false;
+      if (platform.value === "android") {
+        if (!(frameWidth.value>frameHeight.value && screenWidth.value>screenHeight.value)){
+          rotated = true;
+        }
+      }
+      if (rotated) {
+        widthRatio.current = frameHeight.value/photo.width;
+        heightRatio.current = frameWidth.value/photo.height;
+      } else {
+        widthRatio.current = frameWidth.value/photo.width;
+        heightRatio.current = frameHeight.value/photo.height;
+      }
       setPhotoPath(photo.path);
       //setIsActive(false);
     }
@@ -130,12 +162,38 @@ export default function ScannerScreen({route, navigation}) {
 
   const okay = () => {
     console.log("okay");
+    let result = detectionResults.value[0];
+    if (result) {
+      result = scaleDetectionResult(result);
+    }
     navigation.navigate(
       {
-        params: {photoPath:photoPath, detectionResult:detectionResults.value[0]},
+        params: {photoPath:photoPath, detectionResult:result},
         name: "ResultViewer"
       }
     );
+  }
+
+  const scaleDetectionResult = (result:DetectedQuadResult):DetectedQuadResult =>  {    
+    let points:[Point,Point,Point,Point] = [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}];
+    for (let index = 0; index < result.location.points.length; index++) {
+      const point = result.location.points[index];
+      if (point) {
+        let newPoint:Point = {
+          x:point.x / widthRatio.current, 
+          y:point.y / heightRatio.current
+        };
+        points[index] = newPoint;
+      }
+    }
+    let quad:Quadrilateral = {
+      points: points
+    };
+    let newQuadResult:DetectedQuadResult = {
+      confidenceAsDocumentBoundary:result.confidenceAsDocumentBoundary,
+      location: quad
+    };
+    return newQuadResult;
   }
 
   return (
