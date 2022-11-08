@@ -10,8 +10,8 @@ import { intersectionOverUnion } from '../Utils';
 
 export default function ScannerScreen({route, navigation}) {
   const camera = useRef<Camera>(null)
-  const widthRatio = useRef(0);
-  const heightRatio = useRef(0);
+  const widthRatio = useRef(1);
+  const heightRatio = useRef(1);
   const [hasPermission, setHasPermission] = useState(false);
   const detectionResults = REA.useSharedValue([] as DetectedQuadResult[]);
   const frameWidth = REA.useSharedValue(0);
@@ -102,14 +102,27 @@ export default function ScannerScreen({route, navigation}) {
         if (!(frameWidth.value>frameHeight.value && screenWidth.value>screenHeight.value)){
           rotated = true;
         }
-      }
-      if (rotated) {
-        widthRatio.current = frameHeight.value/photo.width;
-        heightRatio.current = frameWidth.value/photo.height;
+        if (rotated) {
+          widthRatio.current = frameHeight.value/photo.width;
+          heightRatio.current = frameWidth.value/photo.height;
+        } else {
+          widthRatio.current = frameWidth.value/photo.width;
+          heightRatio.current = frameHeight.value/photo.height;
+        }
       } else {
-        widthRatio.current = frameWidth.value/photo.width;
-        heightRatio.current = frameHeight.value/photo.height;
+        let photoRotated = false;
+        if (!(photo.width>photo.height && screenWidth.value>screenHeight.value)){
+          photoRotated = true;
+        }
+        if (photoRotated) {
+          widthRatio.current = frameWidth.value/photo.height;
+          heightRatio.current = frameHeight.value/photo.width;
+        }else{
+          widthRatio.current = frameWidth.value/photo.width;
+          heightRatio.current = frameHeight.value/photo.height;
+        }
       }
+      
       setPhotoPath(photo.path);
       //setIsActive(false);
     }
