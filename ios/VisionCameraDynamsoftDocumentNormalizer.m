@@ -12,6 +12,7 @@ RCT_EXTERN_METHOD(initRuntimeSettingsFromString:(NSString *)template
 
 RCT_EXTERN_METHOD(normalizeFile:(NSString *)path
                   quad:(NSDictionary *)quad
+                  config:(NSDictionary *)config
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 

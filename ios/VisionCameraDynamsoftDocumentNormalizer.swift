@@ -15,28 +15,49 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
         }
     }
     
-    @objc(normalizeFile:quad:withResolver:withRejecter:)
-    func normalizeFile(path:String, quad:[String:Any],resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    @objc(normalizeFile:quad:config:withResolver:withRejecter:)
+    func normalizeFile(path:String,quad:[String:Any], config:[String:Any],resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
-            let points = quad["points"] as! [[String:Int]]
+            var returned_result:[String:String] = [:]
+            let points = quad["points"] as! [[String:NSNumber]]
             let quadrilateral = iQuadrilateral.init()
             quadrilateral.points = convertPoints(points)
             let normalizedImageResult = try VisionCameraDynamsoftDocumentNormalizer.ddn.normalizeFile(path, quad: quadrilateral)
             print("normalized image width: ")
             print(normalizedImageResult.image.width)
-            resolve(true)
+            
+            if config["saveNormalizationResultAsFile"] as! Bool == true {
+                let tmpDir = NSTemporaryDirectory()
+                let filePath = tmpDir + ""
+                do{
+                    try normalizedImageResult.saveToFile(filePath)
+                    returned_result["imageURL"] = filePath
+                }catch {
+                    print(error)
+                }
+            }
+            if config["includeNormalizationResultAsBase64"] as! Bool == true {
+                do{
+                    let normalizedUIImage = try normalizedImageResult.image.toUIImage()
+                    let base64 = Utils.getBase64FromImage(normalizedUIImage)
+                    returned_result["imageBase64"] = base64
+                }catch{
+                    print(error)
+                }
+            }
+            resolve(returned_result)
         }catch {
             print("Unexpected error: \(error).")
             resolve(false)
         }
     }
     
-    func convertPoints(_ points:[[String:Int]]) -> [CGPoint] {
+    func convertPoints(_ points:[[String:NSNumber]]) -> [CGPoint] {
         var CGPoints:[CGPoint] = [];
         for point in points {
             let x = point["x"]!
             let y = point["y"]!
-            let cgPoint = CGPoint(x: x, y: y)
+            let cgPoint = CGPoint(x: x.intValue, y: y.intValue)
             CGPoints.append(cgPoint)
         }
         return CGPoints
