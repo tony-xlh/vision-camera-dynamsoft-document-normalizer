@@ -29,7 +29,8 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
             if config["saveNormalizationResultAsFile"] != nil {
                 if config["saveNormalizationResultAsFile"] as! Bool == true {
                     let tmpDir = NSTemporaryDirectory()
-                    let filePath = tmpDir + ""
+                    let timestamp = String(format: "%f", Date().timeIntervalSince1970*1000)
+                    let filePath = tmpDir + "/" + timestamp + ".png"
                     do{
                         try normalizedImageResult.saveToFile(filePath)
                         returned_result["imageURL"] = filePath
