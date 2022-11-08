@@ -35,23 +35,27 @@ public class NormalizationFrameProcessorPlugin: NSObject, FrameProcessorPluginBa
         if results != nil {
             if results?.count ?? 0 > 0 {
                 let normalizedImageResult = try? VisionCameraDynamsoftDocumentNormalizer.ddn.normalizeImage(image, quad: results![0].location)
-                if config["saveNormalizationResultAsFile"] as! Bool == true {
-                    let tmpDir = NSTemporaryDirectory()
-                    let filePath = tmpDir + ""
-                    do{
-                        try normalizedImageResult?.saveToFile(filePath)
-                        returned_result["imageURL"] = filePath
-                    }catch {
-                        print(error)
+                if config["saveNormalizationResultAsFile"] != nil {
+                    if config["saveNormalizationResultAsFile"] as! Bool == true {
+                        let tmpDir = NSTemporaryDirectory()
+                        let filePath = tmpDir + ""
+                        do{
+                            try normalizedImageResult?.saveToFile(filePath)
+                            returned_result["imageURL"] = filePath
+                        }catch {
+                            print(error)
+                        }
                     }
                 }
-                if config["includeNormalizationResultAsBase64"] as! Bool == true {
-                    do{
-                        let normalizedUIImage = try normalizedImageResult?.image.toUIImage()
-                        let base64 = Utils.getBase64FromImage(normalizedUIImage!)
-                        returned_result["imageBase64"] = base64
-                    }catch{
-                        print(error)
+                if config["includeNormalizationResultAsBase64"] != nil {
+                    if config["includeNormalizationResultAsBase64"] as! Bool == true {
+                        do{
+                            let normalizedUIImage = try normalizedImageResult?.image.toUIImage()
+                            let base64 = Utils.getBase64FromImage(normalizedUIImage!)
+                            returned_result["imageBase64"] = base64
+                        }catch{
+                            print(error)
+                        }
                     }
                 }
             }

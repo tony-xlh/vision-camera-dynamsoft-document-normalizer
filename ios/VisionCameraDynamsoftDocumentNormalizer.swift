@@ -26,25 +26,30 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
             print("normalized image width: ")
             print(normalizedImageResult.image.width)
             
-            if config["saveNormalizationResultAsFile"] as! Bool == true {
-                let tmpDir = NSTemporaryDirectory()
-                let filePath = tmpDir + ""
-                do{
-                    try normalizedImageResult.saveToFile(filePath)
-                    returned_result["imageURL"] = filePath
-                }catch {
-                    print(error)
+            if config["saveNormalizationResultAsFile"] != nil {
+                if config["saveNormalizationResultAsFile"] as! Bool == true {
+                    let tmpDir = NSTemporaryDirectory()
+                    let filePath = tmpDir + ""
+                    do{
+                        try normalizedImageResult.saveToFile(filePath)
+                        returned_result["imageURL"] = filePath
+                    }catch {
+                        print(error)
+                    }
                 }
             }
-            if config["includeNormalizationResultAsBase64"] as! Bool == true {
-                do{
-                    let normalizedUIImage = try normalizedImageResult.image.toUIImage()
-                    let base64 = Utils.getBase64FromImage(normalizedUIImage)
-                    returned_result["imageBase64"] = base64
-                }catch{
-                    print(error)
+            if config["includeNormalizationResultAsBase64"] != nil {
+                if config["includeNormalizationResultAsBase64"] as! Bool == true {
+                    do{
+                        let normalizedUIImage = try normalizedImageResult.image.toUIImage()
+                        let base64 = Utils.getBase64FromImage(normalizedUIImage)
+                        returned_result["imageBase64"] = base64
+                    }catch{
+                        print(error)
+                    }
                 }
             }
+
             resolve(returned_result)
         }catch {
             print("Unexpected error: \(error).")
