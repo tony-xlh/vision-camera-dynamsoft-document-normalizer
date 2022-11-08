@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import DynamsoftCore
 import DynamsoftDocumentNormalizer
 
 class Utils {

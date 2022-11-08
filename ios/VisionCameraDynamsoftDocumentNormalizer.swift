@@ -2,7 +2,7 @@ import DynamsoftDocumentNormalizer
 
 @objc(VisionCameraDynamsoftDocumentNormalizer)
 class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListener  {
-    static var ddn:DynamsoftDocumentNormalizer = DynamsoftDocumentNormalizer();
+    static var ddn:DynamsoftDocumentNormalizer = DynamsoftDocumentNormalizer()
     
     @objc(initRuntimeSettingsFromString:withResolver:withRejecter:)
     func initRuntimeSettingsFromString(template:String, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
