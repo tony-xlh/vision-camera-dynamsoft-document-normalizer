@@ -45,7 +45,7 @@ export default function ScannerScreen({route, navigation}) {
     console.log("update pointsData");
     let data = "";
     if (detectionResults.value.length>0) {
-      let result = detectionResults.value[0]; 
+      let result = detectionResults.value[0];
       if (result) {
         let location = result.location;
         let pointsData = location.points[0].x + "," + location.points[0].y + " ";
@@ -63,6 +63,7 @@ export default function ScannerScreen({route, navigation}) {
   const device = devices.back;
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
+    console.log(frame);
     if (taken.value === false) {
       const results = DDN.detect(frame);
       console.log(results);
@@ -110,6 +111,7 @@ export default function ScannerScreen({route, navigation}) {
           heightRatio.current = frameHeight.value/photo.height;
         }
       } else {
+        console.log("ios");
         let photoRotated = false;
         if (!(photo.width>photo.height && screenWidth.value>screenHeight.value)){
           photoRotated = true;
@@ -122,7 +124,8 @@ export default function ScannerScreen({route, navigation}) {
           heightRatio.current = frameHeight.value/photo.height;
         }
       }
-      
+      console.log("width ratio:"+widthRatio.current);
+      console.log("height ratio:"+heightRatio.current);
       setPhotoPath(photo.path);
       //setIsActive(false);
     }
@@ -187,13 +190,13 @@ export default function ScannerScreen({route, navigation}) {
     );
   }
 
-  const scaleDetectionResult = (result:DetectedQuadResult):DetectedQuadResult =>  {    
+  const scaleDetectionResult = (result:DetectedQuadResult):DetectedQuadResult =>  {
     let points:[Point,Point,Point,Point] = [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}];
     for (let index = 0; index < result.location.points.length; index++) {
       const point = result.location.points[index];
       if (point) {
         let newPoint:Point = {
-          x:point.x / widthRatio.current, 
+          x:point.x / widthRatio.current,
           y:point.y / heightRatio.current
         };
         points[index] = newPoint;
@@ -281,8 +284,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "ghostwhite",
-    borderColor:"black", 
-    borderWidth:2, 
+    borderColor:"black",
+    borderWidth:2,
     borderRadius:5,
     padding: 8,
     margin: 3,

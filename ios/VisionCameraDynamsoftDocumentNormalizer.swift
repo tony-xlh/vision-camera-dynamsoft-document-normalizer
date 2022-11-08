@@ -19,23 +19,67 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
     func normalizeFile(path:String,quad:[String:Any], config:[String:Any],resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
             var returned_result:[String:String] = [:]
+            
+            let imageURL = URL(fileURLWithPath: path)
+            var image = UIImage(contentsOfFile: imageURL.path)!
+
+            //DispatchQueue.main.sync {
+            //    image = imageRotatedByDegrees(image:image, degrees:270, flip:false)
+            //}
             let points = quad["points"] as! [[String:NSNumber]]
             let quadrilateral = iQuadrilateral.init()
             quadrilateral.points = convertPoints(points)
-            let imageURL = URL(fileURLWithPath: path)
-            let image = UIImage(contentsOfFile: imageURL.path)!
+            //quadrilateral.points = convertPoints2(points, width: image.size.width, height:image.size.height, orientation: image.imageOrientation)
+
             print("image orientation: ")
             print(image.imageOrientation.rawValue)
             print("image width: ")
             print(image.size.width)
-            var rotatedImage:UIImage!
-            DispatchQueue.main.sync {
-                rotatedImage = imageRotatedByDegrees(image:image, degrees:90, flip:false)
+            print("cgimage width: ")
+            print(image.cgImage?.width)
+            //var rotatedImage:UIImage!
+            //DispatchQueue.main.sync {
+            //    rotatedImage = imageRotatedByDegrees(image:image, degrees:90, flip:false)
+            //}
+            
+            //print("rotatedImage width: ")
+            //print(rotatedImage.size.width)
+            
+            
+            let bpp = image.cgImage?.bitsPerPixel
+            var pixelFormat:EnumImagePixelFormat
+            switch (bpp) {
+               case 1:
+                pixelFormat = EnumImagePixelFormat.binary
+                break;
+               case 8:
+                pixelFormat = EnumImagePixelFormat.grayScaled
+                break;
+               case 32:
+                pixelFormat = EnumImagePixelFormat.ARGB_8888
+                print("ARGB888")
+                break;
+               case 48:
+                pixelFormat = EnumImagePixelFormat.RGB_161616;
+                break;
+               case 64:
+                pixelFormat = EnumImagePixelFormat.ARGB_16161616;
+                break;
+               default:
+                pixelFormat = EnumImagePixelFormat.RGB_888;
+                print("RGB888")
+                break;
             }
             
-            print("rotatedImage width: ")
-            print(rotatedImage.size.width)
-            let normalizedImageResult = try VisionCameraDynamsoftDocumentNormalizer.ddn.normalizeImage(rotatedImage, quad: quadrilateral)
+            let data = iImageData.init()
+            data.bytes = image.cgImage?.dataProvider?.data as! Data
+            data.orientation = 0
+            data.stride = image.cgImage!.bytesPerRow
+            data.width = image.cgImage!.width
+            data.height = image.cgImage!.height
+            data.format = pixelFormat
+            
+            let normalizedImageResult = try VisionCameraDynamsoftDocumentNormalizer.ddn.normalizeBuffer(data, quad: quadrilateral)
             print("normalized image width: ")
             print(normalizedImageResult.image.width)
             
@@ -76,7 +120,27 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
         for point in points {
             let x = point["x"]!
             let y = point["y"]!
-            let cgPoint = CGPoint(x: x.intValue, y: y.intValue)
+            let intX = x.intValue
+            let intY = y.intValue
+            let cgPoint = CGPoint(x: intX, y: intY)
+            CGPoints.append(cgPoint)
+        }
+        return CGPoints
+    }
+    
+    func convertPoints2(_ points:[[String:NSNumber]], width:CGFloat, height:CGFloat, orientation:UIImage.Orientation) -> [CGPoint] {
+        var CGPoints:[CGPoint] = [];
+        for point in points {
+            let x = point["x"]!
+            let y = point["y"]!
+            var intX = x.intValue
+            var intY = y.intValue
+            if orientation.rawValue == 3 {
+                let temp = intX
+                intX = Int(height) - intY
+                intY = temp
+            }
+            let cgPoint = CGPoint(x: intX, y: intY)
             CGPoints.append(cgPoint)
         }
         return CGPoints
