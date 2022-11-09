@@ -16,14 +16,23 @@ const VisionCameraDynamsoftDocumentNormalizer = NativeModules.VisionCameraDynams
       }
     );
 
+/**
+ * Init the license of Dynamsoft Document Normalizer
+ */
 export function initLicense(license:string): Promise<boolean> {
   return VisionCameraDynamsoftDocumentNormalizer.initLicense(license);
 }
 
+/**
+ * Init the runtime settings from a JSON template
+ */
 export function initRuntimeSettingsFromString(template:string): Promise<boolean> {
   return VisionCameraDynamsoftDocumentNormalizer.initRuntimeSettingsFromString(template);
 }
 
+/**
+ * Detect documents from the the camera preview
+ */
 export function detect(frame: Frame): DetectedQuadResult[] {
   'worklet'
   // @ts-ignore
@@ -31,6 +40,9 @@ export function detect(frame: Frame): DetectedQuadResult[] {
   return __detect(frame, {})
 }
 
+/**
+ * Detect documents from the the camera preview and return the normalized image of the first detected result
+ */
 export function detectAndNormalize(frame: Frame, config: NormalizationConfig): NormalizedImageResult {
   // 'worklet'
    // @ts-ignore
@@ -38,15 +50,25 @@ export function detectAndNormalize(frame: Frame, config: NormalizationConfig): N
    return __detectAndNormalize(frame, config)
  }
 
+
+/**
+ * Normalize an image file
+ */
 export function normalizeFile(url:string, quad:Quadrilateral, config: NormalizationConfig): Promise<NormalizedImageResult> {
   return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, quad, config);
 }
 
+/**
+ * Config of whether to save the normalized as a file and base64.
+ */
 export interface NormalizationConfig{
   saveNormalizationResultAsFile?: boolean;
   includeNormalizationResultAsBase64?: boolean;
 }
 
+/**
+ * Normalization result containing the image path or base64
+ */
 export interface NormalizedImageResult {
   imageURL?: string;
   imageBase64?: string;

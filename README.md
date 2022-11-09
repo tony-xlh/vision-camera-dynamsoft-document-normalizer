@@ -5,7 +5,7 @@ A React Native Vision Camera frame processor plugin for [Dynamsoft Document Norm
 ## Supported Platforms
 
 * Android
-* iOS (WIP)
+* iOS
 
 ## Installation
 
@@ -52,6 +52,8 @@ export default function App() {
 }
 
 ```
+
+Check out the [example](https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer/tree/main/example) and the [definition file](https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer/blob/main/src/index.tsx) to learn more.
 
 ## Contributing
 
