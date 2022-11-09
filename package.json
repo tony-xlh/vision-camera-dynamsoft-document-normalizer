@@ -33,7 +33,11 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "document detection",
+    "perspective transformation",
+    "crop",
+    "automatic"
   ],
   "repository": "https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer",
   "author": "Xu Lihang <xulihanghai@gmail.com> (https://github.com/tony-xlh)",
