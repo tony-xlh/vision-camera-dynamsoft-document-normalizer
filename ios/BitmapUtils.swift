@@ -9,7 +9,7 @@
 import Foundation
 
 class BitmapUtils {
-    
+    //https://stackoverflow.com/questions/8915630/ios-uiimageview-how-to-handle-uiimage-image-orientation
     static public func normalizedImage(_ image:UIImage) -> UIImage {
         if image.imageOrientation == UIImage.Orientation.up {
             return image
