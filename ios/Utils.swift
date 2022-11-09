@@ -10,6 +10,7 @@ import Foundation
 import DynamsoftDocumentNormalizer
 
 class Utils {
+    
     static public func convertBase64ToImage(_ imageStr:String) ->UIImage?{
         if let data: NSData = NSData(base64Encoded: imageStr, options:NSData.Base64DecodingOptions.ignoreUnknownCharacters)
         {
@@ -28,6 +29,7 @@ class Utils {
         }
         return ""
     }
+    
     
     static func wrapDetectionResult (result:iDetectedQuadResult) -> [String: Any] {
         var dict: [String: Any] = [:]
