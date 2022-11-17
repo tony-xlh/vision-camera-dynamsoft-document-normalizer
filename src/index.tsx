@@ -31,7 +31,7 @@ export function initRuntimeSettingsFromString(template:string): Promise<boolean>
 }
 
 /**
- * Detect documents from the the camera preview
+ * Detect documents from the camera preview
  */
 export function detect(frame: Frame): DetectedQuadResult[] {
   'worklet'
