@@ -15,6 +15,27 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
         }
     }
     
+    @objc(detectFile:withResolver:withRejecter:)
+    func detectFile(path:String,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+
+        var returned_results: [Any] = []
+        
+        let imageURL = URL(fileURLWithPath: path)
+        var image = UIImage(contentsOfFile: imageURL.path)!
+        image = BitmapUtils.normalizedImage(image)
+        
+        let results = try? VisionCameraDynamsoftDocumentNormalizer.ddn.detectQuadFromImage(image)
+        
+        if results != nil {
+            for result in results! {
+                returned_results.append(Utils.wrapDetectionResult(result:result))
+            }
+        }
+
+        resolve(returned_results)
+
+    }
+    
     @objc(normalizeFile:quad:config:withResolver:withRejecter:)
     func normalizeFile(path:String,quad:[String:Any], config:[String:Any],resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {

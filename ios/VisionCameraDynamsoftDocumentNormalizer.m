@@ -10,6 +10,11 @@ RCT_EXTERN_METHOD(initRuntimeSettingsFromString:(NSString *)template
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
+
+RCT_EXTERN_METHOD(detectFile:(NSString *)path
+                 withResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(normalizeFile:(NSString *)path
                   quad:(NSDictionary *)quad
                   config:(NSDictionary *)config
