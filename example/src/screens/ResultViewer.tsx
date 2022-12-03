@@ -41,7 +41,13 @@ export default function ResultViewerScreen({route, navigation}) {
         await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_COLOUR\"}]}");
       }
       console.log("update settings done");
-      let detectionResult:DetectedQuadResult = route.params.detectionResult;
+      let points = route.params.points;
+      let detectionResult:DetectedQuadResult = {
+        confidenceAsDocumentBoundary:90,
+        location:{
+          points:[points[0],points[1],points[2],points[3]]
+        }
+      }
       let photoPath = route.params.photoPath;
       let normalizedImageResult = await DDN.normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
       console.log(normalizedImageResult);

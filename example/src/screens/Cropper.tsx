@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Dimensions, GestureResponderEvent, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
-import type { DetectedQuadResult } from "vision-camera-dynamsoft-document-normalizer";
-import Svg, { Polygon } from "react-native-svg";
+import type { Point } from "vision-camera-dynamsoft-document-normalizer";
+import Svg, { Polygon, Rect } from "react-native-svg";
 import type { PhotoFile } from "react-native-vision-camera";
-
+import { useIsFocused } from "@react-navigation/native";
 
 export default function CropperScreen({route, navigation}) {
-  const [detectionResult,setDetectionResult] = useState<undefined|DetectedQuadResult>();
+  const isFocused = useIsFocused();
+  const svgElement = useRef<Svg>(null);
   const [photoPath,setPhotoPath] = useState<string|undefined>();
   const [viewBox,setViewBox] = useState<string|undefined>();
   const [pointsData,setPointsData] = useState<string|undefined>();
+  const pointsRef = useRef<Point[]>([]);
+  const [selectedIndex,setSelectedIndex] = useState(-1);
+  const startX = useRef(-1);
+  const startY = useRef(-1);
   useEffect(() => {
     if (route.params.photo) {
       let photo:PhotoFile = route.params.photo;
@@ -45,37 +50,121 @@ export default function CropperScreen({route, navigation}) {
 
   const detectFile = async (path:string) => {
     let results = await DDN.detectFile(path);
-    if (results.length>0) {
-      setDetectionResult(results[0]);
+    if (results.length>0 && results[0]) {
+      pointsRef.current = results[0].location.points;
+      updatePointsData();
+    }
+  }
+
+  const updatePointsData = () => {
+    let points = pointsRef.current;
+    if (points && points[0] && points[1] && points[2] && points[3]) {
+      let data = points[0].x + "," + points[0].y + " ";
+      data = data + points[1].x + "," + points[1].y +" ";
+      data = data + points[2].x + "," + points[2].y +" ";
+      data = data + points[3].x + "," + points[3].y;
+      setPointsData(data)
     }
   }
 
   useEffect(() => {
-    updatePointsData();
-  }, [detectionResult]);
-
-  const updatePointsData = () => {
-    if (detectionResult) {
-      let location = detectionResult.location;
-      let data = location.points[0].x + "," + location.points[0].y + " ";
-      data = data + location.points[1].x + "," + location.points[1].y +" ";
-      data = data + location.points[2].x + "," + location.points[2].y +" ";
-      data = data + location.points[3].x + "," + location.points[3].y;
-      setPointsData(data)
-    }
-  }
+    console.log("back to cropper");
+    setSelectedIndex(-1);
+  }, [isFocused])
 
   const retake = () => {
     navigation.goBack();
   }
 
   const okay = () => {
-    navigation.navigate(
-      {
-        params: {photoPath:photoPath,detectionResult:detectionResult},
-        name: "ResultViewer"
+    if (pointsRef.current) {
+      navigation.navigate(
+        {
+          params: {photoPath:photoPath,points:pointsRef.current},
+          name: "ResultViewer"
+        }
+      );
+    }
+    
+  }
+
+  const verticeSize = () => {
+    const size = 100;
+    let photoWidth:any = viewBox?.split(" ")[2];
+    if (photoWidth) {
+      photoWidth = parseInt(photoWidth);
+      return size/(1920/photoWidth);
+    }else{
+      return size;
+    }
+  }
+
+  const strokeWidth = (selected:boolean) => {
+    let width;
+    if (selected) {
+      width = 24;
+    }else{
+      width = 12;
+    }
+    let photoWidth:any = viewBox?.split(" ")[2];
+    if (photoWidth) {
+      photoWidth = parseInt(photoWidth);
+      return width/(1920/photoWidth);
+    }else{
+      return width;
+    }
+  }
+
+  const onTouchMove = (e:GestureResponderEvent) => {
+    console.log("touch move");
+    let offsetX = e.nativeEvent.locationX - startX.current;
+    let offsetY = e.nativeEvent.locationY - startY.current;
+    offsetX = convertCoordinate(offsetX,true);
+    offsetY = convertCoordinate(offsetY,false);
+    if (selectedIndex != -1) {
+      let points = pointsRef.current;
+      let point = points[selectedIndex];
+      if (point) {
+        let newPoint = {x:0,y:0};
+        newPoint.x = point.x + offsetX;
+        newPoint.y = point.y + offsetY;
+        points[selectedIndex] = newPoint;
+        updatePointsData();
       }
-    );
+    }
+  }
+
+  const onTouchStart = (e:GestureResponderEvent) => {
+    console.log("touch start");
+    startX.current = e.nativeEvent.locationX;
+    startY.current = e.nativeEvent.locationY;
+    //console.log(e);
+  } 
+
+  const convertCoordinate = (value:number,isX:boolean) => {
+    let photoWidth = parseInt(viewBox?.split(" ")[2] as any);
+    let photoHeight = parseInt(viewBox?.split(" ")[3] as any);
+    let xPercent = Dimensions.get("window").width/photoWidth;
+    let yPercent = Dimensions.get("window").height/photoHeight;
+    console.log("xPercent: "+xPercent);
+    console.log("yPercent: "+yPercent);
+    if (isX) {
+      return value*xPercent;
+    }else{
+      return value*yPercent;
+    }
+  }
+
+  const convertCoordinate2 = (value:number,isX:boolean) => {
+    if (svgElement.current) {
+      let CTM = svgElement.current.getScreenCTM();
+      if (isX) {
+        return (value - CTM.e) / CTM.a;
+      }else{
+        return (value - CTM.f) / CTM.d;
+      }
+    }
+    return value;
   }
 
   return (
@@ -88,14 +177,30 @@ export default function CropperScreen({route, navigation}) {
             style={StyleSheet.absoluteFill}
             source={{uri:"file://"+photoPath}}
           />
-          <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox}>
+          <Svg 
+            ref={svgElement}
+            onTouchStart={(e) => onTouchStart(e)}
+            onTouchMove={(e) => onTouchMove(e)}
+            preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox}>
             <Polygon
               points={pointsData}
               fill="lime"
               stroke="green"
-              opacity="0.5"
+              opacity="0.3"
               strokeWidth="1"
             />
+            {pointsRef.current.map((point, idx) => (
+            <Rect key={idx}
+              x={point.x}
+              y={point.y}
+              width={verticeSize()}
+              height={verticeSize()}
+              fill="rgba(0,255,0,0.3)"
+              stroke="green"
+              strokeWidth={strokeWidth(idx == selectedIndex)}
+              onPress={ ()=> setSelectedIndex(idx)}
+            />
+            ))}
           </Svg>
         </>
       )}
