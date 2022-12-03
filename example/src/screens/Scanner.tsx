@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Platform, SafeAreaView, StyleSheet } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import { Svg, Polygon } from 'react-native-svg';
@@ -82,7 +82,6 @@ export default function ScannerScreen({route, navigation}) {
     detectionResults.value = [];
     previousResults.current = [];
     taken.value = false;
-    console.log(camera);
     setIsActive(true);
   }, [isFocused])
   
@@ -191,27 +190,5 @@ export default function ScannerScreen({route, navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  },
-  text: {
-    fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  control:{
-    flexDirection:"row",
-    position: 'absolute',
-    bottom: 0,
-    height: 100,
-    width:"100%",
-    alignSelf:"flex-start",
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: "ghostwhite",
-    borderColor:"black",
-    borderWidth:2,
-    borderRadius:5,
-    padding: 8,
-    margin: 3,
   },
 });
