@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { Dimensions, Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
+import { Camera, PhotoFile, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import { Svg, Polygon } from 'react-native-svg';
 import * as REA from 'react-native-reanimated';
-import type { DetectedQuadResult, Point, Quadrilateral } from 'vision-camera-dynamsoft-document-normalizer';
+import type { DetectedQuadResult } from 'vision-camera-dynamsoft-document-normalizer';
 import { useEffect, useRef, useState } from 'react';
 import { intersectionOverUnion } from '../Utils';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function ScannerScreen({route, navigation}) {
-  const camera = useRef<Camera>(null)
-  const widthRatio = useRef(1);
-  const heightRatio = useRef(1);
+  const camera = useRef<Camera|null>(null)
+  const isFocused = useIsFocused();
+  const [isActive,setIsActive] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
   const detectionResults = REA.useSharedValue([] as DetectedQuadResult[]);
   const frameWidth = REA.useSharedValue(0);
@@ -21,7 +22,7 @@ export default function ScannerScreen({route, navigation}) {
   const screenHeight = REA.useSharedValue(0);
   const [pointsText, setPointsText] = useState("default");
   const taken = REA.useSharedValue(false);
-  const [photoPath, setPhotoPath] = useState<undefined|string>(undefined);
+  const photo = useRef<PhotoFile|null>(null);
   const previousResults = useRef([] as DetectedQuadResult[]);
 
   const viewBox = REA.useDerivedValue(() => {
@@ -74,6 +75,15 @@ export default function ScannerScreen({route, navigation}) {
   }, [])
 
   useEffect(() => {
+    console.log("is focues");
+    detectionResults.value = [];
+    previousResults.current = [];
+    taken.value = false;
+    setIsActive(true);
+  }, [isFocused])
+  
+
+  useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'authorized');
@@ -96,38 +106,15 @@ export default function ScannerScreen({route, navigation}) {
     if (camera.current) {
       taken.value = true;
       console.log("using camera");
-      const photo = await camera.current.takePhoto();
-      console.log(photo);
-      let rotated = false;
-      if (platform.value === "android") {
-        if (!(frameWidth.value>frameHeight.value && screenWidth.value>screenHeight.value)){
-          rotated = true;
+      photo.current = await camera.current.takePhoto();
+      setIsActive(false);
+      console.log(photo.current);
+      navigation.navigate(
+        {
+          params: {photo:photo.current},
+          name: "Cropper"
         }
-        if (rotated) {
-          widthRatio.current = frameHeight.value/photo.width;
-          heightRatio.current = frameWidth.value/photo.height;
-        } else {
-          widthRatio.current = frameWidth.value/photo.width;
-          heightRatio.current = frameHeight.value/photo.height;
-        }
-      } else {
-        console.log("ios");
-        let photoRotated = false;
-        if (!(photo.width>photo.height && screenWidth.value>screenHeight.value)){
-          photoRotated = true;
-        }
-        if (photoRotated) {
-          widthRatio.current = frameWidth.value/photo.height;
-          heightRatio.current = frameHeight.value/photo.width;
-        }else{
-          widthRatio.current = frameWidth.value/photo.width;
-          heightRatio.current = frameHeight.value/photo.height;
-        }
-      }
-      console.log("width ratio:"+widthRatio.current);
-      console.log("height ratio:"+heightRatio.current);
-      setPhotoPath(photo.path);
-      //setIsActive(false);
+      );
     }
   }
 
@@ -169,49 +156,6 @@ export default function ScannerScreen({route, navigation}) {
     return false;
   }
 
-  const retake = () => {
-    detectionResults.value = [];
-    previousResults.current = [];
-    setPhotoPath(undefined);
-    taken.value = false;
-  }
-
-  const okay = () => {
-    console.log("okay");
-    let result = detectionResults.value[0];
-    if (result) {
-      result = scaleDetectionResult(result);
-    }
-    navigation.navigate(
-      {
-        params: {photoPath:photoPath, detectionResult:result},
-        name: "ResultViewer"
-      }
-    );
-  }
-
-  const scaleDetectionResult = (result:DetectedQuadResult):DetectedQuadResult =>  {
-    let points:[Point,Point,Point,Point] = [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}];
-    for (let index = 0; index < result.location.points.length; index++) {
-      const point = result.location.points[index];
-      if (point) {
-        let newPoint:Point = {
-          x:point.x / widthRatio.current,
-          y:point.y / heightRatio.current
-        };
-        points[index] = newPoint;
-      }
-    }
-    let quad:Quadrilateral = {
-      points: points
-    };
-    let newQuadResult:DetectedQuadResult = {
-      confidenceAsDocumentBoundary:result.confidenceAsDocumentBoundary,
-      location: quad
-    };
-    return newQuadResult;
-  }
-
   return (
       <SafeAreaView style={styles.container}>
         {device != null &&
@@ -220,20 +164,12 @@ export default function ScannerScreen({route, navigation}) {
             <Camera
               style={StyleSheet.absoluteFill}
               ref={camera}
-              isActive={true}
+              isActive={isActive}
               device={device}
               photo={true}
               frameProcessor={frameProcessor}
               frameProcessorFps={5}
             />
-            {photoPath && (
-              <>
-                <Image
-                  style={StyleSheet.absoluteFill}
-                  source={{uri:"file://"+photoPath}}
-                />
-              </>
-            )}
             <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox.value}>
               <Polygon
                 points={pointsData.value}
@@ -243,22 +179,6 @@ export default function ScannerScreen({route, navigation}) {
                 strokeWidth="1"
               />
             </Svg>
-            {photoPath && (
-              <>
-                <View style={styles.control}>
-                  <View style={{flex:0.5}}>
-                    <TouchableOpacity onPress={retake} style={styles.button}>
-                      <Text style={{fontSize: 15, color: "black", alignSelf: "center"}}>Retake</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={{flex:0.5}}>
-                    <TouchableOpacity onPress={okay} style={styles.button}>
-                      <Text style={{fontSize: 15, color: "black", alignSelf: "center"}}>Okay</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </>
-            )}
         </>)}
       </SafeAreaView>
   );

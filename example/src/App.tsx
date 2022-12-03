@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ScannerScreen from './screens/Scanner';
 import HomeScreen from './screens/Home';
 import ResultViewerScreen from './screens/ResultViewer';
+import CropperScreen from './screens/Cropper';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Scanner" component={ScannerScreen} />
+        <Stack.Screen name="Cropper" component={CropperScreen} />
         <Stack.Screen name="ResultViewer" component={ResultViewerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
