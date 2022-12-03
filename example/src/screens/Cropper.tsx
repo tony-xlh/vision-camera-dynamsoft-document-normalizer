@@ -167,6 +167,26 @@ export default function CropperScreen({route, navigation}) {
     return value;
   }
 
+  const getVerticeOffsetX = (index:number) => {
+    let size = verticeSize();
+    if (index === 0) {
+      return -size;
+    }else if (index === 3) {
+      return -size;
+    }
+    return 0;
+  }
+
+  const getVerticeOffsetY = (index:number) => {
+    let size = verticeSize();
+    if (index === 0) {
+      return -size;
+    }else if (index === 1) {
+      return -size;
+    }
+    return 0;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {photoPath != undefined && 
@@ -191,8 +211,8 @@ export default function CropperScreen({route, navigation}) {
             />
             {pointsRef.current.map((point, idx) => (
             <Rect key={idx}
-              x={point.x}
-              y={point.y}
+              x={point.x+getVerticeOffsetX(idx)}
+              y={point.y+getVerticeOffsetY(idx)}
               width={verticeSize()}
               height={verticeSize()}
               fill="rgba(0,255,0,0.3)"
