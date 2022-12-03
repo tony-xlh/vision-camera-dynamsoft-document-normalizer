@@ -3,15 +3,15 @@ package com.visioncameradynamsoftdocumentnormalizer;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresPermission;
 import androidx.camera.core.ImageProxy;
 
 import com.dynamsoft.core.CoreException;
-import com.dynamsoft.core.ImageData;
 import com.dynamsoft.core.LicenseManager;
 import com.dynamsoft.core.LicenseVerificationListener;
 import com.dynamsoft.core.Quadrilateral;
@@ -25,13 +25,12 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.module.annotations.ReactModule;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileOutputStream;
 
 @ReactModule(name = VisionCameraDynamsoftDocumentNormalizerModule.NAME)
 public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextBaseJavaModule {
@@ -107,6 +106,42 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
         }
         promise.resolve(returnResult);
     }
+
+    @ReactMethod
+    public void rotateFile(String filePath, int degrees, Promise promise) {
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        bitmap = rotateBitmap(bitmap,degrees,false,false);
+        File file = new File(filePath);
+        try {
+            FileOutputStream fOut = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            promise.reject("DDN",e.getMessage());
+            return;
+        }
+        promise.resolve(true);
+    }
+
+    private static Bitmap rotateBitmap(
+            Bitmap bitmap, int rotationDegrees, boolean flipX, boolean flipY) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(rotationDegrees);
+
+        // Mirror the image along the X or Y axis.
+        matrix.postScale(flipX ? -1.0f : 1.0f, flipY ? -1.0f : 1.0f);
+        Bitmap rotatedBitmap =
+                Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+        // Recycle the old bitmap if it has changed.
+        if (rotatedBitmap != bitmap) {
+            bitmap.recycle();
+        }
+        return rotatedBitmap;
+    }
+
 
     @ReactMethod
     public void normalizeFile(String filePath, ReadableMap quad, ReadableMap config, Promise promise) {

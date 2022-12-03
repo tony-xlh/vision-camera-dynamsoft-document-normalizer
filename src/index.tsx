@@ -66,6 +66,14 @@ export function normalizeFile(url:string, quad:Quadrilateral, config: Normalizat
 }
 
 /**
+ * Rotate an image file. Android only.
+ */
+ export function rotateFile(url:string, degrees:number): Promise<NormalizedImageResult> {
+  return VisionCameraDynamsoftDocumentNormalizer.rotateFile(url, degrees);
+}
+
+
+/**
  * Config of whether to save the normalized as a file and base64.
  */
 export interface NormalizationConfig{
