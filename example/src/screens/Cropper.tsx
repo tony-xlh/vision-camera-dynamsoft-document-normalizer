@@ -8,9 +8,9 @@ import type { PhotoFile } from "react-native-vision-camera";
 
 export default function CropperScreen({route, navigation}) {
   const [detectionResult,setDetectionResult] = useState<undefined|DetectedQuadResult>();
-  const [photoPath,setPhotoPath] = useState("");
-  const [viewBox,setViewBox] = useState("");
-  const [pointsData,setPointsData] = useState("");
+  const [photoPath,setPhotoPath] = useState<string|undefined>();
+  const [viewBox,setViewBox] = useState<string|undefined>();
+  const [pointsData,setPointsData] = useState<string|undefined>();
   useEffect(() => {
     if (route.params.photo) {
       let photo:PhotoFile = route.params.photo;
@@ -57,19 +57,26 @@ export default function CropperScreen({route, navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image
-        style={StyleSheet.absoluteFill}
-        source={{uri:"file://"+photoPath}}
-      />
-      <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox}>
-        <Polygon
-          points={pointsData}
-          fill="lime"
-          stroke="green"
-          opacity="0.5"
-          strokeWidth="1"
-        />
-      </Svg>
+      {photoPath != undefined && 
+      pointsData != undefined && 
+      viewBox != undefined && (
+        <>
+          <Image
+            style={StyleSheet.absoluteFill}
+            source={{uri:"file://"+photoPath}}
+          />
+          <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox}>
+            <Polygon
+              points={pointsData}
+              fill="lime"
+              stroke="green"
+              opacity="0.5"
+              strokeWidth="1"
+            />
+          </Svg>
+        </>
+      )}
+      
       <View style={styles.control}>
         <View style={{flex:0.5}}>
           <TouchableOpacity onPress={retake} style={styles.button}>
