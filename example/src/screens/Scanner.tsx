@@ -111,6 +111,12 @@ export default function ScannerScreen({route, navigation}) {
       console.log("using camera");
       photo.current = await camera.current.takePhoto();
       setIsActive(false);
+      if (Platform.OS === "android") {
+        if (photo.current.metadata.Orientation === 6) {
+          console.log("rotate bitmap for Android");
+          await DDN.rotateFile(photo.current.path,90);
+        }
+      }
       console.log(photo.current);
       navigation.navigate(
         {
