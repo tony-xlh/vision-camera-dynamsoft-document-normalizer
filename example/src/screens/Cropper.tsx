@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import type { DetectedQuadResult } from "vision-camera-dynamsoft-document-normalizer";
 import Svg, { Polygon } from "react-native-svg";
@@ -15,10 +15,33 @@ export default function CropperScreen({route, navigation}) {
     if (route.params.photo) {
       let photo:PhotoFile = route.params.photo;
       setPhotoPath(photo.path);
-      setViewBox("0 0 "+photo.width+" "+photo.height);
+      updateViewBox(photo);
       detectFile(photo.path);
     }
   }, []);
+
+  const updateViewBox = (photo:PhotoFile) => {
+    let screenWidth = Dimensions.get('window').width;
+    let screenHeight = Dimensions.get('window').height;
+    
+    let rotated = false; // image is rotated for display
+
+    if (photo.width>photo.height && screenWidth<screenHeight){
+      rotated = true;
+    }
+    if (photo.width<photo.height && screenWidth>screenHeight){
+      rotated = true;
+    }
+
+    let viewBoxValue = "";
+    if (rotated) {
+      viewBoxValue = "0 0 "+photo.height+" "+photo.width;
+    }else{
+      viewBoxValue = "0 0 "+photo.width+" "+photo.height;
+    }
+
+    setViewBox(viewBoxValue);
+  }
 
   const detectFile = async (path:string) => {
     let results = await DDN.detectFile(path);

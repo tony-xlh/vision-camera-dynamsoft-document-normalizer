@@ -30,7 +30,10 @@ export default function ScannerScreen({route, navigation}) {
     let viewBox = "";
     let rotated = false;
     if (platform.value === "android") {
-      if (!(frameWidth.value>frameHeight.value && screenWidth.value>screenHeight.value)){
+      if (frameWidth.value>frameHeight.value && screenWidth.value<screenHeight.value){
+        rotated = true;
+      }
+      if (frameWidth.value<frameHeight.value && screenWidth.value>screenHeight.value){
         rotated = true;
       }
     }
@@ -75,10 +78,11 @@ export default function ScannerScreen({route, navigation}) {
   }, [])
 
   useEffect(() => {
-    console.log("is focues");
+    console.log("is focused");
     detectionResults.value = [];
     previousResults.current = [];
     taken.value = false;
+    console.log(camera);
     setIsActive(true);
   }, [isFocused])
   
