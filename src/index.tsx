@@ -52,6 +52,13 @@ export function detectAndNormalize(frame: Frame, config: NormalizationConfig): N
 
 
 /**
+ * Detect documents in an image file
+ */
+export function detectFile(url:string): Promise<DetectedQuadResult[]> {
+  return VisionCameraDynamsoftDocumentNormalizer.detectFile(url);
+}
+
+/**
  * Normalize an image file
  */
 export function normalizeFile(url:string, quad:Quadrilateral, config: NormalizationConfig): Promise<NormalizedImageResult> {

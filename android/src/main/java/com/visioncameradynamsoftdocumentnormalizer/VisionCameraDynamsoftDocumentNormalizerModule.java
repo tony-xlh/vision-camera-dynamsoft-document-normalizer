@@ -26,6 +26,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.module.annotations.ReactModule;
 
@@ -89,6 +90,22 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
             e.printStackTrace();
             promise.reject("DDN",e.getMessage());
         }
+    }
+
+    @ReactMethod
+    public void detectFile(String filePath, Promise promise) {
+        WritableNativeArray returnResult = new WritableNativeArray();
+        try {
+            DetectedQuadResult[] quadResults = ddn.detectQuad(filePath);
+            for (DetectedQuadResult quad:quadResults) {
+                returnResult.pushMap(Utils.getMapFromDetectedQuadResult(quad));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            promise.reject("DDN",e.getMessage());
+            return;
+        }
+        promise.resolve(returnResult);
     }
 
     @ReactMethod
