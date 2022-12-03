@@ -188,7 +188,9 @@ export default function CropperScreen({route, navigation}) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView 
+      onTouchStart={(e) => onTouchStart(e)}
+      onTouchMove={(e) => onTouchMove(e)} style={styles.container}>
       {photoPath != undefined && 
       pointsData != undefined && 
       viewBox != undefined && (
@@ -199,8 +201,6 @@ export default function CropperScreen({route, navigation}) {
           />
           <Svg 
             ref={svgElement}
-            onTouchStart={(e) => onTouchStart(e)}
-            onTouchMove={(e) => onTouchMove(e)}
             preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox}>
             <Polygon
               points={pointsData}
