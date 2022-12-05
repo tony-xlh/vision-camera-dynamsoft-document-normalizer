@@ -218,7 +218,7 @@ export default function CropperScreen({route, navigation}) {
               fill="rgba(0,255,0,0.3)"
               stroke="green"
               strokeWidth={strokeWidth(idx == selectedIndex)}
-              onPress={ ()=> setSelectedIndex(idx)}
+              onPressIn={ ()=> setSelectedIndex(idx)}
             />
             ))}
           </Svg>
