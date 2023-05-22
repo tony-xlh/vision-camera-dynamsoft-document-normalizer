@@ -142,6 +142,13 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
     
     func licenseVerificationCallback(_ isSuccess: Bool, error: Error?) {
         print(isSuccess)
+        var msg:String? = nil
+        if(error != nil)
+        {
+            let err = error as NSError?
+            msg = err!.userInfo[NSUnderlyingErrorKey] as? String
+            print("Server license verify failed: ", msg ?? "")
+        }
         licenseResolveBlock(isSuccess);
     }
 }
