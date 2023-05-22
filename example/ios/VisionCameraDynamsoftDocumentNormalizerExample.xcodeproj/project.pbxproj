@@ -292,7 +292,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.visioncameradynamsoftdocumentnormalizer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.visioncameraddn;
 				PRODUCT_NAME = VisionCameraDynamsoftDocumentNormalizerExample;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -318,7 +318,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.visioncameradynamsoftdocumentnormalizer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.visioncameraddn;
 				PRODUCT_NAME = VisionCameraDynamsoftDocumentNormalizerExample;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
