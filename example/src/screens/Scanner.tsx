@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dimensions, Platform, SafeAreaView, StyleSheet } from 'react-native';
+import { Alert, Dimensions, Platform, SafeAreaView, StyleSheet } from 'react-native';
 import { Camera, PhotoFile, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import { Svg, Polygon } from 'react-native-svg';
@@ -92,6 +92,9 @@ export default function ScannerScreen({route, navigation}) {
       setHasPermission(status === 'authorized');
       let result = await DDN.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAwMjI3NzYzLVRYbE5iMkpwYkdWUWNtOXFYMlJrYmciLCJvcmdhbml6YXRpb25JRCI6IjEwMDIyNzc2MyIsImNoZWNrQ29kZSI6MTM0ODY2MDUyMn0=");
       console.log(result);
+      if (result === false) {
+        Alert.alert("DDN","License invalid");
+      }
     })();
     platform.value = Platform.OS;
     screenWidth.value = Dimensions.get('window').width;
