@@ -91,6 +91,7 @@ export default function ScannerScreen({route, navigation}) {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'authorized');
       let result = await DDN.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAwMjI3NzYzLVRYbE5iMkpwYkdWUWNtOXFYMlJrYmciLCJvcmdhbml6YXRpb25JRCI6IjEwMDIyNzc2MyIsImNoZWNrQ29kZSI6MTM0ODY2MDUyMn0=");
+      console.log("Licesne valid: ");
       console.log(result);
       if (result === false) {
         Alert.alert("DDN","License invalid");
