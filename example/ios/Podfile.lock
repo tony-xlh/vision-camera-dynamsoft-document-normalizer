@@ -1,13 +1,13 @@
 PODS:
   - boost (1.76.0)
   - DoubleConversion (1.1.6)
-  - DynamsoftCore (2.0.1)
-  - DynamsoftDocumentNormalizer (1.0.10):
+  - DynamsoftCore (2.0.2)
+  - DynamsoftDocumentNormalizer (1.0.20):
     - DynamsoftCore (>= 2.0.0)
     - DynamsoftImageProcessing
     - DynamsoftIntermediateResult
-  - DynamsoftImageProcessing (1.0.10)
-  - DynamsoftIntermediateResult (1.0.10)
+  - DynamsoftImageProcessing (1.0.20)
+  - DynamsoftIntermediateResult (1.0.20)
   - FBLazyVector (0.68.2)
   - FBReactNativeSpec (0.68.2):
     - RCT-Folly (= 2021.06.28.00-v2)
@@ -349,8 +349,8 @@ PODS:
     - React-Core
   - RNSVG (13.4.0):
     - React-Core
-  - vision-camera-dynamsoft-document-normalizer (0.1.0):
-    - DynamsoftDocumentNormalizer (= 1.0.10)
+  - vision-camera-dynamsoft-document-normalizer (0.2.1):
+    - DynamsoftDocumentNormalizer (= 1.0.20)
     - React-Core
   - VisionCamera (2.14.1):
     - React
@@ -496,10 +496,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
-  DynamsoftCore: a39ffde3c0dc1cbc8279d92950abb0b69e86e999
-  DynamsoftDocumentNormalizer: 62d05deb9cfed88a100d341291e0e6255395f76c
-  DynamsoftImageProcessing: 28ed681404fe6a48a14773472e77aaa9ffd3193b
-  DynamsoftIntermediateResult: 0af2d8dda17d886761d5aef833f5a1bdbd40dd8a
+  DynamsoftCore: 80c01db1e40dd019d50b9c07bff50c73fcb06d03
+  DynamsoftDocumentNormalizer: b40ccace39cecece242697f076cf60ab50e39125
+  DynamsoftImageProcessing: 91d7062099a70a9db81cc30a0400e136eafdf838
+  DynamsoftIntermediateResult: 4a56047650f7c9225ec0b9a2531c9f4dd60ff2a6
   FBLazyVector: a7a655862f6b09625d11c772296b01cd5164b648
   FBReactNativeSpec: 81ce99032d5b586fddd6a38d450f8595f7e04be4
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
@@ -537,7 +537,7 @@ SPEC CHECKSUMS:
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNShare: 36aa3e6958373a0ad1c95a1c960adef589da3794
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
-  vision-camera-dynamsoft-document-normalizer: 36944b0380d3f147699f42b7a9aa20ebe8a339b6
+  vision-camera-dynamsoft-document-normalizer: f8410ce4f3510047cb773e1f561f6a031e9f3f57
   VisionCamera: 55a9d8c2544d0fd898c7d39eb30a195bb9f45999
   Yoga: 99652481fcd320aefa4a7ef90095b95acd181952
 
