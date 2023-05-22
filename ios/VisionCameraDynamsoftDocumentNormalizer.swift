@@ -3,7 +3,8 @@ import DynamsoftDocumentNormalizer
 @objc(VisionCameraDynamsoftDocumentNormalizer)
 class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListener  {
     static var ddn:DynamsoftDocumentNormalizer = DynamsoftDocumentNormalizer()
-    
+    var licenseResolveBlock:RCTPromiseResolveBlock!;
+    var licenseRejectBlock:RCTPromiseRejectBlock!;
     @objc(initRuntimeSettingsFromString:withResolver:withRejecter:)
     func initRuntimeSettingsFromString(template:String, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
@@ -133,12 +134,14 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
     }
     
     @objc(initLicense:withResolver:withRejecter:)
-    func initLicense(license:String, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    func initLicense(license:String, resolve:@escaping RCTPromiseResolveBlock,reject:@escaping RCTPromiseRejectBlock) -> Void {
         DynamsoftLicenseManager.initLicense(license, verificationDelegate: self)
-        resolve(true)
+        licenseResolveBlock = resolve;
+        licenseRejectBlock = reject;
     }
     
     func licenseVerificationCallback(_ isSuccess: Bool, error: Error?) {
         print(isSuccess)
+        licenseResolveBlock(isSuccess);
     }
 }
