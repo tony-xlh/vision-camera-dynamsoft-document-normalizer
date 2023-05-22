@@ -21,7 +21,7 @@
     "react-native-share": "^8.0.0",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-svg": "^13.4.0",
-    "react-native-vision-camera": "^2.14.1"
+    "react-native-vision-camera": "^2.15.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
