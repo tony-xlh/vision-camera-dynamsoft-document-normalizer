@@ -12,12 +12,13 @@ public class VisionCameraDetectionPlugin extends FrameProcessorPlugin {
     private VisionCameraDynamsoftDocumentNormalizerModule mModule;
     @Override
     public Object callback(ImageProxy image, Object[] params) {
-        Log.d("DDN","detect");
         WritableNativeArray quadResultsWrapped = new WritableNativeArray();
         try {
             DetectedQuadResult[] quadResults = mModule.detectImageProxy(image);
-            for (DetectedQuadResult quad:quadResults) {
-                quadResultsWrapped.pushMap(Utils.getMapFromDetectedQuadResult(quad));
+            if (quadResults != null) {
+                for (DetectedQuadResult quad:quadResults) {
+                    quadResultsWrapped.pushMap(Utils.getMapFromDetectedQuadResult(quad));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
