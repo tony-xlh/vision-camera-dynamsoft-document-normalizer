@@ -4,11 +4,7 @@ A React Native Vision Camera frame processor plugin for [Dynamsoft Document Norm
 
 [Demo video](https://user-images.githubusercontent.com/5462205/200720562-a7b91e06-cf6c-4235-a8cd-ef200012a42a.MP4)
 
-This version of the plugin works for the following combination:
-
-* vision camera v2
-* react-native-reanimated v2
-* react native <= 0.71
+Please note that this version of the plugin works for Vision Camera v2.
 
 ## Supported Platforms
 
