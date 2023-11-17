@@ -2,12 +2,12 @@ PODS:
   - boost (1.76.0)
   - DoubleConversion (1.1.6)
   - DynamsoftCore (2.0.2)
-  - DynamsoftDocumentNormalizer (1.0.20):
+  - DynamsoftDocumentNormalizer (1.0.30):
     - DynamsoftCore (>= 2.0.0)
     - DynamsoftImageProcessing
     - DynamsoftIntermediateResult
-  - DynamsoftImageProcessing (1.0.20)
-  - DynamsoftIntermediateResult (1.0.20)
+  - DynamsoftImageProcessing (1.0.30)
+  - DynamsoftIntermediateResult (1.0.30)
   - FBLazyVector (0.68.2)
   - FBReactNativeSpec (0.68.2):
     - RCT-Folly (= 2021.06.28.00-v2)
@@ -349,10 +349,13 @@ PODS:
     - React-Core
   - RNSVG (13.4.0):
     - React-Core
-  - vision-camera-dynamsoft-document-normalizer (0.2.1):
-    - DynamsoftDocumentNormalizer (= 1.0.20)
+  - vision-camera-dynamsoft-document-normalizer (0.4.0):
+    - DynamsoftCore (= 2.0.2)
+    - DynamsoftDocumentNormalizer (= 1.0.30)
+    - DynamsoftImageProcessing (= 1.0.30)
+    - DynamsoftIntermediateResult (= 1.0.30)
     - React-Core
-  - VisionCamera (2.14.1):
+  - VisionCamera (2.15.4):
     - React
     - React-callinvoker
     - React-Core
@@ -497,9 +500,9 @@ SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
   DynamsoftCore: 80c01db1e40dd019d50b9c07bff50c73fcb06d03
-  DynamsoftDocumentNormalizer: b40ccace39cecece242697f076cf60ab50e39125
-  DynamsoftImageProcessing: 91d7062099a70a9db81cc30a0400e136eafdf838
-  DynamsoftIntermediateResult: 4a56047650f7c9225ec0b9a2531c9f4dd60ff2a6
+  DynamsoftDocumentNormalizer: c316039c6209200d068231ff676da81af75e7778
+  DynamsoftImageProcessing: ffed5d46c90d8857f3e65194947b8447a10629b3
+  DynamsoftIntermediateResult: b611948b62c0c48e2a5d247bcc1ec31a03b670ff
   FBLazyVector: a7a655862f6b09625d11c772296b01cd5164b648
   FBReactNativeSpec: 81ce99032d5b586fddd6a38d450f8595f7e04be4
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
@@ -537,10 +540,10 @@ SPEC CHECKSUMS:
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNShare: 36aa3e6958373a0ad1c95a1c960adef589da3794
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
-  vision-camera-dynamsoft-document-normalizer: f8410ce4f3510047cb773e1f561f6a031e9f3f57
-  VisionCamera: 55a9d8c2544d0fd898c7d39eb30a195bb9f45999
+  vision-camera-dynamsoft-document-normalizer: 781a08fee6c3b7c2ddd48a1d868e1eceb58cea07
+  VisionCamera: 7047698c711b2ebeb74c32f64fa364eb4ad237fc
   Yoga: 99652481fcd320aefa4a7ef90095b95acd181952
 
 PODFILE CHECKSUM: 6d8377c3e6ed8d786e8e1aeb01ea0f7fb402fa90
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.14.2
