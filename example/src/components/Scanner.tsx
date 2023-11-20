@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { intersectionOverUnion } from '../Utils';
 
 export interface ScannerProps{
-    onScanned?: (path:PhotoFile) => void;
+    onScanned?: (path:PhotoFile|null) => void;
   }
   
 export default function Scanner(props:ScannerProps) {

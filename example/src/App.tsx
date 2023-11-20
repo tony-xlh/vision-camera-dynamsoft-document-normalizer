@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Scanner from './components/Scanner';
 import type { PhotoFile } from 'react-native-vision-camera';
 import type * as DDN from "vision-camera-dynamsoft-document-normalizer";
@@ -18,10 +18,15 @@ export default function App() {
     setShowScanner(true);
   }
 
-  const onScanned = (photo:PhotoFile) => {
-    setShowScanner(false);
-    setPhotoTaken(photo);
-    setShowCropper(true);
+  const onScanned = (photo:PhotoFile|null) => {
+    if (photo) {
+      setShowScanner(false);
+      setPhotoTaken(photo);
+      setShowCropper(true);
+    }else{
+      Alert.alert("Error","Failed to take a photo. Please try again.");
+      setShowScanner(false);
+    }
   }
 
   const renderBody = () => {
