@@ -1,8 +1,8 @@
 {
   "name": "vision-camera-dynamsoft-document-normalizer",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "private": false,
-  "description": "React Native Vision Camera Frame Processor Plugin of Dynamsoft Barcode Reader",
+  "description": "A React Native Vision Camera frame processor plugin for Dynamsoft Document Normalizer which can be used to create a document scanner.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
@@ -36,11 +36,13 @@
     "react-native",
     "ios",
     "android",
-    "pdf417",
-    "barcode",
-    "qr-code",
-    "ean13",
-    "data-matrix"
+    "document scanning",
+    "document scanner",
+    "document scan",
+    "document detection",
+    "perspective transformation",
+    "crop",
+    "automatic"
   ],
   "repository": {
     "type": "git",
