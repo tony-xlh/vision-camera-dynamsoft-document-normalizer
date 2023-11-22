@@ -6,7 +6,7 @@ import { Svg, Polygon } from 'react-native-svg';
 import type { DetectedQuadResult } from 'vision-camera-dynamsoft-document-normalizer';
 import { useEffect, useRef, useState } from 'react';
 import { Worklets,useSharedValue } from 'react-native-worklets-core';
-import { intersectionOverUnion } from '../Utils';
+import { intersectionOverUnion, sleep } from '../Utils';
 
 export interface ScannerProps{
     onScanned?: (path:PhotoFile|null) => void;
@@ -21,29 +21,12 @@ export default function Scanner(props:ScannerProps) {
   const frameHeight = useSharedValue(1080);
   const [viewBox,setViewBox] = useState("0 0 1080 1920");
   const [pointsText, setPointsText] = useState("default");
-  const taken = useSharedValue(false);
+  const takenShared = useSharedValue(false);
+  const [taken,setTaken] = useState(false);
   const photo = useRef<PhotoFile|null>(null);
   const previousResults = useRef([] as DetectedQuadResult[]);
-
   const device = useCameraDevice("back");
-  const frameProcessor = useFrameProcessor((frame) => {
-    'worklet'
-    console.log(taken.value)
-    console.log("detect frame");
-    console.log(frame);
-    if (taken.value === false) {
-      const results = DDN.detect(frame);
-      console.log(results);
-      if (results.length>0) {
-        frameWidth.value = frame.width;
-        frameHeight.value = frame.height;
-        detectionResults.value = results;
-        updateViewBoxJS();
-        updatePointsDataJS();
-      }
-    }
-  }, [])
-
+  
   useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
@@ -99,16 +82,20 @@ export default function Scanner(props:ScannerProps) {
   const updatePointsDataJS = Worklets.createRunInJsFn(updatePointsData);
   
   useEffect(() => {
-    console.log("pointsText changed");
-    checkIfSteady();
+    if (pointsText != "default") {
+      console.log("pointsText changed");
+      checkIfSteady();
+    }
   }, [pointsText]);
 
 
   const takePhoto = async () => {
     console.log("take photo");
     if (camera.current) {
-      taken.value = true;
       console.log("using camera");
+      setTaken(true);
+      takenShared.value = true;
+      await sleep(1000);
       photo.current = await camera.current.takePhoto();
       if (photo.current) {
         setIsActive(false);
@@ -122,11 +109,18 @@ export default function Scanner(props:ScannerProps) {
           console.log(photo.current);
           props.onScanned(photo.current);
         }
+      }else{
+        Alert.alert("","Failed to take a photo");
+        setTaken(false);
+        takenShared.value = false;
       }
     }
   }
 
   const checkIfSteady = async () => {
+    if (detectionResults.value.length == 0) {
+      return;
+    }
     let result = detectionResults.value[0];
     console.log("previousResults");
     console.log(previousResults);
@@ -164,6 +158,23 @@ export default function Scanner(props:ScannerProps) {
     return false;
   }
 
+  const frameProcessor = useFrameProcessor((frame) => {
+    'worklet'
+    console.log("detect frame");
+    console.log(frame);
+    if (takenShared.value === false) {
+      const results = DDN.detect(frame);
+      console.log(results);
+      if (results.length>0) {
+        frameWidth.value = frame.width;
+        frameHeight.value = frame.height;
+        detectionResults.value = results;
+        updateViewBoxJS();
+        updatePointsDataJS();
+      }
+    }
+  }, [])
+
   return (
       <SafeAreaView style={styles.container}>
         {device != null &&
@@ -175,16 +186,18 @@ export default function Scanner(props:ScannerProps) {
               isActive={isActive}
               device={device}
               photo={true}
-              frameProcessor={frameProcessor}
+              frameProcessor={taken ? undefined: frameProcessor}
             />
             <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox}>
-              <Polygon
-                points={pointsText}
-                fill="lime"
-                stroke="green"
-                opacity="0.5"
-                strokeWidth="1"
-              />
+              {pointsText != "default" && (
+                <Polygon
+                  points={pointsText}
+                  fill="lime"
+                  stroke="green"
+                  opacity="0.5"
+                  strokeWidth="1"
+                />
+              )}
             </Svg>
         </>)}
       </SafeAreaView>

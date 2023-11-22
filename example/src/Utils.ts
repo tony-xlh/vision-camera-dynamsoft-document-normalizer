@@ -1,5 +1,11 @@
 import type { Point, Rect } from "vision-camera-dynamsoft-document-normalizer";
 
+export function sleep(time:number){
+  return new Promise(function(resolve){
+    setTimeout(resolve, time);
+  });
+}
+
 export function intersectionOverUnion(pts1:Point[] ,pts2:Point[]) : number {
   let rect1 = getRectFromPoints(pts1);
   let rect2 = getRectFromPoints(pts2);
