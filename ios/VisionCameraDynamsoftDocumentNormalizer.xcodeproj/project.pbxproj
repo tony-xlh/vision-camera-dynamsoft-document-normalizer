@@ -25,6 +25,7 @@
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libVisionCameraDynamsoftDocumentNormalizer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVisionCameraDynamsoftDocumentNormalizer.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3E7B5891CC2AC0600A0062D /* VisionCameraDynamsoftDocumentNormalizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VisionCameraDynamsoftDocumentNormalizer.m; sourceTree = "<group>"; };
+		BE7FE4F62B0DE506008B2EC7 /* VisionCameraDynamsoftDocumentNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisionCameraDynamsoftDocumentNormalizer.h; sourceTree = "<group>"; };
 		BEE0A5102918E50000A062CB /* DetectionFrameProcessorPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetectionFrameProcessorPlugin.m; sourceTree = "<group>"; };
 		BEE6C1CA29150A6800F35AAA /* DetectionFrameProcessorPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionFrameProcessorPlugin.swift; sourceTree = "<group>"; };
 		BEE6C1CC29150A9500F35AAA /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -55,6 +56,7 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				BE7FE4F62B0DE506008B2EC7 /* VisionCameraDynamsoftDocumentNormalizer.h */,
 				BEE0A5102918E50000A062CB /* DetectionFrameProcessorPlugin.m */,
 				BEE6C1CD29150AA300F35AAA /* BitmapUtils.swift */,
 				BEE6C1CC29150A9500F35AAA /* Utils.swift */,

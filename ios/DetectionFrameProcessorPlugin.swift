@@ -10,7 +10,6 @@ import Foundation
 
 @objc(DetectionFrameProcessorPlugin)
 public class DetectionFrameProcessorPlugin: FrameProcessorPlugin {
-    private static let context = CIContext(options: nil)
     public override func callback(_ frame: Frame, withArguments arguments: [AnyHashable: Any]?) -> Any? {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer) else {
             print("Failed to get CVPixelBuffer!")
@@ -18,7 +17,7 @@ public class DetectionFrameProcessorPlugin: FrameProcessorPlugin {
           }
         let ciImage = CIImage(cvPixelBuffer: imageBuffer)
 
-        guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
+        guard let cgImage = CIContext().createCGImage(ciImage, from: ciImage.extent) else {
             print("Failed to create CGImage!")
             return nil
         }

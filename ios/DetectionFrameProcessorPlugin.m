@@ -10,7 +10,7 @@
 #import <VisionCamera/FrameProcessorPlugin.h>
 #import <VisionCamera/FrameProcessorPluginRegistry.h>
 #import <VisionCamera/Frame.h>
-#import "VisionCameraDynamsoftBarcodeReader-Swift.h"
+#import "VisionCameraDynamsoftDocumentNormalizer-Swift.h"
 
 @interface DetectionFrameProcessorPlugin (FrameProcessorPluginLoader)
 @end
