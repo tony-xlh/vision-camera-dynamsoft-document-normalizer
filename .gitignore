@@ -31,21 +31,14 @@ project.xcworkspace
 
 # Android/IJ
 #
-.classpath
-.cxx
-.gradle
 .idea
-.project
-.settings
+.gradle
 local.properties
 android.iml
 
 # Cocoapods
 #
 example/ios/Pods
-
-# Ruby
-example/vendor/
 
 # node.js
 #

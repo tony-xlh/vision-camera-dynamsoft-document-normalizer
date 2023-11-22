@@ -32,7 +32,6 @@ To run the example app on iOS:
 yarn example ios
 ```
 
-
 Make sure your code passes TypeScript and ESLint. Run the following to verify:
 
 ```sh
@@ -51,9 +50,11 @@ Remember to add tests for your change if possible. Run the unit tests by:
 ```sh
 yarn test
 ```
-To edit the Objective-C files, open `example/ios/VisionCameraDynamsoftDocumentNormalizerExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > vision-camera-dynamsoft-document-normalizer`.
+
+To edit the Objective-C files, open `example/ios/VisionCameraDynamsoftDocumentNormalizerExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > VisionCameraDynamsoftDocumentNormalizer`.
 
 To edit the Kotlin files, open `example/android` in Android studio and find the source files at `visioncameradynamsoftdocumentnormalizer` under `Android`.
+
 ### Commit message convention
 
 We follow the [conventional commits specification](https://www.conventionalcommits.org/en) for our commit messages:
@@ -99,7 +100,7 @@ The `package.json` file contains various scripts for common tasks:
 
 ### Sending a pull request
 
-> **Working on your first pull request?** You can learn how from this _free_ series: [How to Contribute to an Open Source Project on GitHub](https://app.egghead.io/playlists/how-to-contribute-to-an-open-source-project-on-github).
+> **Working on your first pull request?** You can learn how from this _free_ series: [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github).
 
 When you're sending a pull request:
 

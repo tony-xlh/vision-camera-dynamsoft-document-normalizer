@@ -1,63 +1,120 @@
-# vision-camera-dynamsoft-document-normalizer
 
-A React Native Vision Camera frame processor plugin for [Dynamsoft Document Normalizer](https://www.dynamsoft.com/document-normalizer/docs/).
+# vision-camera-dynamsoft-barcode-reader
 
-[Demo video](https://user-images.githubusercontent.com/5462205/200720562-a7b91e06-cf6c-4235-a8cd-ef200012a42a.MP4)
+React Native Vision Camera Frame Processor Plugin of [Dynamsoft Barcode Reader](https://www.dynamsoft.com/barcode-reader/overview/).
 
-Please note that this version of the plugin works for Vision Camera v2.
+## Versions
+
+For vision-camera v2, use versions 0.x.
+
+For vision-camera v3, use versions >= 1.0.0.
+
+## Installation
+
+```sh
+yarn add vision-camera-dynamsoft-barcode-reader
+cd ios && pod install
+```
+
+Add the plugin to your `babel.config.js`:
+
+```js
+module.exports = {
+   plugins: [['react-native-worklets-core/plugin']],
+    // ...
+```
+
+> Note: You have to restart metro-bundler for changes in the `babel.config.js` file to take effect.
+
+## Usage
+
+1. Scan barcodes with vision camera.
+   
+   ```js
+   import { decode } from 'vision-camera-dynamsoft-barcode-reader';
+ 
+   // ...
+   const frameProcessor = useFrameProcessor((frame) => {
+     'worklet';
+     const barcodes = decode(frame);
+   }, []);
+   ```
+   
+2. Scan barcodes from a base64-encoded static image.
+
+   ```ts
+   let results = await decodeBase64(base64);
+   ```
+
+3. License initialization ([apply for a trial license](https://www.dynamsoft.com/customer/license/trialLicense/?product=dbr)).
+
+   ```ts
+   await initLicense("your license");
+   ```
+
+### Interfaces
+
+TextResult:
+
+```js
+ TextResult{
+    barcodeText:string;
+    barcodeFormat:string;
+    barcodeBytesBase64:string;
+    x1:number;
+    x2:number;
+    x3:number;
+    x4:number;
+    y1:number;
+    y2:number;
+    y3:number;
+    y4:number;
+}
+```
+
+Configuration:
+
+```js
+DBRConfig{
+  template?:string;
+  license?:string;
+  isFront?:boolean;
+  rotateImage?:boolean;
+}
+```
+
+`isFront` and `rotateImage` are Android-only. Since the natural camera sensor's orientation in Android is landscape, the camera image may be rotated for preview while the raw image we get is still not rotated. If we enable `rotateImage`, the plugin will rotate the image automatically to match the camera preview. If it is disabled, the plugin will rotate the returned coordinates instead of the image which may have a slight performance gain. `isFront` is needed for rotating the coordinates since the image of front camera is mirrored.
 
 ## Supported Platforms
 
 * Android
 * iOS
 
-## Installation
+## Supported Barcode Symbologies
 
-```sh
-npm install vision-camera-dynamsoft-document-normalizer
-```
-
-make sure you correctly setup react-native-reanimated and add this to your `babel.config.js`
-
-```js
-[
-  'react-native-reanimated/plugin',
-  {
-    globals: ['__detect','__detectAndNormalize'],
-  },
-]
-```
-
-
-## Usage
-
-```js
-import * as DDN from "vision-camera-dynamsoft-document-normalizer";
-import type { DetectedQuadResult, Point, Quadrilateral } from 'vision-camera-dynamsoft-document-normalizer';
-
-export default function App() {
-
-  useEffect(() => {
-    (async () => {
-      const status = await Camera.requestCameraPermission();
-      setHasPermission(status === 'authorized');
-      let result = await DDN.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="); // init license. Apply for a 30-day trial license here: https://www.dynamsoft.com/customer/license/trialLicense/?product=ddn
-    })();
-  }, []);
-
-  const frameProcessor = useFrameProcessor((frame) => {
-    'worklet'
-    const detectionResults = DDN.detect(frame);
-  }, [])
-  
-  const normalizeImage = (photoPath:string, detectionResult:DetectedQuadResult) => {
-    let normalizedImageResult = await DDN.normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
-  }
-}
-
-```
-
-Check out the [example](https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer/tree/main/example) and the [definition file](https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer/blob/main/src/index.tsx) to learn more.
+* Code 11
+* Code 39
+* Code 93
+* Code 128
+* Codabar
+* EAN-8
+* EAN-13
+* UPC-A
+* UPC-E
+* Interleaved 2 of 5 (ITF)
+* Industrial 2 of 5 (Code 2 of 5 Industry, Standard 2 of 5, Code 2 of 5)
+* ITF-14 
+* QRCode
+* DataMatrix
+* PDF417
+* GS1 DataBar
+* Maxicode
+* Micro PDF417
+* Micro QR
+* PatchCode
+* GS1 Composite
+* Postal Code
+* Dot Code
 
 ## Contributing
 
@@ -66,7 +123,3 @@ See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the 
 ## License
 
 MIT
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
