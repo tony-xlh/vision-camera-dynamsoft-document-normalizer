@@ -1,15 +1,14 @@
 import { NativeModules, Platform } from 'react-native';
 import {VisionCameraProxy,  Frame} from 'react-native-vision-camera';
 
+
 const LINKING_ERROR =
   `The package 'vision-camera-dynamsoft-document-normalizer' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
   '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
+  '- You are not using Expo managed workflow\n';
 
-const VisionCameraDynamsoftDocumentNormalizer = NativeModules.VisionCameraDynamsoftDocumentNormalizer
-  ? NativeModules.VisionCameraDynamsoftDocumentNormalizer
-  : new Proxy(
+const VisionCameraDynamsoftDocumentNormalizer = NativeModules.VisionCameraDynamsoftDocumentNormalizer  ? NativeModules.VisionCameraDynamsoftDocumentNormalizer  : new Proxy(
       {},
       {
         get() {
@@ -18,59 +17,8 @@ const VisionCameraDynamsoftDocumentNormalizer = NativeModules.VisionCameraDynams
       }
     );
 
-
-const plugin = VisionCameraProxy.initFrameProcessorPlugin('decode')
-
 /**
- * Detect barcodes from the camera preview
- */
-export function decode(frame: Frame,config?:DBRConfig):TextResult[]|undefined {
-  'worklet'
-  if (plugin == null) throw new Error('Failed to load Frame Processor Plugin "decode"!')
-  if (config) {
-    let record:Record<string,any> = {};
-    if (config.isFront != undefined && config.isFront != null) {
-      record["isFront"] = config.isFront;
-    }
-    if (config.rotateImage != undefined && config.rotateImage != null) {
-      record["rotateImage"] = config.rotateImage;
-    }
-    if (config.template) {
-      record["template"] = config.template;
-    }
-    if (config.license) {
-      record["license"] = config.license;
-    }
-    return plugin.call(frame,record) as any;
-  }else{
-    return plugin.call(frame) as any;
-  }
-}
-
-
-export interface TextResult{
-  barcodeText:string;
-  barcodeFormat:string;
-  barcodeBytesBase64:string;
-  x1:number;
-  x2:number;
-  x3:number;
-  x4:number;
-  y1:number;
-  y2:number;
-  y3:number;
-  y4:number;
-}
-
-export interface DBRConfig{
-  template?:string;
-  isFront?:boolean;
-  rotateImage?:boolean;
-  license?:string;
-}
-
-/**
- * Init the license of Dynamsoft Barcode Reader
+ * Init the license of Dynamsoft Document Normalizer
  */
 export function initLicense(license:string): Promise<boolean> {
   return VisionCameraDynamsoftDocumentNormalizer.initLicense(license);
@@ -84,8 +32,72 @@ export function initRuntimeSettingsFromString(template:string): Promise<boolean>
 }
 
 /**
- * Detect barcodes from base64
+ * Detect documents in an image file
  */
-export function decodeBase64(base64:string): Promise<TextResult[]> {
-  return VisionCameraDynamsoftDocumentNormalizer.decodeBase64(base64);
+export function detectFile(url:string): Promise<DetectedQuadResult[]> {
+  return VisionCameraDynamsoftDocumentNormalizer.detectFile(url);
+}
+
+/**
+ * Normalize an image file
+ */
+export function normalizeFile(url:string, quad:Quadrilateral, config: NormalizationConfig): Promise<NormalizedImageResult> {
+  return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, quad, config);
+}
+
+/**
+ * Rotate an image file. Android only.
+ */
+ export function rotateFile(url:string, degrees:number): Promise<NormalizedImageResult> {
+  return VisionCameraDynamsoftDocumentNormalizer.rotateFile(url, degrees);
+}
+
+/**
+ * Config of whether to save the normalized as a file and base64.
+ */
+export interface NormalizationConfig{
+  saveNormalizationResultAsFile?: boolean;
+  includeNormalizationResultAsBase64?: boolean;
+}
+
+/**
+ * Normalization result containing the image path or base64
+ */
+export interface NormalizedImageResult {
+  imageURL?: string;
+  imageBase64?: string;
+}
+
+export interface DetectedQuadResult {
+  location: Quadrilateral;
+  confidenceAsDocumentBoundary: number;
+}
+
+export interface Point {
+  x:number;
+  y:number;
+}
+
+export interface Quadrilateral {
+  points: [Point, Point, Point, Point];
+}
+
+export interface Rect {
+  left:number;
+  right:number;
+  top:number;
+  bottom:number;
+  width:number;
+  height:number;
+}
+
+const plugin = VisionCameraProxy.initFrameProcessorPlugin('detect')
+
+/**
+ * Detect documents from the camera preview
+ */
+export function detect(frame: Frame): DetectedQuadResult[] {
+  'worklet'
+  if (plugin == null) throw new Error('Failed to load Frame Processor Plugin "decode"!')
+  return plugin.call(frame) as any;
 }
