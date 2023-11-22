@@ -1,6 +1,6 @@
 //
 //  BarcodeReaderInitializer.swift
-//  vision-camera-dynamsoft-barcode-reader
+//  vision-camera-dynamsoft-document-normalizer
 //
 //  Created by xulihang on 2022/4/17.
 //

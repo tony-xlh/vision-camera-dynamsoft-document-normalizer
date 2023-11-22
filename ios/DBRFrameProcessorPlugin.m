@@ -1,6 +1,6 @@
 //
 //  VisionCameraDBRPlugin.m
-//  vision-camera-dynamsoft-barcode-reader
+//  vision-camera-dynamsoft-document-normalizer
 //
 //  Created by xulihang on 2022/1/26.
 //

@@ -1,5 +1,5 @@
 {
-  "name": "vision-camera-dynamsoft-barcode-reader",
+  "name": "vision-camera-dynamsoft-document-normalizer",
   "version": "1.0.3",
   "private": false,
   "description": "React Native Vision Camera Frame Processor Plugin of Dynamsoft Barcode Reader",
@@ -44,14 +44,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tony-xlh/vision-camera-dynamsoft-barcode-reader.git"
+    "url": "git+https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer.git"
   },
   "author": "xulihang <xulihanghai@gmail.com> (https://github.com/xulihang)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tony-xlh/vision-camera-dynamsoft-barcode-reader/issues"
+    "url": "https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer/issues"
   },
-  "homepage": "https://github.com/tony-xlh/vision-camera-dynamsoft-barcode-reader#readme",
+  "homepage": "https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"

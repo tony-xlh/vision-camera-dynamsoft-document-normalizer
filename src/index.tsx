@@ -2,7 +2,7 @@ import { NativeModules, Platform } from 'react-native';
 import {VisionCameraProxy,  Frame} from 'react-native-vision-camera';
 
 const LINKING_ERROR =
-  `The package 'vision-camera-dynamsoft-barcode-reader' doesn't seem to be linked. Make sure: \n\n` +
+  `The package 'vision-camera-dynamsoft-document-normalizer' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';

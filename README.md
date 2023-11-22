@@ -1,7 +1,7 @@
 
-# vision-camera-dynamsoft-barcode-reader
+# vision-camera-dynamsoft-document-normalizer
 
-React Native Vision Camera Frame Processor Plugin of [Dynamsoft Barcode Reader](https://www.dynamsoft.com/barcode-reader/overview/).
+React Native Vision Camera Frame Processor Plugin of [Dynamsoft Barcode Reader](https://www.dynamsoft.com/document-normalizer/overview/).
 
 ## Versions
 
@@ -12,7 +12,7 @@ For vision-camera v3, use versions >= 1.0.0.
 ## Installation
 
 ```sh
-yarn add vision-camera-dynamsoft-barcode-reader
+yarn add vision-camera-dynamsoft-document-normalizer
 cd ios && pod install
 ```
 
@@ -31,7 +31,7 @@ module.exports = {
 1. Scan barcodes with vision camera.
    
    ```js
-   import { decode } from 'vision-camera-dynamsoft-barcode-reader';
+   import { decode } from 'vision-camera-dynamsoft-document-normalizer';
  
    // ...
    const frameProcessor = useFrameProcessor((frame) => {
