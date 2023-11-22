@@ -101,9 +101,10 @@ export default function Scanner(props:ScannerProps) {
       await sleep(1000);
       photo.current = await camera.current.takePhoto();
       if (photo.current) {
+        console.log(photo.current);
         setIsActive(false);
         if (Platform.OS === "android") {
-          if (photo.current.metadata!.Orientation === 6) {
+          if (photo.current.metadata && photo.current.metadata.Orientation === 6) {
             console.log("rotate bitmap for Android");
             await DDN.rotateFile(photo.current.path,90);
           }
