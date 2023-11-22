@@ -31,7 +31,6 @@ public class VisionCameraDetectionPlugin extends FrameProcessorPlugin {
             Bitmap bitmap = BitmapUtils.getBitmap(frame);
             DetectedQuadResult[] quadResults = ddn.detectQuad(bitmap);
             if (quadResults != null) {
-                Log.d("DDN","length: "+quadResults.length);
                 for (DetectedQuadResult quad:quadResults) {
                     WritableNativeMap map = Utils.getMapFromDetectedQuadResult(quad);
                     quadResultsWrapped.add(map.toHashMap());
@@ -41,7 +40,6 @@ public class VisionCameraDetectionPlugin extends FrameProcessorPlugin {
             e.printStackTrace();
             Log.d("DDN",e.getMessage());
         }
-        Log.d("DDN","quadResultsWrapped: "+quadResultsWrapped.size());
         return quadResultsWrapped;
     }
 
