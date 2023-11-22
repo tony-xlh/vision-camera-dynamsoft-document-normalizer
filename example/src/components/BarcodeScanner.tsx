@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { Camera, useCameraDevice, useFrameProcessor } from 'react-native-vision-camera';
-import { decode, type DBRConfig, type TextResult } from 'vision-camera-dynamsoft-barcode-reader';
+import { decode, type DBRConfig, type TextResult } from 'vision-camera-dynamsoft-document-normalizer';
 import { Worklets} from 'react-native-worklets-core';
 
 interface props {

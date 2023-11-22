@@ -571,7 +571,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - VisionCamera (from `../node_modules/react-native-vision-camera`)
-  - VisionCameraDynamsoftDocumentNormalizer (from `../node_modules/vision-camera-dynamsoft-barcode-reader`)
+  - VisionCameraDynamsoftDocumentNormalizer (from `../node_modules/vision-camera-dynamsoft-document-normalizer`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -677,7 +677,7 @@ EXTERNAL SOURCES:
   VisionCamera:
     :path: "../node_modules/react-native-vision-camera"
   VisionCameraDynamsoftDocumentNormalizer:
-    :path: "../node_modules/vision-camera-dynamsoft-barcode-reader"
+    :path: "../node_modules/vision-camera-dynamsoft-document-normalizer"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 

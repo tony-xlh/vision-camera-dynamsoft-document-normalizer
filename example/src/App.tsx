@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, SafeAreaView, StyleSheet, Switch, Text, View } from 'react-native';
-import type { TextResult } from 'vision-camera-dynamsoft-barcode-reader';
-import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
+import type { TextResult } from 'vision-camera-dynamsoft-document-normalizer';
+import * as DBR from 'vision-camera-dynamsoft-document-normalizer';
 import {launchImageLibrary, type ImageLibraryOptions} from 'react-native-image-picker';
 import BarcodeScanner from './components/BarcodeScanner';
 
