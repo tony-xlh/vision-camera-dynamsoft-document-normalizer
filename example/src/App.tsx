@@ -1,101 +1,77 @@
 import * as React from 'react';
-import { Button, SafeAreaView, StyleSheet, Switch, Text, View } from 'react-native';
-import type { TextResult } from 'vision-camera-dynamsoft-document-normalizer';
-import * as DBR from 'vision-camera-dynamsoft-document-normalizer';
-import {launchImageLibrary, type ImageLibraryOptions} from 'react-native-image-picker';
-import BarcodeScanner from './components/BarcodeScanner';
+import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import Scanner from './components/Scanner';
+import type { PhotoFile } from 'react-native-vision-camera';
+import type * as DDN from "vision-camera-dynamsoft-document-normalizer";
+import Cropper from './components/Cropper';
+import ResultViewer from './components/ResultViewer';
 
-const Separator = () => (
-  <View style={styles.separator} />
-);
 
 export default function App() {
-  const [useCamera,setUseCamera] = React.useState(false);
-  const [continuous, setContinuous] = React.useState(false);
-  const [barcodeResults, setBarcodeResults] = React.useState([] as TextResult[]);
-  const toggleSwitch = () => setContinuous(previousState => !previousState);
-  
-  React.useEffect(() => {
-    (async () => {
-      const result = await DBR.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==");
-      console.log(result);
-    })();
-  }, []);
+  const [showScanner,setShowScanner] = React.useState(false);
+  const [showCropper,setShowCropper] = React.useState(false);
+  const [showResultViewer,setShowResultViewer] = React.useState(false);
+  const [photoTaken,setPhotoTaken] = React.useState<PhotoFile|undefined>();
+  const [photoPath,setPhotoPath] = React.useState<string>("");
+  const [points,setPoints] = React.useState<DDN.Point[]>([]);
+  const onPressed = () => {
+    setShowScanner(true);
+  }
 
-  const onScanned = (results:TextResult[]) => {
-    setBarcodeResults(results);
-    if (results.length>0 && !continuous) {
-      setUseCamera(false);
+  const onScanned = (photo:PhotoFile|null) => {
+    if (photo) {
+      setShowScanner(false);
+      setPhotoTaken(photo);
+      setShowCropper(true);
+    }else{
+      Alert.alert("Error","Failed to take a photo. Please try again.");
+      setShowScanner(false);
     }
   }
 
-  const decodeFromAlbum = async () => {
-    let options: ImageLibraryOptions = {
-      mediaType: 'photo',
-      includeBase64: true,
-    }
-    let response = await launchImageLibrary(options);
-    if (response && response.assets) {
-      if (response.assets[0]!.base64) {
-        console.log(response.assets[0]!.base64);
-        let results = await DBR.decodeBase64(response.assets[0]!.base64);
-        setBarcodeResults(results);
-      }
+  const renderBody = () => {
+    if (showScanner) {
+      return (
+        <Scanner onScanned={onScanned}></Scanner>
+      )
+    }else if (showCropper){
+      return (
+        <Cropper 
+          photo={photoTaken}
+          onCanceled={()=>{
+            setShowCropper(false);
+            setShowScanner(true);
+          }}
+          onConfirmed={(path,adjustedPoints)=>{
+            setPhotoPath(path);
+            setPoints(adjustedPoints);
+            setShowCropper(false);
+            setShowResultViewer(true);
+          }}
+        ></Cropper>
+      )
+    }else if (showResultViewer){
+      return (
+        <ResultViewer photoPath={photoPath} points={points} 
+          onBack={()=>{
+            setShowResultViewer(false);
+          }}  
+        ></ResultViewer>
+      )
+    }else{
+      return (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => onPressed()}
+        >
+          <Text style={styles.buttonText}>Scan Document</Text>
+        </TouchableOpacity>
+        )
     }
   }
-
   return (
     <SafeAreaView style={styles.container}>
-      {useCamera && (
-        <>
-          <BarcodeScanner onScanned={onScanned}></BarcodeScanner>
-          <View
-            style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-end', alignItems: 'center'}}
-          >
-            <Button
-              title="Close"
-              onPress={() => setUseCamera(false)}
-            />
-          </View>
-        </>
-        
-      )}
-      {!useCamera &&(
-          <View style={{alignItems:"center"}}>
-            <Text style={styles.title}>
-              Dynamsoft Barcode Reader Demo
-            </Text>
-            <Button
-              title="Read Barcodes from the Camera"
-              onPress={() => setUseCamera(true)}
-            />
-            <Separator />
-            <View style={styles.switchView}>
-              <Text style={{alignSelf: 'center'}}>
-                Continues Scan
-              </Text>
-              <Switch 
-                style={{alignSelf: 'center'}}
-                trackColor={{ false: "#767577", true: "#81b0ff" }}
-                thumbColor={continuous ? "#f5dd4b" : "#f4f3f4"}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={toggleSwitch}
-                value={continuous}
-              />
-            </View>
-            <Separator />
-            <Button
-              title="Read Barcodes from the Album"
-              onPress={() => decodeFromAlbum()}
-            />
-            <Separator />
-            {barcodeResults.map((barcode, idx) => (
-              <Text key={"barcode"+idx}>
-                {barcode.barcodeFormat+": "+barcode.barcodeText}
-              </Text>
-            ))}
-          </View>
-      )}
+      {renderBody()}
     </SafeAreaView>
   );
 }
@@ -104,20 +80,16 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
   },
-  title: {
-    textAlign: 'center',
-    marginVertical: 8,
+  info: {
+    margin: 8,
   },
-  separator: {
-    marginVertical: 4,
+  button: {
+    alignItems: "center",
+    backgroundColor: "rgb(33, 150, 243)",
+    margin: 8,
+    padding: 10,
   },
-  switchView: {
-    alignItems: 'center',
-    flexDirection: "row",
-  },
-  barcodeText: {
-    fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold',
+  buttonText:{
+    color: "#FFFFFF",
   },
 });
