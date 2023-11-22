@@ -25,11 +25,10 @@
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libVisionCameraDynamsoftDocumentNormalizer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVisionCameraDynamsoftDocumentNormalizer.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3E7B5891CC2AC0600A0062D /* VisionCameraDynamsoftDocumentNormalizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VisionCameraDynamsoftDocumentNormalizer.m; sourceTree = "<group>"; };
-		BE19B86F2B0B4CFC000D8CDE /* BarcodeReaderInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeReaderInitializer.swift; sourceTree = "<group>"; };
-		BE19B8722B0B530D000D8CDE /* DBRFrameProcessorPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBRFrameProcessorPlugin.swift; sourceTree = "<group>"; };
-		BE19B8732B0B530D000D8CDE /* DBRFrameProcessorPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBRFrameProcessorPlugin.m; sourceTree = "<group>"; };
-		BE19B8742B0B53E7000D8CDE /* DBRFrameProcessorPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DBRFrameProcessorPlugin.h; sourceTree = "<group>"; };
-		BE4111A92B0C4750005FE9C1 /* VisionCameraDynamsoftDocumentNormalizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisionCameraDynamsoftDocumentNormalizer.h; sourceTree = "<group>"; };
+		BEE0A5102918E50000A062CB /* DetectionFrameProcessorPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetectionFrameProcessorPlugin.m; sourceTree = "<group>"; };
+		BEE6C1CA29150A6800F35AAA /* DetectionFrameProcessorPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionFrameProcessorPlugin.swift; sourceTree = "<group>"; };
+		BEE6C1CC29150A9500F35AAA /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		BEE6C1CD29150AA300F35AAA /* BitmapUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitmapUtils.swift; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* VisionCameraDynamsoftDocumentNormalizer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VisionCameraDynamsoftDocumentNormalizer-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* VisionCameraDynamsoftDocumentNormalizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionCameraDynamsoftDocumentNormalizer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -56,11 +55,10 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				BE4111A92B0C4750005FE9C1 /* VisionCameraDynamsoftDocumentNormalizer.h */,
-				BE19B8742B0B53E7000D8CDE /* DBRFrameProcessorPlugin.h */,
-				BE19B8732B0B530D000D8CDE /* DBRFrameProcessorPlugin.m */,
-				BE19B8722B0B530D000D8CDE /* DBRFrameProcessorPlugin.swift */,
-				BE19B86F2B0B4CFC000D8CDE /* BarcodeReaderInitializer.swift */,
+				BEE0A5102918E50000A062CB /* DetectionFrameProcessorPlugin.m */,
+				BEE6C1CD29150AA300F35AAA /* BitmapUtils.swift */,
+				BEE6C1CC29150A9500F35AAA /* Utils.swift */,
+				BEE6C1CA29150A6800F35AAA /* DetectionFrameProcessorPlugin.swift */,
 				F4FF95D6245B92E800C19C63 /* VisionCameraDynamsoftDocumentNormalizer.swift */,
 				B3E7B5891CC2AC0600A0062D /* VisionCameraDynamsoftDocumentNormalizer.m */,
 				F4FF95D5245B92E700C19C63 /* VisionCameraDynamsoftDocumentNormalizer-Bridging-Header.h */,
@@ -135,7 +133,6 @@
 		58B511ED1A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -161,6 +158,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -186,7 +184,6 @@
 		58B511EE1A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -212,6 +209,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -242,7 +240,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "VisionCameraDynamsoftDocumentNormalizer-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -260,7 +258,7 @@
 				PRODUCT_NAME = VisionCameraDynamsoftDocumentNormalizer;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "VisionCameraDynamsoftDocumentNormalizer-Bridging-Header.h";
-				SWIFT_VERSION = 5.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

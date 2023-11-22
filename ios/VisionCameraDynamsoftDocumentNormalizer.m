@@ -1,7 +1,4 @@
-#import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
-
-
 
 @interface RCT_EXTERN_MODULE(VisionCameraDynamsoftDocumentNormalizer, NSObject)
 
@@ -13,7 +10,14 @@ RCT_EXTERN_METHOD(initRuntimeSettingsFromString:(NSString *)template
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(decodeBase64:(NSString *)base64
+
+RCT_EXTERN_METHOD(detectFile:(NSString *)path
+                 withResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(normalizeFile:(NSString *)path
+                  quad:(NSDictionary *)quad
+                  config:(NSDictionary *)config
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
