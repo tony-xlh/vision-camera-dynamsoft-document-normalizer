@@ -1,7 +1,11 @@
 
 # vision-camera-dynamsoft-document-normalizer
 
-React Native Vision Camera Frame Processor Plugin of [Dynamsoft Barcode Reader](https://www.dynamsoft.com/document-normalizer/overview/).
+A React Native Vision Camera frame processor plugin for [Dynamsoft Document Normalizer](https://www.dynamsoft.com/document-normalizer/docs/).
+
+It can detect document boundaries and run perspective transformation to get a normalized image.
+
+[Demo video](https://user-images.githubusercontent.com/5462205/200720562-a7b91e06-cf6c-4235-a8cd-ef200012a42a.MP4)
 
 ## Versions
 
@@ -28,93 +32,40 @@ module.exports = {
 
 ## Usage
 
-1. Scan barcodes with vision camera.
+1. Scan documents with vision camera.
    
    ```js
-   import { decode } from 'vision-camera-dynamsoft-document-normalizer';
+   import { detect } from 'vision-camera-dynamsoft-document-normalizer';
  
    // ...
    const frameProcessor = useFrameProcessor((frame) => {
      'worklet';
-     const barcodes = decode(frame);
+     const detectionResults = detect(frame);
    }, []);
    ```
    
-2. Scan barcodes from a base64-encoded static image.
+2. Scan documents from a file.
 
    ```ts
-   let results = await decodeBase64(base64);
+   let detectionResults = await detectFile(photoPath);
    ```
 
-3. License initialization ([apply for a trial license](https://www.dynamsoft.com/customer/license/trialLicense/?product=dbr)).
+3. Normalize a document image with the detection result.
+
+   ```ts
+   let normalizedImageResult = await normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
+   ```
+
+4. License initialization ([apply for a trial license](https://www.dynamsoft.com/customer/license/trialLicense/?product=ddn)).
 
    ```ts
    await initLicense("your license");
    ```
 
-### Interfaces
-
-TextResult:
-
-```js
- TextResult{
-    barcodeText:string;
-    barcodeFormat:string;
-    barcodeBytesBase64:string;
-    x1:number;
-    x2:number;
-    x3:number;
-    x4:number;
-    y1:number;
-    y2:number;
-    y3:number;
-    y4:number;
-}
-```
-
-Configuration:
-
-```js
-DBRConfig{
-  template?:string;
-  license?:string;
-  isFront?:boolean;
-  rotateImage?:boolean;
-}
-```
-
-`isFront` and `rotateImage` are Android-only. Since the natural camera sensor's orientation in Android is landscape, the camera image may be rotated for preview while the raw image we get is still not rotated. If we enable `rotateImage`, the plugin will rotate the image automatically to match the camera preview. If it is disabled, the plugin will rotate the returned coordinates instead of the image which may have a slight performance gain. `isFront` is needed for rotating the coordinates since the image of front camera is mirrored.
-
 ## Supported Platforms
 
 * Android
 * iOS
-
-## Supported Barcode Symbologies
-
-* Code 11
-* Code 39
-* Code 93
-* Code 128
-* Codabar
-* EAN-8
-* EAN-13
-* UPC-A
-* UPC-E
-* Interleaved 2 of 5 (ITF)
-* Industrial 2 of 5 (Code 2 of 5 Industry, Standard 2 of 5, Code 2 of 5)
-* ITF-14 
-* QRCode
-* DataMatrix
-* PDF417
-* GS1 DataBar
-* Maxicode
-* Micro PDF417
-* Micro QR
-* PatchCode
-* GS1 Composite
-* Postal Code
-* Dot Code
 
 ## Contributing
 
