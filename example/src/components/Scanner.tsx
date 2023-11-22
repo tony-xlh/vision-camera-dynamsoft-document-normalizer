@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Alert, Dimensions, Platform, SafeAreaView, StyleSheet } from 'react-native';
-import { Camera, PhotoFile, useCameraDevice, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
+import { Camera, PhotoFile, useCameraDevice, useCameraDevices, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import { Svg, Polygon } from 'react-native-svg';
 import type { DetectedQuadResult } from 'vision-camera-dynamsoft-document-normalizer';
@@ -26,7 +26,10 @@ export default function Scanner(props:ScannerProps) {
   const photo = useRef<PhotoFile|null>(null);
   const previousResults = useRef([] as DetectedQuadResult[]);
   const device = useCameraDevice("back");
-  
+  const cameraFormat = useCameraFormat(device, [
+    { videoResolution: { width: 1280, height: 720 } },
+    { fps: 60 }
+  ])
   useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
@@ -186,7 +189,9 @@ export default function Scanner(props:ScannerProps) {
               isActive={isActive}
               device={device}
               photo={true}
+              format={cameraFormat}
               frameProcessor={taken ? undefined: frameProcessor}
+              pixelFormat='yuv'
             />
             <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox}>
               {pointsText != "default" && (
