@@ -153,12 +153,11 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
             NormalizedImageResult result = ddn.normalize(filePath,quadrilateral);
             if (config.hasKey("saveNormalizationResultAsFile")) {
                 if (config.getBoolean("saveNormalizationResultAsFile")) {
-                    //String path = filePath+".jpg";
-                    //result.saveToFile(path);
                     File cacheDir = mContext.getCacheDir();
-                    String fileName = System.currentTimeMillis() + ".jpg";
-                    String path = BitmapUtils.saveImage(result.image.toBitmap(), cacheDir, fileName);
-                    returnResult.putString("imageURL",path);
+                    String fileName = System.currentTimeMillis() + ".png";
+                    File file = new File(cacheDir, fileName);
+                    result.saveToFile(file.getAbsolutePath());
+                    returnResult.putString("imageURL",file.getAbsolutePath());
                 }
             }
             if (config.hasKey("includeNormalizationResultAsBase64")) {
