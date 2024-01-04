@@ -8,8 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.dynamsoft.ddn.DetectedQuadResult;
-import com.dynamsoft.ddn.DocumentNormalizer;
+import com.dynamsoft.core.basic_structures.CapturedResult;
+import com.dynamsoft.core.basic_structures.CapturedResultItem;
+import com.dynamsoft.cvr.CaptureVisionRouter;
+import com.dynamsoft.ddn.DetectedQuadResultItem;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.mrousavy.camera.frameprocessor.Frame;
@@ -20,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class VisionCameraDetectionPlugin extends FrameProcessorPlugin {
-    private DocumentNormalizer ddn = VisionCameraDynamsoftDocumentNormalizerModule.ddn;
+    private CaptureVisionRouter cvr = VisionCameraDynamsoftDocumentNormalizerModule.cvr;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
@@ -28,11 +30,18 @@ public class VisionCameraDetectionPlugin extends FrameProcessorPlugin {
     public Object callback(@NonNull Frame frame, @Nullable Map<String, Object> arguments) {
         List<Object> quadResultsWrapped = new ArrayList<>();
         try {
+            String templateName = "DetectDocumentBoundaries_Default";
+            if (arguments != null ) {
+                if (arguments.containsKey("template")) {
+                    templateName = (String) arguments.get("template");
+                }
+            }
             Bitmap bitmap = BitmapUtils.getBitmap(frame);
-            DetectedQuadResult[] quadResults = ddn.detectQuad(bitmap);
-            if (quadResults != null) {
-                for (DetectedQuadResult quad:quadResults) {
-                    WritableNativeMap map = Utils.getMapFromDetectedQuadResult(quad);
+            CapturedResult capturedResult = cvr.capture(bitmap,templateName);
+            CapturedResultItem[] results = capturedResult.getItems();
+            if (results != null) {
+                for (CapturedResultItem quad:results) {
+                    WritableNativeMap map = Utils.getMapFromDetectedQuadResult((DetectedQuadResultItem) quad);
                     quadResultsWrapped.add(map.toHashMap());
                 }
             }

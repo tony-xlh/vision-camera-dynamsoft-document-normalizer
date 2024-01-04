@@ -3,8 +3,8 @@ package com.visioncameradynamsoftdocumentnormalizer;
 import android.graphics.Point;
 import android.util.Log;
 
-import com.dynamsoft.core.Quadrilateral;
-import com.dynamsoft.ddn.DetectedQuadResult;
+import com.dynamsoft.core.basic_structures.Quadrilateral;
+import com.dynamsoft.ddn.DetectedQuadResultItem;
 import com.facebook.react.bridge.NativeMap;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -64,10 +64,10 @@ public class Utils {
         return hashMap;
     }
 
-    public static WritableNativeMap getMapFromDetectedQuadResult(DetectedQuadResult result){
+    public static WritableNativeMap getMapFromDetectedQuadResult(DetectedQuadResultItem result){
         WritableNativeMap map = new WritableNativeMap();
-        map.putInt("confidenceAsDocumentBoundary",result.confidenceAsDocumentBoundary);
-        map.putMap("location",getMapFromLocation(result.location));
+        map.putInt("confidenceAsDocumentBoundary",result.getConfidenceAsDocumentBoundary());
+        map.putMap("location",getMapFromLocation(result.getLocation()));
         return map;
     }
 

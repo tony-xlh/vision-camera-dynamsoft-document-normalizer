@@ -140,5 +140,10 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
   implementation project(':react-native-vision-camera')
-  implementation 'com.dynamsoft:dynamsoftdocumentnormalizer:1.0.30'
+  // DDN
+  implementation 'com.dynamsoft:dynamsoftcapturevisionrouter:2.0.21'
+  implementation 'com.dynamsoft:dynamsoftdocumentnormalizer:2.0.20'
+  implementation 'com.dynamsoft:dynamsoftcore:3.0.20'
+  implementation 'com.dynamsoft:dynamsoftlicense:3.0.30'
+  implementation 'com.dynamsoft:dynamsoftimageprocessing:2.0.21'
 }
