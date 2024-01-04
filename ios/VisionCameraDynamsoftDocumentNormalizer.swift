@@ -1,14 +1,24 @@
+import DynamsoftCore
+import DynamsoftLicense
+import DynamsoftCaptureVisionRouter
 import DynamsoftDocumentNormalizer
 
 @objc(VisionCameraDynamsoftDocumentNormalizer)
 class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListener  {
-    static var ddn:DynamsoftDocumentNormalizer = DynamsoftDocumentNormalizer()
+    
+    static var cvr:CaptureVisionRouter = CaptureVisionRouter()
     var licenseResolveBlock:RCTPromiseResolveBlock!;
     var licenseRejectBlock:RCTPromiseRejectBlock!;
+    
+    override init(){
+        super.init()
+        loadTemplate()
+    }
+    
     @objc(initRuntimeSettingsFromString:withResolver:withRejecter:)
     func initRuntimeSettingsFromString(template:String, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         do {
-            try VisionCameraDynamsoftDocumentNormalizer.ddn.initRuntimeSettingsFromString(template)
+            try VisionCameraDynamsoftDocumentNormalizer.cvr.initSettings(template)
             resolve(true)
         }catch {
             print("Unexpected error: \(error).")
@@ -16,20 +26,31 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
         }
     }
     
-    @objc(detectFile:withResolver:withRejecter:)
-    func detectFile(path:String,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    func loadTemplate(){
+        try? VisionCameraDynamsoftDocumentNormalizer.cvr.initSettings("{\"CaptureVisionTemplates\": [{\"Name\": \"Default\"},{\"Name\": \"DetectDocumentBoundaries_Default\",\"ImageROIProcessingNameArray\": [\"roi-detect-document-boundaries\"]},{\"Name\": \"DetectAndNormalizeDocument_Binary\",\"ImageROIProcessingNameArray\": [\"roi-detect-and-normalize-document-binary\"]},{\"Name\": \"DetectAndNormalizeDocument_Gray\",\"ImageROIProcessingNameArray\": [\"roi-detect-and-normalize-document-gray\"]},{\"Name\": \"DetectAndNormalizeDocument_Color\",\"ImageROIProcessingNameArray\": [\"roi-detect-and-normalize-document-color\"]},{\"Name\": \"NormalizeDocument_Binary\",\"ImageROIProcessingNameArray\": [\"roi-normalize-document-binary\"]},{\"Name\": \"NormalizeDocument_Gray\",\"ImageROIProcessingNameArray\": [\"roi-normalize-document-gray\"]},{\"Name\": \"NormalizeDocument_Color\",\"ImageROIProcessingNameArray\": [\"roi-normalize-document-color\"]}],\"TargetROIDefOptions\": [{\"Name\": \"roi-detect-document-boundaries\",\"TaskSettingNameArray\": [\"task-detect-document-boundaries\"]},{\"Name\": \"roi-detect-and-normalize-document-binary\",\"TaskSettingNameArray\": [\"task-detect-and-normalize-document-binary\"]},{\"Name\": \"roi-detect-and-normalize-document-gray\",\"TaskSettingNameArray\": [\"task-detect-and-normalize-document-gray\"]},{\"Name\": \"roi-detect-and-normalize-document-color\",\"TaskSettingNameArray\": [\"task-detect-and-normalize-document-color\"]},{\"Name\": \"roi-normalize-document-binary\",\"TaskSettingNameArray\": [\"task-normalize-document-binary\"]},{\"Name\": \"roi-normalize-document-gray\",\"TaskSettingNameArray\": [\"task-normalize-document-gray\"]},{\"Name\": \"roi-normalize-document-color\",\"TaskSettingNameArray\": [\"task-normalize-document-color\"]}],\"DocumentNormalizerTaskSettingOptions\": [{\"Name\": \"task-detect-and-normalize-document-binary\",\"ColourMode\": \"ICM_BINARY\",\"SectionImageParameterArray\": [{\"Section\": \"ST_REGION_PREDETECTION\",\"ImageParameterName\": \"ip-detect-and-normalize\"},{\"Section\": \"ST_DOCUMENT_DETECTION\",\"ImageParameterName\": \"ip-detect-and-normalize\"},{\"Section\": \"ST_DOCUMENT_NORMALIZATION\",\"ImageParameterName\": \"ip-detect-and-normalize\"}]},{\"Name\": \"task-detect-and-normalize-document-gray\",\"ColourMode\": \"ICM_GRAYSCALE\",\"SectionImageParameterArray\": [{\"Section\": \"ST_REGION_PREDETECTION\",\"ImageParameterName\": \"ip-detect-and-normalize\"},{\"Section\": \"ST_DOCUMENT_DETECTION\",\"ImageParameterName\": \"ip-detect-and-normalize\"},{\"Section\": \"ST_DOCUMENT_NORMALIZATION\",\"ImageParameterName\": \"ip-detect-and-normalize\"}]},{\"Name\": \"task-detect-and-normalize-document-color\",\"ColourMode\": \"ICM_COLOUR\",\"SectionImageParameterArray\": [{\"Section\": \"ST_REGION_PREDETECTION\",\"ImageParameterName\": \"ip-detect-and-normalize\"},{\"Section\": \"ST_DOCUMENT_DETECTION\",\"ImageParameterName\": \"ip-detect-and-normalize\"},{\"Section\": \"ST_DOCUMENT_NORMALIZATION\",\"ImageParameterName\": \"ip-detect-and-normalize\"}]},{\"Name\": \"task-detect-document-boundaries\",\"TerminateSetting\": {\"Section\": \"ST_DOCUMENT_DETECTION\"},\"SectionImageParameterArray\": [{\"Section\": \"ST_REGION_PREDETECTION\",\"ImageParameterName\": \"ip-detect\"},{\"Section\": \"ST_DOCUMENT_DETECTION\",\"ImageParameterName\": \"ip-detect\"},{\"Section\": \"ST_DOCUMENT_NORMALIZATION\",\"ImageParameterName\": \"ip-detect\"}]},{\"Name\": \"task-normalize-document-binary\",\"StartSection\": \"ST_DOCUMENT_NORMALIZATION\",\"ColourMode\": \"ICM_BINARY\",\"SectionImageParameterArray\": [{\"Section\": \"ST_REGION_PREDETECTION\",\"ImageParameterName\": \"ip-normalize\"},{\"Section\": \"ST_DOCUMENT_DETECTION\",\"ImageParameterName\": \"ip-normalize\"},{\"Section\": \"ST_DOCUMENT_NORMALIZATION\",\"ImageParameterName\": \"ip-normalize\"}]},{\"Name\": \"task-normalize-document-gray\",\"ColourMode\": \"ICM_GRAYSCALE\",\"StartSection\": \"ST_DOCUMENT_NORMALIZATION\",\"SectionImageParameterArray\": [{\"Section\": \"ST_REGION_PREDETECTION\",\"ImageParameterName\": \"ip-normalize\"},{\"Section\": \"ST_DOCUMENT_DETECTION\",\"ImageParameterName\": \"ip-normalize\"},{\"Section\": \"ST_DOCUMENT_NORMALIZATION\",\"ImageParameterName\": \"ip-normalize\"}]},{\"Name\": \"task-normalize-document-color\",\"ColourMode\": \"ICM_COLOUR\",\"StartSection\": \"ST_DOCUMENT_NORMALIZATION\",\"SectionImageParameterArray\": [{\"Section\": \"ST_REGION_PREDETECTION\",\"ImageParameterName\": \"ip-normalize\"},{\"Section\": \"ST_DOCUMENT_DETECTION\",\"ImageParameterName\": \"ip-normalize\"},{\"Section\": \"ST_DOCUMENT_NORMALIZATION\",\"ImageParameterName\": \"ip-normalize\"}]}],\"ImageParameterOptions\": [{\"Name\": \"ip-detect-and-normalize\",\"BinarizationModes\": [{\"Mode\": \"BM_LOCAL_BLOCK\",\"BlockSizeX\": 0,\"BlockSizeY\": 0,\"EnableFillBinaryVacancy\": 0}],\"TextDetectionMode\": {\"Mode\": \"TTDM_WORD\",\"Direction\": \"HORIZONTAL\",\"Sensitivity\": 7}},{\"Name\": \"ip-detect\",\"BinarizationModes\": [{\"Mode\": \"BM_LOCAL_BLOCK\",\"BlockSizeX\": 0,\"BlockSizeY\": 0,\"EnableFillBinaryVacancy\": 0,\"ThresholdCompensation\": 7}],\"TextDetectionMode\": {\"Mode\": \"TTDM_WORD\",\"Direction\": \"HORIZONTAL\",\"Sensitivity\": 7},\"ScaleDownThreshold\": 512},{\"Name\": \"ip-normalize\",\"BinarizationModes\": [{\"Mode\": \"BM_LOCAL_BLOCK\",\"BlockSizeX\": 0,\"BlockSizeY\": 0,\"EnableFillBinaryVacancy\": 0}],\"TextDetectionMode\": {\"Mode\": \"TTDM_WORD\",\"Direction\": \"HORIZONTAL\",\"Sensitivity\": 7}}]}")
+    }
+    
+    @objc(detectFile:template:withResolver:withRejecter:)
+    func detectFile(path:String,template:String,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
 
         var returned_results: [Any] = []
         
         let imageURL = URL(fileURLWithPath: path)
         var image = UIImage(contentsOfFile: imageURL.path)!
         image = BitmapUtils.normalizedImage(image)
+        var templateName:String
+        if template != "" {
+            templateName = template
+        }else{
+            templateName = "DetectDocumentBoundaries_Default"
+        }
         
-        let results = try? VisionCameraDynamsoftDocumentNormalizer.ddn.detectQuadFromImage(image)
+        let capturedResult =  VisionCameraDynamsoftDocumentNormalizer.cvr.captureFromImage(image, templateName: templateName)
+        let results = capturedResult.items
         
         if results != nil {
             for result in results! {
-                returned_results.append(Utils.wrapDetectionResult(result:result))
+                returned_results.append(Utils.wrapDetectionResult(result:result as! DetectedQuadResultItem))
             }
         }
 
@@ -37,88 +58,52 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
 
     }
     
-    @objc(normalizeFile:quad:config:withResolver:withRejecter:)
-    func normalizeFile(path:String,quad:[String:Any], config:[String:Any],resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
-        do {
-            var returned_result:[String:String] = [:]
-            
-            let imageURL = URL(fileURLWithPath: path)
-            var image = UIImage(contentsOfFile: imageURL.path)!
-            image = BitmapUtils.normalizedImage(image)
-            let points = quad["points"] as! [[String:NSNumber]]
-            let quadrilateral = iQuadrilateral.init()
-            quadrilateral.points = convertPoints(points)
-            
-            let bpp = image.cgImage?.bitsPerPixel
-            var pixelFormat:EnumImagePixelFormat
-            switch (bpp) {
-               case 1:
-                pixelFormat = EnumImagePixelFormat.binary
-                break;
-               case 8:
-                pixelFormat = EnumImagePixelFormat.grayScaled
-                break;
-               case 32:
-                pixelFormat = EnumImagePixelFormat.ARGB_8888
-                print("ARGB888")
-                break;
-               case 48:
-                pixelFormat = EnumImagePixelFormat.RGB_161616;
-                break;
-               case 64:
-                pixelFormat = EnumImagePixelFormat.ARGB_16161616;
-                break;
-               default:
-                pixelFormat = EnumImagePixelFormat.RGB_888;
-                print("RGB888")
-                break;
-            }
-            
-            let data = iImageData.init()
-            data.bytes = image.cgImage?.dataProvider?.data as! Data
-            data.orientation = 0
-            data.stride = image.cgImage!.bytesPerRow
-            data.width = image.cgImage!.width
-            data.height = image.cgImage!.height
-            data.format = pixelFormat
-            
-            let normalizedImageResult = try VisionCameraDynamsoftDocumentNormalizer.ddn.normalizeBuffer(data, quad: quadrilateral)
-            //print("normalized image width: ")
-            //print(normalizedImageResult.image.width)
-            
-            if config["saveNormalizationResultAsFile"] != nil {
-                if config["saveNormalizationResultAsFile"] as! Bool == true {
-                    let tmpDir = NSTemporaryDirectory()
-                    let timestamp = String(format: "%f", Date().timeIntervalSince1970*1000)
-                    let filePath = tmpDir + "/" + timestamp + ".png"
-                    do{
-                        try normalizedImageResult.saveToFile(filePath)
-                        returned_result["imageURL"] = filePath
-                    }catch {
-                        print(error)
-                    }
-                }
-            }
-            if config["includeNormalizationResultAsBase64"] != nil {
-                if config["includeNormalizationResultAsBase64"] as! Bool == true {
-                    do{
-                        let normalizedUIImage = try normalizedImageResult.image.toUIImage()
-                        let base64 = Utils.getBase64FromImage(normalizedUIImage)
-                        returned_result["imageBase64"] = base64
-                    }catch{
-                        print(error)
-                    }
-                }
-            }
+    @objc(normalizeFile:quad:config:template:withResolver:withRejecter:)
+    func normalizeFile(path:String,quad:[String:Any], config:[String:Any],template:String,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
 
-            resolve(returned_result)
-        }catch {
-            print("Unexpected error: \(error).")
-            resolve(false)
+        var templateName:String
+        if template != "" {
+            templateName = template
+        }else{
+            templateName = "NormalizeDocument_Color"
         }
+        var returned_result:[String:String] = [:]
+        
+        let imageURL = URL(fileURLWithPath: path)
+        var image = UIImage(contentsOfFile: imageURL.path)!
+        image = BitmapUtils.normalizedImage(image)
+        let points = quad["points"] as! [[String:NSNumber]]
+        let quad = Quadrilateral.init(pointArray: convertPoints(points))
+        let settings = try? VisionCameraDynamsoftDocumentNormalizer.cvr.getSimplifiedSettings(template)
+        settings?.roi = quad
+        settings?.roiMeasuredInPercentage = false
+        try? VisionCameraDynamsoftDocumentNormalizer.cvr.updateSettings(template, settings: settings!)
+        
+        let capturedResult =  VisionCameraDynamsoftDocumentNormalizer.cvr.captureFromImage(image, templateName: templateName)
+        let results = capturedResult.items
+        if results != nil {
+            if results?.count ?? 0 > 0 {
+                let normalizedImageResult:NormalizedImageResultItem = results![0] as! NormalizedImageResultItem
+                let normalizedUIImage = try? normalizedImageResult.imageData?.toUIImage()
+                if config["saveNormalizationResultAsFile"] != nil {
+                    if config["saveNormalizationResultAsFile"] as! Bool == true {
+                        let url = FileManager.default.temporaryDirectory
+                                                .appendingPathComponent(UUID().uuidString)
+                                                .appendingPathExtension("jpeg")
+                        try? normalizedUIImage?.jpegData(compressionQuality: 1.0)?.write(to: url)
+                        returned_result["imageURL"] = url.path
+                    }
+                }
+                if config["includeNormalizationResultAsBase64"] != nil {
+                    if config["includeNormalizationResultAsBase64"] as! Bool == true {
+                        let base64 = Utils.getBase64FromImage(normalizedUIImage!)
+                        returned_result["imageBase64"] = base64
+                    }
+                }
+            }
+        }
+        resolve(returned_result)
     }
-    
-
     
     func convertPoints(_ points:[[String:NSNumber]]) -> [CGPoint] {
         var CGPoints:[CGPoint] = [];
@@ -135,13 +120,12 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
     
     @objc(initLicense:withResolver:withRejecter:)
     func initLicense(license:String, resolve:@escaping RCTPromiseResolveBlock,reject:@escaping RCTPromiseRejectBlock) -> Void {
-        DynamsoftLicenseManager.initLicense(license, verificationDelegate: self)
+        LicenseManager.initLicense(license, verificationDelegate: self)
         licenseResolveBlock = resolve;
         licenseRejectBlock = reject;
     }
     
-    func licenseVerificationCallback(_ isSuccess: Bool, error: Error?) {
-        print(isSuccess)
+    func onLicenseVerified(_ isSuccess: Bool, error: Error?) {
         var msg:String? = nil
         if(error != nil)
         {

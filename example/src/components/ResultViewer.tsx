@@ -45,12 +45,13 @@ export default function ResultViewer(props:ResultViewerProps) {
     if (normalizedResult[value]) {
       setNormalizedImagePath(normalizedResult[value]);
     }else{
+      let templateName = "";
       if (value === 0) {
-        await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_BINARY\"}]}");
+        templateName = "NormalizeDocument_Binary";
       } else if (value === 1) {
-        await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_GRAYSCALE\"}]}");
+        templateName = "NormalizeDocument_Gray";
       } else {
-        await DDN.initRuntimeSettingsFromString("{\"GlobalParameter\":{\"Name\":\"GP\",\"MaxTotalImageDimension\":0},\"ImageParameterArray\":[{\"Name\":\"IP-1\",\"NormalizerParameterName\":\"NP-1\",\"BaseImageParameterName\":\"\"}],\"NormalizerParameterArray\":[{\"Name\":\"NP-1\",\"ContentType\":\"CT_DOCUMENT\",\"ColourMode\":\"ICM_COLOUR\"}]}");
+        templateName = "NormalizeDocument_Color";
       }
       console.log("update settings done");
       let points = props.points;
@@ -61,7 +62,7 @@ export default function ResultViewer(props:ResultViewerProps) {
         }
       }
       let photoPath = props.photoPath;
-      let normalizedImageResult = await DDN.normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
+      let normalizedImageResult = await DDN.normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true},templateName);
       console.log(normalizedImageResult);
       if (normalizedImageResult.imageURL) {
         normalizedResult[value] = normalizedImageResult.imageURL;

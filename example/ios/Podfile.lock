@@ -2,13 +2,11 @@ PODS:
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
-  - DynamsoftCore (2.0.2)
-  - DynamsoftDocumentNormalizer (1.0.30):
-    - DynamsoftCore (>= 2.0.0)
-    - DynamsoftImageProcessing
-    - DynamsoftIntermediateResult
-  - DynamsoftImageProcessing (1.0.30)
-  - DynamsoftIntermediateResult (1.0.30)
+  - DynamsoftCaptureVisionRouter (2.0.21)
+  - DynamsoftCore (3.0.20)
+  - DynamsoftDocumentNormalizer (2.0.20)
+  - DynamsoftImageProcessing (2.0.21)
+  - DynamsoftLicense (3.0.30)
   - FBLazyVector (0.72.5)
   - FBReactNativeSpec (0.72.5):
     - RCT-Folly (= 2021.07.22.00)
@@ -506,11 +504,12 @@ PODS:
     - React-callinvoker
     - React-Core
     - react-native-worklets-core
-  - VisionCameraDynamsoftDocumentNormalizer (1.0.3):
-    - DynamsoftCore (= 2.0.2)
-    - DynamsoftDocumentNormalizer (= 1.0.30)
-    - DynamsoftImageProcessing (= 1.0.30)
-    - DynamsoftIntermediateResult (= 1.0.30)
+  - VisionCameraDynamsoftDocumentNormalizer (1.0.1):
+    - DynamsoftCaptureVisionRouter (= 2.0.21)
+    - DynamsoftCore (= 3.0.20)
+    - DynamsoftDocumentNormalizer (= 2.0.20)
+    - DynamsoftImageProcessing (= 2.0.21)
+    - DynamsoftLicense (= 3.0.30)
     - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -589,10 +588,11 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - CocoaAsyncSocket
+    - DynamsoftCaptureVisionRouter
     - DynamsoftCore
     - DynamsoftDocumentNormalizer
     - DynamsoftImageProcessing
-    - DynamsoftIntermediateResult
+    - DynamsoftLicense
     - Flipper
     - Flipper-Boost-iOSX
     - Flipper-DoubleConversion
@@ -702,10 +702,11 @@ SPEC CHECKSUMS:
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
-  DynamsoftCore: 80c01db1e40dd019d50b9c07bff50c73fcb06d03
-  DynamsoftDocumentNormalizer: c316039c6209200d068231ff676da81af75e7778
-  DynamsoftImageProcessing: ffed5d46c90d8857f3e65194947b8447a10629b3
-  DynamsoftIntermediateResult: b611948b62c0c48e2a5d247bcc1ec31a03b670ff
+  DynamsoftCaptureVisionRouter: 9fd011a7b53b2fd57a12307e83d2e136431605bd
+  DynamsoftCore: 928916c8605eb622c13d560753d5de67e8694fb4
+  DynamsoftDocumentNormalizer: a860b4836b0060e8b489c0803feb815dda34374e
+  DynamsoftImageProcessing: 62ff1a661fcaace2d2f7b19a93563c3b6d581a27
+  DynamsoftLicense: ec443a74c75c1e3ba318369d1fee4b86635e7029
   FBLazyVector: 71803c074f6325f10b5ec891c443b6bbabef0ca7
   FBReactNativeSpec: 448e08a759d29a96e15725ae532445bf4343567c
   Flipper: 6edb735e6c3e332975d1b17956bcc584eccf5818
@@ -718,7 +719,7 @@ SPEC CHECKSUMS:
   FlipperKit: 2efad7007d6745a3f95e4034d547be637f89d3f6
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
-  hermes-engine: 9cb7fdb59c4ef7e4689a9409a08da0e298cf0cd4
+  hermes-engine: f6cf92a471053245614d9d8097736f6337d5b86c
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
@@ -758,7 +759,7 @@ SPEC CHECKSUMS:
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   VisionCamera: ce927c396e1057199dd01bf412ba3777d900e166
-  VisionCameraDynamsoftDocumentNormalizer: 384d76756bbc105155afb56be3ec1def4f909989
+  VisionCameraDynamsoftDocumentNormalizer: 091958df4b475938b8c745e804e8f20fb6f3077c
   Yoga: 86fed2e4d425ee4c6eab3813ba1791101ee153c6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

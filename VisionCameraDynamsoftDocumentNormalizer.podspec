@@ -16,8 +16,9 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
   s.dependency "React-Core"
-  s.dependency "DynamsoftCore", "= 2.0.2"
-  s.dependency "DynamsoftImageProcessing", "= 1.0.30"
-  s.dependency "DynamsoftIntermediateResult", "= 1.0.30"
-  s.dependency "DynamsoftDocumentNormalizer", "= 1.0.30"
+  s.dependency "DynamsoftCaptureVisionRouter", "2.0.21"
+  s.dependency "DynamsoftDocumentNormalizer", "2.0.20"
+  s.dependency "DynamsoftCore", "3.0.20"
+  s.dependency "DynamsoftLicense", "3.0.30"
+  s.dependency "DynamsoftImageProcessing", "2.0.21"
 end

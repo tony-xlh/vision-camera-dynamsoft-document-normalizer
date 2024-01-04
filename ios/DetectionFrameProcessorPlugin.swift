@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import DynamsoftDocumentNormalizer
 
 @objc(DetectionFrameProcessorPlugin)
 public class DetectionFrameProcessorPlugin: FrameProcessorPlugin {
@@ -21,14 +22,24 @@ public class DetectionFrameProcessorPlugin: FrameProcessorPlugin {
             print("Failed to create CGImage!")
             return nil
         }
+        var templateName = "DetectDocumentBoundaries_Default"
+        if arguments != nil {
+            if arguments?["template"] != nil {
+                let template = arguments?["template"] as! String
+                if template != "" {
+                    templateName = template
+                }
+            }
+        }
         
         var returned_results: [Any] = []
         let image = UIImage(cgImage: cgImage)
         
-        let results = try? VisionCameraDynamsoftDocumentNormalizer.ddn.detectQuadFromImage(image)
+        let capturedResult = VisionCameraDynamsoftDocumentNormalizer.cvr.captureFromImage(image, templateName: templateName)
+        let results = capturedResult.items
         if results != nil {
             for result in results! {
-                returned_results.append(Utils.wrapDetectionResult(result:result))
+                returned_results.append(Utils.wrapDetectionResult(result:result as! DetectedQuadResultItem))
             }
         }
         return returned_results
