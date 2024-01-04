@@ -34,15 +34,15 @@ export function initRuntimeSettingsFromString(template:string): Promise<boolean>
 /**
  * Detect documents in an image file
  */
-export function detectFile(url:string): Promise<DetectedQuadResult[]> {
-  return VisionCameraDynamsoftDocumentNormalizer.detectFile(url);
+export function detectFile(url:string,template?:string): Promise<DetectedQuadResult[]> {
+  return VisionCameraDynamsoftDocumentNormalizer.detectFile(url,template ?? "");
 }
 
 /**
  * Normalize an image file
  */
-export function normalizeFile(url:string, quad:Quadrilateral, config: NormalizationConfig): Promise<NormalizedImageResult> {
-  return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, quad, config);
+export function normalizeFile(url:string, quad:Quadrilateral, config: NormalizationConfig, template?:string): Promise<NormalizedImageResult> {
+  return VisionCameraDynamsoftDocumentNormalizer.normalizeFile(url, quad, config, template ?? "");
 }
 
 /**
@@ -96,8 +96,15 @@ const plugin = VisionCameraProxy.initFrameProcessorPlugin('detect')
 /**
  * Detect documents from the camera preview
  */
-export function detect(frame: Frame): DetectedQuadResult[] {
+export function detect(frame: Frame,template?: string): DetectedQuadResult[] {
   'worklet'
-  if (plugin == null) throw new Error('Failed to load Frame Processor Plugin "decode"!')
-  return plugin.call(frame) as any;
+  if (plugin == null) throw new Error('Failed to load Frame Processor Plugin "detect"!')
+  if (template) {
+    let record:Record<string,any> = {};
+    record["template"] = template;
+    return plugin.call(frame,record) as any;
+  }else{
+    return plugin.call(frame) as any;
+  }
+  
 }
