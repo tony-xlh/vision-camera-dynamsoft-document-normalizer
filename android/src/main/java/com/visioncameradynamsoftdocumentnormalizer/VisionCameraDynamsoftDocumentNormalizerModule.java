@@ -22,6 +22,7 @@ import com.dynamsoft.ddn.DocumentNormalizerException;
 import com.dynamsoft.ddn.NormalizedImageResultItem;
 import com.dynamsoft.license.LicenseManager;
 import com.dynamsoft.license.LicenseVerificationListener;
+import com.dynamsoft.utility.ImageManager;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -173,17 +174,19 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
             cvr.updateSettings(templateName,settings);
             CapturedResult capturedResult = cvr.capture(filePath,templateName);
             NormalizedImageResultItem result = (NormalizedImageResultItem) capturedResult.getItems()[0];
-            Bitmap bm = result.getImageData().toBitmap();
+
             if (config.hasKey("saveNormalizationResultAsFile")) {
                 if (config.getBoolean("saveNormalizationResultAsFile")) {
                     File cacheDir = mContext.getCacheDir();
                     String fileName = System.currentTimeMillis() + ".jpg";
-                    String path = BitmapUtils.saveImage(bm, cacheDir, fileName);
-                    returnResult.putString("imageURL",path);
+                    File file = new File(cacheDir,fileName);
+                    new ImageManager().saveToFile(result.getImageData(),file.getAbsolutePath(),true);
+                    returnResult.putString("imageURL",file.getAbsolutePath());
                 }
             }
             if (config.hasKey("includeNormalizationResultAsBase64")) {
                 if (config.getBoolean("includeNormalizationResultAsBase64")) {
+                    Bitmap bm = result.getImageData().toBitmap();
                     String base64 = BitmapUtils.bitmap2Base64(bm);
                     returnResult.putString("imageBase64",base64);
                 }
