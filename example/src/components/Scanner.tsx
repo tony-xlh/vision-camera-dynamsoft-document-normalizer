@@ -34,7 +34,8 @@ export default function Scanner(props:ScannerProps) {
     (async () => {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'granted');
-      let result = await DDN.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==");
+      let license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
+      let result = await DDN.initLicense(license);
       console.log("Licesne valid: ");
       console.log(result);
       if (result === false) {
@@ -165,16 +166,20 @@ export default function Scanner(props:ScannerProps) {
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
     console.log("detect frame");
-    console.log(frame);
+    console.log(frame.toString());
     if (takenShared.value === false) {
-      const results = DDN.detect(frame);
-      console.log(results);
-      if (results.length>0) {
-        frameWidth.value = frame.width;
-        frameHeight.value = frame.height;
-        detectionResults.value = results;
-        updateViewBoxJS();
-        updatePointsDataJS();
+      try {
+        const results = DDN.detect(frame);
+        console.log(results);
+        if (results.length>0) {
+          frameWidth.value = frame.width;
+          frameHeight.value = frame.height;
+          detectionResults.value = results;
+          updateViewBoxJS();
+          updatePointsDataJS();
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   }, [])

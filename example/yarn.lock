@@ -5577,10 +5577,10 @@ react-native-svg@^13.4.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
-react-native-vision-camera@^3.6.4:
-  version "3.6.8"
-  resolved "https://registry.npmmirror.com/react-native-vision-camera/-/react-native-vision-camera-3.6.8.tgz#205a53bb7a3bf73e3f8e7886953ea3f6e1159d68"
-  integrity sha512-fgySMUaIOooysBt5KO2tgftq3uIgdAsCjJc26GpwSxi3SdKp636Z3j5tjzxcW530BTf/udeUstxvNGlr8zeSQQ==
+react-native-vision-camera@^3.8.2:
+  version "3.8.2"
+  resolved "https://registry.npmmirror.com/react-native-vision-camera/-/react-native-vision-camera-3.8.2.tgz#f4f75f84c6a19e1c3474ddc0f7f785b5a526739b"
+  integrity sha512-MY39l2e3hNRPUefn2JPShOFExcw0PblbAcUGvJrIfS9pMzdIyceo0umRAx8lOGXzDUAdb+xy/tFWb8zGxKimCQ==
 
 react-native-worklets-core@^0.2.4:
   version "0.2.4"
@@ -6508,7 +6508,7 @@ vary@~1.1.2:
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
 vision-camera-dynamsoft-document-normalizer@../:
-  version "1.0.1"
+  version "2.0.1"
 
 vlq@^1.0.0:
   version "1.0.1"

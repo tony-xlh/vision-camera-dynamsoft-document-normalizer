@@ -14,7 +14,7 @@ import java.util.List;
 
 public class VisionCameraDynamsoftDocumentNormalizerPackage implements ReactPackage {
     static {
-        FrameProcessorPluginRegistry.addFrameProcessorPlugin("detect", options -> new VisionCameraDetectionPlugin());
+        FrameProcessorPluginRegistry.addFrameProcessorPlugin("detect", VisionCameraDetectionPlugin::new);
     }
     @NonNull
     @Override
