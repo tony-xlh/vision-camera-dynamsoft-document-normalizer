@@ -19,10 +19,10 @@
 
 + (void)load
 {
-  [FrameProcessorPluginRegistry addFrameProcessorPlugin:@"detect"
-                                        withInitializer:^FrameProcessorPlugin* (NSDictionary* options) {
-    return [[DetectionFrameProcessorPlugin alloc] init];
-  }];
+    [FrameProcessorPluginRegistry addFrameProcessorPlugin:@"detect"
+                                        withInitializer:^FrameProcessorPlugin* (VisionCameraProxyHolder* proxy, NSDictionary* options) {
+        return [[DetectionFrameProcessorPlugin alloc] initWithProxy:proxy withOptions:options];
+    }];
 }
 
 @end

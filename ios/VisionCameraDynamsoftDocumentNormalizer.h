@@ -2,7 +2,7 @@
 //  VisionCameraDynamsoftDocumentNormalizer.h
 //  VisionCameraDynamsoftDocumentNormalizer
 //
-//  Created by 徐力航 on 2023/11/22.
+//  Created by xulihang on 2023/11/22.
 //  Copyright © 2023 Facebook. All rights reserved.
 //
 
