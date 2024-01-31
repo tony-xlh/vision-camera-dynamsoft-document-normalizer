@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Alert, Dimensions, Platform, SafeAreaView, StyleSheet } from 'react-native';
-import { Camera, PhotoFile, useCameraDevice, useCameraDevices, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera';
+import { Camera, PhotoFile, runAtTargetFps, useCameraDevice, useCameraDevices, useCameraFormat, useFrameProcessor } from 'react-native-vision-camera';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import { Svg, Polygon } from 'react-native-svg';
 import type { DetectedQuadResult } from 'vision-camera-dynamsoft-document-normalizer';
@@ -34,7 +34,7 @@ export default function Scanner(props:ScannerProps) {
     (async () => {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'granted');
-      let license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==";
+      let license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="; //one-day public trial
       let result = await DDN.initLicense(license);
       console.log("Licesne valid: ");
       console.log(result);
@@ -168,19 +168,22 @@ export default function Scanner(props:ScannerProps) {
     console.log("detect frame");
     console.log(frame.toString());
     if (takenShared.value === false) {
-      try {
-        const results = DDN.detect(frame);
-        console.log(results);
-        if (results.length>0) {
-          frameWidth.value = frame.width;
-          frameHeight.value = frame.height;
-          detectionResults.value = results;
-          updateViewBoxJS();
-          updatePointsDataJS();
+      runAtTargetFps(3, () => {
+        'worklet'
+        try {
+          const results = DDN.detect(frame);
+          console.log(results);
+          if (results.length>0) {
+            frameWidth.value = frame.width;
+            frameHeight.value = frame.height;
+            detectionResults.value = results;
+            updateViewBoxJS();
+            updatePointsDataJS();
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
-      }
+      })
     }
   }, [])
 
@@ -197,6 +200,7 @@ export default function Scanner(props:ScannerProps) {
               photo={true}
               format={cameraFormat}
               frameProcessor={taken ? undefined: frameProcessor}
+              enableHighQualityPhotos={true}
               pixelFormat='yuv'
             />
             <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox}>
