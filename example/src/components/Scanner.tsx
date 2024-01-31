@@ -34,13 +34,6 @@ export default function Scanner(props:ScannerProps) {
     (async () => {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'granted');
-      let license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="; //one-day public trial
-      let result = await DDN.initLicense(license);
-      console.log("Licesne valid: ");
-      console.log(result);
-      if (result === false) {
-        Alert.alert("DDN","License invalid");
-      }
     })();
   }, []);
 
