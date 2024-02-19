@@ -96,7 +96,7 @@ const plugin = VisionCameraProxy.initFrameProcessorPlugin('detect')
 /**
  * Detect documents from the camera preview
  */
-export function detect(frame: Frame,template?: string): DetectedQuadResult[] {
+export function detect(frame: Frame,template?: string): Record<string,DetectedQuadResult> {
   'worklet'
   if (plugin == null) throw new Error('Failed to load Frame Processor Plugin "detect"!')
   if (template) {
