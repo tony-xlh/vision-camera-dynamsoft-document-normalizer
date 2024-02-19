@@ -499,12 +499,12 @@ PODS:
   - RNSVG (13.14.0):
     - React-Core
   - SocketRocket (0.6.1)
-  - VisionCamera (3.8.2):
+  - VisionCamera (3.9.0):
     - React
     - React-callinvoker
     - React-Core
     - react-native-worklets-core
-  - VisionCameraDynamsoftDocumentNormalizer (2.0.1):
+  - VisionCameraDynamsoftDocumentNormalizer (2.1.0):
     - DynamsoftCaptureVisionRouter (= 2.0.21)
     - DynamsoftCore (= 3.0.20)
     - DynamsoftDocumentNormalizer (= 2.0.20)
@@ -758,8 +758,8 @@ SPEC CHECKSUMS:
   RNShare: d82e10f6b7677f4b0048c23709bd04098d5aee6c
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  VisionCamera: edbcd00e27a438b2228f67823e2b8d15a189065f
-  VisionCameraDynamsoftDocumentNormalizer: 8ae41c360a64a4920c00049417b98b248bcef4f0
+  VisionCamera: 72ec2908dff5de402074d0cfd41932cd33c1fe65
+  VisionCameraDynamsoftDocumentNormalizer: 15e769f93f336a619ac497eca2f96270ba98ae30
   Yoga: 86fed2e4d425ee4c6eab3813ba1791101ee153c6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

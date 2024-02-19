@@ -14,6 +14,7 @@ import com.dynamsoft.cvr.CaptureVisionRouter;
 import com.dynamsoft.ddn.DetectedQuadResultItem;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.mrousavy.camera.core.FrameInvalidError;
 import com.mrousavy.camera.frameprocessor.Frame;
 import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin;
 import com.mrousavy.camera.frameprocessor.VisionCameraProxy;
@@ -46,7 +47,7 @@ public class VisionCameraDetectionPlugin extends FrameProcessorPlugin {
                     quadResultsWrapped.add(map.toHashMap());
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception | FrameInvalidError e) {
             e.printStackTrace();
             Log.d("DDN",e.getMessage());
         }
