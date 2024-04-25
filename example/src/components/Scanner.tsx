@@ -25,7 +25,7 @@ export default function Scanner(props:ScannerProps) {
     }
     setDetectionResults(results);
   }
-  const convertAndSetResultsJS = Worklets.createRunInJsFn(convertAndSetResults);
+  const convertAndSetResultsJS = Worklets.createRunOnJS(convertAndSetResults);
   const frameWidth = useSharedValue(1920);
   const frameHeight = useSharedValue(1080);
   const [viewBox,setViewBox] = useState("0 0 1080 1920");
@@ -70,7 +70,7 @@ export default function Scanner(props:ScannerProps) {
     console.log("viewBox"+viewBox);
   }
 
-  const updateViewBoxJS = Worklets.createRunInJsFn(updateViewBox);
+  const updateViewBoxJS = Worklets.createRunOnJS(updateViewBox);
   const updatePointsData = () => {
     if (detectionResults.length>0) {
       let result = detectionResults[0];
@@ -85,7 +85,7 @@ export default function Scanner(props:ScannerProps) {
     }
   }
 
-  const updatePointsDataJS = Worklets.createRunInJsFn(updatePointsData);
+  const updatePointsDataJS = Worklets.createRunOnJS(updatePointsData);
   
   useEffect(() => {
     if (pointsText != "default") {
