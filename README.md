@@ -11,7 +11,9 @@ It can detect document boundaries and run perspective transformation to get a no
 
 For vision-camera v2, use versions 0.x.
 
-For vision-camera v3, use versions >= 1.0.0.
+For vision-camera v3, use versions 1.x - 2.x.
+
+For vision-camera v4, use versions >= 3.0.0.
 
 ## Installation
 
