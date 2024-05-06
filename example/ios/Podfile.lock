@@ -511,7 +511,7 @@ PODS:
   - VisionCamera/React (4.0.1):
     - React-Core
     - VisionCamera/FrameProcessors
-  - VisionCameraDynamsoftDocumentNormalizer (2.3.0):
+  - VisionCameraDynamsoftDocumentNormalizer (3.0.0):
     - DynamsoftCaptureVisionRouter (= 2.0.21)
     - DynamsoftCore (= 3.0.20)
     - DynamsoftDocumentNormalizer (= 2.0.20)
@@ -766,7 +766,7 @@ SPEC CHECKSUMS:
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   VisionCamera: 8e00df84a76cf26ca70ecd3b6ed05dc0d3b60beb
-  VisionCameraDynamsoftDocumentNormalizer: e000ab117d740278964bb73f871325d8755663f5
+  VisionCameraDynamsoftDocumentNormalizer: 26727ccb940d5fa7865d216947d8fab59ab4296d
   Yoga: 86fed2e4d425ee4c6eab3813ba1791101ee153c6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

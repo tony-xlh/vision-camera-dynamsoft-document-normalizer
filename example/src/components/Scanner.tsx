@@ -36,7 +36,8 @@ export default function Scanner(props:ScannerProps) {
   const previousResults = useRef([] as DetectedQuadResult[]);
   const device = useCameraDevice("back");
   const cameraFormat = useCameraFormat(device, [
-    { videoResolution: { width: 1280, height: 720 } },
+    { videoResolution: { width: 1920, height: 1080 } },
+    { photoResolution: "max"},
     { fps: 60 }
   ])
   useEffect(() => {
@@ -205,7 +206,6 @@ export default function Scanner(props:ScannerProps) {
               photo={true}
               format={cameraFormat}
               frameProcessor={taken ? undefined: frameProcessor}
-              enableHighQualityPhotos={true}
               pixelFormat='yuv'
             />
             <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox}>
