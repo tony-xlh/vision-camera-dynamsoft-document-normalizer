@@ -35,7 +35,7 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
 
         var returned_results: [Any] = []
         
-        let imageURL = URL(fileURLWithPath: path)
+        let imageURL = URL(fileURLWithPath: path.replacingOccurrences(of: "file://", with: ""))
         var image = UIImage(contentsOfFile: imageURL.path)!
         image = BitmapUtils.normalizedImage(image)
         var templateName:String
@@ -69,7 +69,7 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
         }
         var returned_result:[String:String] = [:]
         
-        let imageURL = URL(fileURLWithPath: path)
+        let imageURL = URL(fileURLWithPath: path.replacingOccurrences(of: "file://", with: ""))
         var image = UIImage(contentsOfFile: imageURL.path)!
         image = BitmapUtils.normalizedImage(image)
         let points = quad["points"] as! [[String:NSNumber]]
