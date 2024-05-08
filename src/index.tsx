@@ -71,6 +71,7 @@ export interface NormalizedImageResult {
 export interface DetectedQuadResult {
   location: Quadrilateral;
   confidenceAsDocumentBoundary: number;
+  area: number;
 }
 
 export interface Point {
