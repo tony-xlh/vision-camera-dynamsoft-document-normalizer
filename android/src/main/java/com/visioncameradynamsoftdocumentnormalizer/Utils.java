@@ -68,6 +68,7 @@ public class Utils {
         WritableNativeMap map = new WritableNativeMap();
         map.putInt("confidenceAsDocumentBoundary",result.getConfidenceAsDocumentBoundary());
         map.putMap("location",getMapFromLocation(result.getLocation()));
+        map.putInt("area",result.getLocation().getArea());
         return map;
     }
 

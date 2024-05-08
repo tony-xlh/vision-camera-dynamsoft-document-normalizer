@@ -10,10 +10,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.dynamsoft.core.basic_structures.CapturedResult;
 import com.dynamsoft.core.basic_structures.CapturedResultItem;
-import com.dynamsoft.core.basic_structures.CoreException;
 import com.dynamsoft.core.basic_structures.Quadrilateral;
+import com.dynamsoft.cvr.CapturedResult;
 import com.dynamsoft.cvr.CaptureVisionRouter;
 import com.dynamsoft.cvr.CaptureVisionRouterException;
 import com.dynamsoft.cvr.SimplifiedCaptureVisionSettings;

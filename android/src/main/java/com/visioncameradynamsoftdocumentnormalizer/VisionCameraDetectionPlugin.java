@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.dynamsoft.core.basic_structures.CapturedResult;
 import com.dynamsoft.core.basic_structures.CapturedResultItem;
 import com.dynamsoft.cvr.CaptureVisionRouter;
+import com.dynamsoft.cvr.CapturedResult;
 import com.dynamsoft.ddn.DetectedQuadResultItem;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
