@@ -2,11 +2,11 @@ PODS:
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
-  - DynamsoftCaptureVisionRouter (2.0.21)
-  - DynamsoftCore (3.0.20)
-  - DynamsoftDocumentNormalizer (2.0.20)
-  - DynamsoftImageProcessing (2.0.21)
-  - DynamsoftLicense (3.0.30)
+  - DynamsoftCaptureVisionRouter (2.2.12)
+  - DynamsoftCore (3.2.11)
+  - DynamsoftDocumentNormalizer (2.2.11)
+  - DynamsoftImageProcessing (2.2.11)
+  - DynamsoftLicense (3.2.11)
   - FBLazyVector (0.72.5)
   - FBReactNativeSpec (0.72.5):
     - RCT-Folly (= 2021.07.22.00)
@@ -511,12 +511,12 @@ PODS:
   - VisionCamera/React (4.0.1):
     - React-Core
     - VisionCamera/FrameProcessors
-  - VisionCameraDynamsoftDocumentNormalizer (3.0.0):
-    - DynamsoftCaptureVisionRouter (= 2.0.21)
-    - DynamsoftCore (= 3.0.20)
-    - DynamsoftDocumentNormalizer (= 2.0.20)
-    - DynamsoftImageProcessing (= 2.0.21)
-    - DynamsoftLicense (= 3.0.30)
+  - VisionCameraDynamsoftDocumentNormalizer (3.0.1):
+    - DynamsoftCaptureVisionRouter (= 2.2.12)
+    - DynamsoftCore (= 3.2.11)
+    - DynamsoftDocumentNormalizer (= 2.2.11)
+    - DynamsoftImageProcessing (= 2.2.11)
+    - DynamsoftLicense (= 3.2.11)
     - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -709,11 +709,11 @@ SPEC CHECKSUMS:
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
-  DynamsoftCaptureVisionRouter: 9fd011a7b53b2fd57a12307e83d2e136431605bd
-  DynamsoftCore: 928916c8605eb622c13d560753d5de67e8694fb4
-  DynamsoftDocumentNormalizer: a860b4836b0060e8b489c0803feb815dda34374e
-  DynamsoftImageProcessing: 62ff1a661fcaace2d2f7b19a93563c3b6d581a27
-  DynamsoftLicense: ec443a74c75c1e3ba318369d1fee4b86635e7029
+  DynamsoftCaptureVisionRouter: e0556107089dd4708db7c79a391798159d62a501
+  DynamsoftCore: 318bae4cfef9d63624752e8efdd138c034fab05c
+  DynamsoftDocumentNormalizer: 8232f301db5b9b8c9390f20b5d715de5bbb84c0a
+  DynamsoftImageProcessing: e595f5575ee0a61489f46f478fd0c26e8455b45d
+  DynamsoftLicense: 66da18be67cc4f1c069eb1d4fe969f703787c73d
   FBLazyVector: 71803c074f6325f10b5ec891c443b6bbabef0ca7
   FBReactNativeSpec: 448e08a759d29a96e15725ae532445bf4343567c
   Flipper: 6edb735e6c3e332975d1b17956bcc584eccf5818
@@ -766,7 +766,7 @@ SPEC CHECKSUMS:
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   VisionCamera: 8e00df84a76cf26ca70ecd3b6ed05dc0d3b60beb
-  VisionCameraDynamsoftDocumentNormalizer: 26727ccb940d5fa7865d216947d8fab59ab4296d
+  VisionCameraDynamsoftDocumentNormalizer: 4d8fea1f229344ecfeb408f344b560e14bc42d16
   Yoga: 86fed2e4d425ee4c6eab3813ba1791101ee153c6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

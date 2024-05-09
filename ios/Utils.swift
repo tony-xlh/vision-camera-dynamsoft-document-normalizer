@@ -35,6 +35,7 @@ class Utils {
         var dict: [String: Any] = [:]
         dict["confidenceAsDocumentBoundary"] = result.confidenceAsDocumentBoundary
         dict["location"] = wrapLocation(location:result.location)
+        dict["area"] = result.location.area
         return dict
     }
     

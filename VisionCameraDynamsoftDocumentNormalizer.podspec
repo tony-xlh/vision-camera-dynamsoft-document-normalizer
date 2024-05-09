@@ -14,11 +14,10 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
-
   s.dependency "React-Core"
-  s.dependency "DynamsoftCaptureVisionRouter", "2.0.21"
-  s.dependency "DynamsoftDocumentNormalizer", "2.0.20"
-  s.dependency "DynamsoftCore", "3.0.20"
-  s.dependency "DynamsoftLicense", "3.0.30"
-  s.dependency "DynamsoftImageProcessing", "2.0.21"
+  s.dependency "DynamsoftCaptureVisionRouter", "2.2.12"
+  s.dependency "DynamsoftDocumentNormalizer", "2.2.11"
+  s.dependency "DynamsoftCore", "3.2.11"
+  s.dependency "DynamsoftLicense", "3.2.11"
+  s.dependency "DynamsoftImageProcessing", "2.2.11"
 end
