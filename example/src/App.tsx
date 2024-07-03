@@ -1,31 +1,118 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'vision-camera-dynamsoft-document-normalizer';
+import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import Scanner from './components/Scanner';
+import type { PhotoFile } from 'react-native-vision-camera';
+import * as DDN from "vision-camera-dynamsoft-document-normalizer";
+import Cropper from './components/Cropper';
+import ResultViewer from './components/ResultViewer';
+import { useEffect } from 'react';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [showScanner,setShowScanner] = React.useState(false);
+  const [showCropper,setShowCropper] = React.useState(false);
+  const [showResultViewer,setShowResultViewer] = React.useState(false);
+  const [photoTaken,setPhotoTaken] = React.useState<PhotoFile|undefined>();
+  const [photoPath,setPhotoPath] = React.useState<string>("");
+  const [points,setPoints] = React.useState<DDN.Point[]>([]);
+  const [status,setStatus] = React.useState<string>("Initializing...");
 
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+  useEffect(() => {
+    (async () => {
+      let license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="; //one-day public trial
+      let result = await DDN.initLicense(license);
+      console.log("Licesne valid: ");
+      console.log(result);
+      if (result === false) {
+        Alert.alert("DDN","License invalid");
+      }else{
+        setStatus("");
+      }
+    })();
   }, []);
 
+  const onPressed = () => {
+    if (status === "Initializing...") {
+      Alert.alert("DDN","Please wait for the initialization.");
+    }else{
+      setShowScanner(true);
+    }
+  }
+
+  const onScanned = (photo:PhotoFile|null) => {
+    if (photo) {
+      setShowScanner(false);
+      setPhotoTaken(photo);
+      setShowCropper(true);
+    }else{
+      Alert.alert("Error","Failed to take a photo. Please try again.");
+      setShowScanner(false);
+    }
+  }
+
+  const renderBody = () => {
+    if (showScanner) {
+      return (
+        <Scanner onScanned={onScanned}></Scanner>
+      )
+    }else if (showCropper){
+      return (
+        <Cropper 
+          photo={photoTaken}
+          onCanceled={()=>{
+            setShowCropper(false);
+            setShowScanner(true);
+          }}
+          onConfirmed={(path,adjustedPoints)=>{
+            setPhotoPath(path);
+            setPoints(adjustedPoints);
+            setShowCropper(false);
+            setShowResultViewer(true);
+          }}
+        ></Cropper>
+      )
+    }else if (showResultViewer){
+      return (
+        <ResultViewer photoPath={photoPath} points={points} 
+          onBack={()=>{
+            setShowResultViewer(false);
+          }}  
+        ></ResultViewer>
+      )
+    }else{
+      return (
+        <>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => onPressed()}
+          >
+            <Text style={styles.buttonText}>Scan Document</Text>
+          </TouchableOpacity>
+          <Text>{status}</Text>
+        </>
+        )
+    }
+  }
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      {renderBody()}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex:1,
   },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+  info: {
+    margin: 8,
+  },
+  button: {
+    alignItems: "center",
+    backgroundColor: "rgb(33, 150, 243)",
+    margin: 8,
+    padding: 10,
+  },
+  buttonText:{
+    color: "#FFFFFF",
   },
 });

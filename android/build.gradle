@@ -81,11 +81,26 @@ repositories {
   google()
 }
 
+rootProject.allprojects {
+  repositories {
+    maven {
+      url "https://download2.dynamsoft.com/maven/aar"
+    }
+  }
+}
 
 dependencies {
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
+  implementation project(':react-native-vision-camera')
+  // DDN
+  implementation 'com.dynamsoft:dynamsoftcapturevisionrouter:2.2.10'
+  implementation 'com.dynamsoft:dynamsoftcore:3.2.10'
+  implementation 'com.dynamsoft:dynamsoftdocumentnormalizer:2.2.10'
+  implementation 'com.dynamsoft:dynamsoftimageprocessing:2.2.10'
+  implementation 'com.dynamsoft:dynamsoftlicense:3.2.10'
+  implementation 'com.dynamsoft:dynamsoftutility:1.2.10'
 }
 
