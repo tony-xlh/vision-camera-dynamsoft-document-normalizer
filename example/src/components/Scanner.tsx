@@ -31,7 +31,6 @@ export default function Scanner(props:ScannerProps) {
   const [viewBox,setViewBox] = useState("0 0 1080 1920");
   const [pointsText, setPointsText] = useState("default");
   const takenShared = useSharedValue(false);
-  const [taken,setTaken] = useState(false);
   const photo = useRef<PhotoFile|null>(null);
   const previousResults = useRef([] as DetectedQuadResult[]);
   const device = useCameraDevice("back");
@@ -50,13 +49,24 @@ export default function Scanner(props:ScannerProps) {
 
   const getFrameSize = () => {
     let width, height;
-    if (frameWidth>frameHeight && Dimensions.get('window').width>Dimensions.get('window').height){
-      width = frameWidth;
-      height = frameHeight;
-    }else {
-      console.log("Has rotation");
-      width = frameHeight;
-      height = frameWidth;
+    if (frameWidth.value>frameHeight.value){
+      if (Dimensions.get('window').width>Dimensions.get('window').height) {
+        width = frameWidth.value;
+        height = frameHeight.value;
+      }else{
+        console.log("Has rotation");
+        width = frameHeight.value;
+        height = frameWidth.value;
+      }
+    }else if (frameWidth.value<frameHeight.value) {
+      if (Dimensions.get('window').width<Dimensions.get('window').height) {
+        width = frameWidth.value;
+        height = frameHeight.value;
+      }else{
+        console.log("Has rotation");
+        width = frameHeight.value;
+        height = frameWidth.value;
+      }
     }
     return [width, height];
   }
@@ -96,7 +106,6 @@ export default function Scanner(props:ScannerProps) {
     console.log("take photo");
     if (camera.current) {
       console.log("using camera");
-      setTaken(true);
       takenShared.value = true;
       await sleep(500);
       photo.current = await camera.current.takePhoto();
@@ -115,7 +124,6 @@ export default function Scanner(props:ScannerProps) {
         }
       }else{
         Alert.alert("","Failed to take a photo");
-        setTaken(false);
         takenShared.value = false;
       }
     }

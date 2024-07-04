@@ -43,9 +43,11 @@ public class DetectionFrameProcessorPlugin: FrameProcessorPlugin {
         }else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
             degree = 270.0;
         }
+
         if degree != 0.0 {
             image = DetectionFrameProcessorPlugin.rotate(image:image,degree:degree)
         }
+
         let capturedResult = VisionCameraDynamsoftDocumentNormalizer.cvr.captureFromImage(image, templateName: templateName)
         let results = capturedResult.items
         if results != nil {
