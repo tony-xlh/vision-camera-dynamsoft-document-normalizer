@@ -1,6 +1,6 @@
 {
   "name": "vision-camera-dynamsoft-document-normalizer",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "A React Native Vision Camera frame processor plugin for Dynamsoft Document Normalizer which can be used to create a document scanner.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
