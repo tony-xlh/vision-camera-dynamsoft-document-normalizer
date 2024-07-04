@@ -201,7 +201,7 @@ export default function Scanner(props:ScannerProps) {
               device={device}
               photo={true}
               format={cameraFormat}
-              frameProcessor={taken ? undefined: frameProcessor}
+              frameProcessor={frameProcessor}
               pixelFormat='yuv'
               resizeMode='contain'
             />
