@@ -74,10 +74,10 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
         image = BitmapUtils.normalizedImage(image)
         let points = quad["points"] as! [[String:NSNumber]]
         let quad = Quadrilateral.init(pointArray: convertPoints(points))
-        let settings = try? VisionCameraDynamsoftDocumentNormalizer.cvr.getSimplifiedSettings(template)
+        let settings = try? VisionCameraDynamsoftDocumentNormalizer.cvr.getSimplifiedSettings(templateName)
         settings?.roi = quad
         settings?.roiMeasuredInPercentage = false
-        try? VisionCameraDynamsoftDocumentNormalizer.cvr.updateSettings(template, settings: settings!)
+        try? VisionCameraDynamsoftDocumentNormalizer.cvr.updateSettings(templateName, settings: settings!)
         
         let capturedResult =  VisionCameraDynamsoftDocumentNormalizer.cvr.captureFromImage(image, templateName: templateName)
         let results = capturedResult.items
