@@ -15,6 +15,12 @@ For vision-camera v3, use versions 1.x - 2.x.
 
 For vision-camera v4, use versions >= 3.0.0.
 
+## SDK Versions Used for Different Platforms
+
+| Product      | Android |    iOS |
+| ----------- | ----------- | -----------  | 
+| Dynamsoft Document Normalizer    | 2.x       | 2.x     |
+
 ## Installation
 
 ```sh
