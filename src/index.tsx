@@ -96,16 +96,23 @@ const plugin = VisionCameraProxy.initFrameProcessorPlugin('detect',{})
 
 /**
  * Detect documents from the camera preview
+ * @param template - the template name to use
+ * @param rotateImage - rotate the image to match camera preview
+ * @returns The detected quad result
  */
-export function detect(frame: Frame,template?: string): Record<string,DetectedQuadResult> {
+export function detect(frame: Frame,template?: string, rotateImage?:boolean): Record<string,DetectedQuadResult> {
   'worklet'
   if (plugin == null) throw new Error('Failed to load Frame Processor Plugin "detect"!')
-  if (template) {
+  if (template || rotateImage != undefined) {
     let record:Record<string,any> = {};
-    record["template"] = template;
+    if (template) {
+      record["template"] = template;
+    }
+    if (rotateImage != undefined) {
+      record["rotateImage"] = rotateImage;
+    }
     return plugin.call(frame,record) as any;
   }else{
     return plugin.call(frame) as any;
   }
-  
 }

@@ -18,9 +18,11 @@ export default function Scanner(props:ScannerProps) {
   const [hasPermission, setHasPermission] = useState(false);
   const [detectionResults,setDetectionResults] = useState([] as DetectedQuadResult[]);
   const convertAndSetResults = (records:Record<string,DetectedQuadResult>) => {
+    console.log("convertAndSetResults");
     let results:DetectedQuadResult[] = [];
     for (let index = 0; index < Object.keys(records).length; index++) {
       const result = records[Object.keys(records)[index]];
+      console.log(result)
       results.push(result);
     }
     setDetectionResults(results);
@@ -177,19 +179,16 @@ export default function Scanner(props:ScannerProps) {
 
   const frameProcessor = useFrameProcessor((frame) => {
     'worklet'
-    console.log("detect frame");
-    console.log(frame.toString());
+
     if (takenShared.value === false) {
       runAtTargetFps(3, () => {
         'worklet'
         try {
-          const results = DDN.detect(frame);
+          const results = DDN.detect(frame,"",false);
           console.log(results);
-          if (Object.keys(results).length>0) {
-            frameWidth.value = frame.width;
-            frameHeight.value = frame.height;
-            convertAndSetResultsJS(results);
-          }
+          frameWidth.value = frame.width;
+          frameHeight.value = frame.height;
+          convertAndSetResultsJS(results);
         } catch (error) {
           console.log(error);
         }
@@ -210,7 +209,6 @@ export default function Scanner(props:ScannerProps) {
               photo={true}
               format={cameraFormat}
               frameProcessor={frameProcessor}
-              pixelFormat='yuv'
               resizeMode='contain'
             />
             <Svg preserveAspectRatio='xMidYMid slice' style={StyleSheet.absoluteFill} viewBox={viewBox}>
