@@ -15,7 +15,7 @@
     "react-native-share": "^10.2.1",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-svg": "^15.3.0",
-    "react-native-vision-camera": "4.3.2",
+    "react-native-vision-camera": "4.5.1",
     "react-native-worklets-core": "^1.3.3"
   },
   "devDependencies": {
