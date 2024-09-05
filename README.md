@@ -75,6 +75,10 @@ module.exports = {
 * Android
 * iOS
 
+## Blog
+
+[Build a Document Normalization React Native Vision Camera Plugin](https://www.dynamsoft.com/codepool/react-native-vision-camera-document-normalizer-plugin.html)
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
