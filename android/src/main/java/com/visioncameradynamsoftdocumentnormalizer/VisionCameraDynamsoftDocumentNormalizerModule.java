@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -107,6 +108,11 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
         }
         WritableNativeArray returnResult = new WritableNativeArray();
         try {
+            File file = new File(filePath);
+            if (file.exists() == false) { //convert uri to path
+                Uri uri = Uri.parse(filePath);
+                filePath = uri.getPath();
+            }
             CapturedResult capturedResult = cvr.capture(filePath,templateName);
             for (CapturedResultItem quad:capturedResult.getItems()) {
                 returnResult.pushMap(Utils.getMapFromDetectedQuadResult((DetectedQuadResultItem) quad));
@@ -125,6 +131,11 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
         bitmap = rotateBitmap(bitmap,degrees,false,false);
         File file = new File(filePath);
         try {
+            if (file.exists() == false) { //convert uri to path
+                Uri uri = Uri.parse(filePath);
+                filePath = uri.getPath();
+                file = new File(filePath);
+            }
             FileOutputStream fOut = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
             fOut.flush();
@@ -164,6 +175,11 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
         }
         Log.d("DDN",templateName);
         try {
+            File file = new File(filePath);
+            if (file.exists() == false) { //convert uri to path
+                Uri uri = Uri.parse(filePath);
+                filePath = uri.getPath();
+            }
             ReadableArray points = quad.getArray("points");
             Quadrilateral quadrilateral = new Quadrilateral();
             quadrilateral.points = convertPoints(points);
@@ -178,9 +194,9 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
                 if (config.getBoolean("saveNormalizationResultAsFile")) {
                     File cacheDir = mContext.getCacheDir();
                     String fileName = System.currentTimeMillis() + ".jpg";
-                    File file = new File(cacheDir,fileName);
-                    new ImageManager().saveToFile(result.getImageData(),file.getAbsolutePath(),true);
-                    returnResult.putString("imageURL",file.getAbsolutePath());
+                    File output = new File(cacheDir,fileName);
+                    new ImageManager().saveToFile(result.getImageData(),output.getAbsolutePath(),true);
+                    returnResult.putString("imageURL",output.getAbsolutePath());
                 }
             }
             if (config.hasKey("includeNormalizationResultAsBase64")) {
