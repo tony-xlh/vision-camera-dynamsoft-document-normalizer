@@ -1,11 +1,11 @@
 PODS:
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
-  - DynamsoftCaptureVisionRouter (2.2.12)
-  - DynamsoftCore (3.2.11)
-  - DynamsoftDocumentNormalizer (2.2.11)
-  - DynamsoftImageProcessing (2.2.11)
-  - DynamsoftLicense (3.2.11)
+  - DynamsoftCaptureVisionRouter (2.4.20)
+  - DynamsoftCore (3.4.20)
+  - DynamsoftDocumentNormalizer (2.4.20)
+  - DynamsoftImageProcessing (2.4.20)
+  - DynamsoftLicense (3.4.20)
   - FBLazyVector (0.74.3)
   - fmt (9.1.0)
   - glog (0.3.5)
@@ -1190,13 +1190,13 @@ PODS:
   - VisionCamera/React (4.3.2):
     - React-Core
     - VisionCamera/FrameProcessors
-  - VisionCameraDynamsoftDocumentNormalizer (0.1.0):
+  - VisionCameraDynamsoftDocumentNormalizer (3.2.3):
     - DoubleConversion
-    - DynamsoftCaptureVisionRouter (= 2.2.12)
-    - DynamsoftCore (= 3.2.11)
-    - DynamsoftDocumentNormalizer (= 2.2.11)
-    - DynamsoftImageProcessing (= 2.2.11)
-    - DynamsoftLicense (= 3.2.11)
+    - DynamsoftCaptureVisionRouter (= 2.4.20)
+    - DynamsoftCore (= 3.4.20)
+    - DynamsoftDocumentNormalizer (= 2.4.20)
+    - DynamsoftImageProcessing (= 2.4.20)
+    - DynamsoftLicense (= 3.4.20)
     - glog
     - hermes-engine
     - RCT-Folly (= 2024.01.01.00)
@@ -1414,11 +1414,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  DynamsoftCaptureVisionRouter: e0556107089dd4708db7c79a391798159d62a501
-  DynamsoftCore: 318bae4cfef9d63624752e8efdd138c034fab05c
-  DynamsoftDocumentNormalizer: 8232f301db5b9b8c9390f20b5d715de5bbb84c0a
-  DynamsoftImageProcessing: e595f5575ee0a61489f46f478fd0c26e8455b45d
-  DynamsoftLicense: 66da18be67cc4f1c069eb1d4fe969f703787c73d
+  DynamsoftCaptureVisionRouter: 0b794903e58db1d488309441af9f4cd47e1e1efa
+  DynamsoftCore: 958f8f530011d20a6b935ec770d483c4668e6929
+  DynamsoftDocumentNormalizer: 1b83189e072844c5f3e32aeca626fc209a4d99a5
+  DynamsoftImageProcessing: 36a0ebede82ffebec815465d0a617c33867eb15a
+  DynamsoftLicense: fca251e77d7171de39e7b316f992cb19307b96b5
   FBLazyVector: 7e977dd099937dc5458851233141583abba49ff2
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
@@ -1475,7 +1475,7 @@ SPEC CHECKSUMS:
   RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   VisionCamera: 9f7b70431c8662ff933e1ed66d074bdba3a63f7d
-  VisionCameraDynamsoftDocumentNormalizer: f3e5ee6314caa4310c0b58c202039f3cc60038b8
+  VisionCameraDynamsoftDocumentNormalizer: 36f466d24777806ed678b6de3eb829e0c4b243a5
   Yoga: 04f1db30bb810187397fa4c37dd1868a27af229c
 
 PODFILE CHECKSUM: f9e9de76e1fd99d878c23be696e288be9a5a199b

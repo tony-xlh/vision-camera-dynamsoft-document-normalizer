@@ -15,11 +15,11 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/tony-xlh/vision-camera-dynamsoft-document-normalizer.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
-  s.dependency "DynamsoftCaptureVisionRouter", "2.2.12"
-  s.dependency "DynamsoftDocumentNormalizer", "2.2.11"
-  s.dependency "DynamsoftCore", "3.2.11"
-  s.dependency "DynamsoftLicense", "3.2.11"
-  s.dependency "DynamsoftImageProcessing", "2.2.11"
+  s.dependency "DynamsoftCaptureVisionRouter", "2.4.20"
+  s.dependency "DynamsoftDocumentNormalizer", "2.4.20"
+  s.dependency "DynamsoftCore", "3.4.20"
+  s.dependency "DynamsoftLicense", "3.4.20"
+  s.dependency "DynamsoftImageProcessing", "2.4.20"
   # Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.
   # See https://github.com/facebook/react-native/blob/febf6b7f33fdb4904669f99d795eba4c0f95d7bf/scripts/cocoapods/new_architecture.rb#L79.
   if respond_to?(:install_modules_dependencies, true)
