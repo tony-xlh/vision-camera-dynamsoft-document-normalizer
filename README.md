@@ -64,7 +64,7 @@ module.exports = {
    let normalizedImageResult = await normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
    ```
 
-4. License initialization ([apply for a trial license](https://www.dynamsoft.com/customer/license/trialLicense/?product=ddn)).
+4. License initialization ([apply for a trial license](https://www.dynamsoft.com/customer/license/trialLicense/?product=dcv&package=cross-platform)).
 
    ```ts
    await initLicense("your license");
