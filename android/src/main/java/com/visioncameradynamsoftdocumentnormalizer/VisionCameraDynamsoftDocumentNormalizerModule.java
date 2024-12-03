@@ -12,6 +12,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.dynamsoft.core.basic_structures.CapturedResultItem;
+import com.dynamsoft.core.basic_structures.ImageData;
 import com.dynamsoft.core.basic_structures.Quadrilateral;
 import com.dynamsoft.cvr.CapturedResult;
 import com.dynamsoft.cvr.CaptureVisionRouter;
@@ -39,6 +40,7 @@ import java.io.FileOutputStream;
 @ReactModule(name = VisionCameraDynamsoftDocumentNormalizerModule.NAME)
 public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextBaseJavaModule {
     public static final String NAME = "VisionCameraDynamsoftDocumentNormalizer";
+    public static ImageData normalizedImage = null;
     private Context mContext;
     public static CaptureVisionRouter cvr;
     public VisionCameraDynamsoftDocumentNormalizerModule(ReactApplicationContext reactContext) {
@@ -165,6 +167,33 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
         return rotatedBitmap;
     }
 
+    @ReactMethod
+    public void getNormalizationResult(ReadableMap config, Promise promise) {
+        WritableNativeMap returnResult = new WritableNativeMap();
+        try {
+          if (config.hasKey("saveNormalizationResultAsFile")) {
+            if (config.getBoolean("saveNormalizationResultAsFile")) {
+              File cacheDir = mContext.getCacheDir();
+              String fileName = System.currentTimeMillis() + ".jpg";
+              File output = new File(cacheDir,fileName);
+              new ImageManager().saveToFile(normalizedImage,output.getAbsolutePath(),true);
+              returnResult.putString("imageURL",output.getAbsolutePath());
+            }
+          }
+          if (config.hasKey("includeNormalizationResultAsBase64")) {
+            if (config.getBoolean("includeNormalizationResultAsBase64")) {
+              Bitmap bm = normalizedImage.toBitmap();
+              String base64 = BitmapUtils.bitmap2Base64(bm);
+              returnResult.putString("imageBase64",base64);
+            }
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+          promise.reject("DDN",e.getMessage());
+          return;
+        }
+        promise.resolve(returnResult);
+    }
 
     @ReactMethod
     public void normalizeFile(String filePath, ReadableMap quad, ReadableMap config, String template, Promise promise) {

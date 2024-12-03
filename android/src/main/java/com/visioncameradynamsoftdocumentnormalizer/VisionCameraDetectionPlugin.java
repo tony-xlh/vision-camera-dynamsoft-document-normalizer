@@ -9,9 +9,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.dynamsoft.core.basic_structures.CapturedResultItem;
+import com.dynamsoft.core.basic_structures.Quadrilateral;
 import com.dynamsoft.cvr.CaptureVisionRouter;
 import com.dynamsoft.cvr.CapturedResult;
+import com.dynamsoft.cvr.SimplifiedCaptureVisionSettings;
 import com.dynamsoft.ddn.DetectedQuadResultItem;
+import com.dynamsoft.ddn.DetectedQuadsResult;
+import com.dynamsoft.ddn.NormalizedImageResultItem;
+import com.dynamsoft.ddn.NormalizedImagesResult;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.mrousavy.camera.core.FrameInvalidError;
@@ -33,18 +38,45 @@ public class VisionCameraDetectionPlugin extends FrameProcessorPlugin {
         List<Object> quadResultsWrapped = new ArrayList<>();
         try {
             String templateName = "DetectDocumentBoundaries_Default";
+            Boolean saveNormalizationResult = false;
             if (arguments != null ) {
                 if (arguments.containsKey("template")) {
                     templateName = (String) arguments.get("template");
                 }
+                if (arguments.containsKey("saveNormalizationResult")) {
+                  saveNormalizationResult = (Boolean) arguments.get("saveNormalizationResult");
+                  if (saveNormalizationResult == false) {
+                    VisionCameraDynamsoftDocumentNormalizerModule.normalizedImage = null;
+                  }
+                }
             }
             Bitmap bitmap = BitmapUtils.getBitmap(frame);
             CapturedResult capturedResult = cvr.capture(bitmap,templateName);
-            CapturedResultItem[] results = capturedResult.getItems();
-            if (results != null) {
-                for (CapturedResultItem quad:results) {
-                    WritableNativeMap map = Utils.getMapFromDetectedQuadResult((DetectedQuadResultItem) quad);
+            DetectedQuadsResult detectedQuadsResult = capturedResult.getDetectedQuadsResult();
+            if (detectedQuadsResult != null) {
+                DetectedQuadResultItem[] results = detectedQuadsResult.getItems();
+                for (DetectedQuadResultItem quad:results) {
+                    WritableNativeMap map = Utils.getMapFromDetectedQuadResult(quad);
                     quadResultsWrapped.add(map.toHashMap());
+                }
+                if (saveNormalizationResult && results.length>0) {
+                    Log.d("DDN","save normalization result");
+                    DetectedQuadResultItem detectedQuadResultItem = (DetectedQuadResultItem) results[0];
+                    String normalizationTemplateName = "NormalizeDocument_Color"; // alternatives: NormalizeDocument_Gray, NormalizeDocument_Color
+                    Quadrilateral quad = new Quadrilateral();
+                    quad.points = detectedQuadResultItem.getLocation().points;
+                    SimplifiedCaptureVisionSettings settings = cvr.getSimplifiedSettings(normalizationTemplateName);
+                    settings.roi = quad;
+                    settings.roiMeasuredInPercentage = false;
+                    cvr.updateSettings(normalizationTemplateName,settings); //pass the polygon to the capture router
+                    CapturedResult normalizationResult = cvr.capture(bitmap,normalizationTemplateName); //run normalization
+                    NormalizedImagesResult normalizedImagesResult = normalizationResult.getNormalizedImagesResult();
+                    if (normalizedImagesResult != null) {
+                        NormalizedImageResultItem[] normalizedImageResultItems = normalizedImagesResult.getItems();
+                        if (normalizedImageResultItems.length>0) {
+                            VisionCameraDynamsoftDocumentNormalizerModule.normalizedImage = normalizedImageResultItems[0].getImageData();
+                        }
+                    }
                 }
             }
         } catch (Exception | FrameInvalidError e) {
