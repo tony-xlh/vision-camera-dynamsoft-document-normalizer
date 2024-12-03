@@ -53,6 +53,13 @@ export function normalizeFile(url:string, quad:Quadrilateral, config: Normalizat
 }
 
 /**
+ * Get the normalized image during live detection
+ */
+export function getNormalizationResult(config:NormalizationConfig): Promise<NormalizedImageResult> {
+  return VisionCameraDynamsoftDocumentNormalizer.getNormalizationResult(config);
+}
+
+/**
  * Config of whether to save the normalized as a file and base64.
  */
 export interface NormalizationConfig{
@@ -95,17 +102,24 @@ export interface Rect {
 const plugin = VisionCameraProxy.initFrameProcessorPlugin('detect',{})
 
 /**
- * Detect documents from the camera preview
+ * @description detect documents from the camera preview
+ * @param frame camera frame
+ * @param template specify the template name
+ * @param saveNormalizationResult  save the normalization result
  */
-export function detect(frame: Frame,template?: string): Record<string,DetectedQuadResult> {
+export function detect(frame: Frame,template?: string,saveNormalizationResult?: boolean): Record<string,DetectedQuadResult> {
   'worklet'
   if (plugin == null) throw new Error('Failed to load Frame Processor Plugin "detect"!')
-  if (template) {
+  if (template || saveNormalizationResult) {
     let record:Record<string,any> = {};
-    record["template"] = template;
+    if (template != undefined) {
+      record["template"] = template;
+    }
+    if (saveNormalizationResult != undefined) {
+      record["saveNormalizationResult"] = saveNormalizationResult;
+    }
     return plugin.call(frame,record) as any;
   }else{
     return plugin.call(frame) as any;
   }
-  
 }

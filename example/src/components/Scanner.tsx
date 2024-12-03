@@ -107,6 +107,8 @@ export default function Scanner(props:ScannerProps) {
     if (camera.current) {
       console.log("using camera");
       takenShared.value = true;
+      const result = await DDN.getNormalizationResult({includeNormalizationResultAsBase64:true});
+      console.log(result);
       await sleep(500);
       photo.current = await camera.current.takePhoto();
       if (photo.current) {
@@ -183,7 +185,7 @@ export default function Scanner(props:ScannerProps) {
       runAtTargetFps(3, () => {
         'worklet'
         try {
-          const results = DDN.detect(frame);
+          const results = DDN.detect(frame,"",true);
           console.log(results);
           if (Object.keys(results).length>0) {
             frameWidth.value = frame.width;
