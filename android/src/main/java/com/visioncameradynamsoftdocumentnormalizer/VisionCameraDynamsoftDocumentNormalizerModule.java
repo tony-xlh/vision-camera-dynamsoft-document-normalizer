@@ -102,43 +102,46 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
 
     @ReactMethod
     public void detectFile(String filePath, String template,Promise promise) {
-      detectFileImpl(filePath,template,promise);
+        detectFileImpl(filePath,template,false,promise);
     }
 
     @ReactMethod
     public void detectBase64(String base64, String template,Promise promise) {
-      detectFileImpl(base64,template,promise);
+        detectFileImpl(base64,template,true,promise);
     }
 
-    private void detectFileImpl(String str, String template,Promise promise) {
+    private void detectFileImpl(String str, String template,Boolean isBase64, Promise promise) {
         String templateName = "DetectDocumentBoundaries_Default";
         if (!template.equals("")) {
-          templateName = template;
+            templateName = template;
         }
         WritableNativeArray returnResult = new WritableNativeArray();
         try {
-          String filePath = str;
-          Bitmap bitmap = null;
-          File file = new File(str);
-          if (file.exists() == false) { //convert uri to path if the string is uri
-            Uri uri = Uri.parse(str);
-            filePath = uri.getPath();
-          }else{
-            bitmap = BitmapUtils.base642Bitmap(str);
-          }
-          CapturedResult capturedResult;
-          if (bitmap != null) {
-            capturedResult = cvr.capture(bitmap, templateName);
-          }else{
-            capturedResult = cvr.capture(filePath, templateName);
-          }
-          for (CapturedResultItem quad:capturedResult.getItems()) {
-            returnResult.pushMap(Utils.getMapFromDetectedQuadResult((DetectedQuadResultItem) quad));
-          }
+            String filePath = str;
+            Bitmap bitmap = null;
+            if (isBase64) {
+                bitmap = BitmapUtils.base642Bitmap(str);
+            }else{
+                File file = new File(str);
+                if (file.exists() == false) { //convert uri to path if the string is uri
+                    Uri uri = Uri.parse(str);
+                    filePath = uri.getPath();
+                }
+            }
+
+            CapturedResult capturedResult;
+            if (bitmap != null) {
+                capturedResult = cvr.capture(bitmap, templateName);
+            }else{
+                capturedResult = cvr.capture(filePath, templateName);
+            }
+            for (CapturedResultItem quad:capturedResult.getItems()) {
+                returnResult.pushMap(Utils.getMapFromDetectedQuadResult((DetectedQuadResultItem) quad));
+            }
         } catch (Exception e) {
-          e.printStackTrace();
-          promise.reject("DDN",e.getMessage());
-          return;
+            e.printStackTrace();
+            promise.reject("DDN",e.getMessage());
+            return;
         }
         promise.resolve(returnResult);
     }
@@ -167,14 +170,14 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
     }
 
     private static Bitmap rotateBitmap(
-            Bitmap bitmap, int rotationDegrees, boolean flipX, boolean flipY) {
+        Bitmap bitmap, int rotationDegrees, boolean flipX, boolean flipY) {
         Matrix matrix = new Matrix();
         matrix.postRotate(rotationDegrees);
 
         // Mirror the image along the X or Y axis.
         matrix.postScale(flipX ? -1.0f : 1.0f, flipY ? -1.0f : 1.0f);
         Bitmap rotatedBitmap =
-                Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         // Recycle the old bitmap if it has changed.
         if (rotatedBitmap != bitmap) {
@@ -186,67 +189,70 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
 
     @ReactMethod
     public void normalizeFile(String filePath, ReadableMap quad, ReadableMap config, String template, Promise promise) {
-      normalizeFileImpl(filePath,quad,config,template,promise);
+        normalizeFileImpl(filePath,false,quad,config,template,promise);
     }
 
     @ReactMethod
     public void normalizeBase64(String base64, ReadableMap quad, ReadableMap config, String template, Promise promise) {
-      normalizeFileImpl(base64,quad,config,template,promise);
+        normalizeFileImpl(base64,true,quad,config,template,promise);
     }
 
-    private void normalizeFileImpl(String str, ReadableMap quad, ReadableMap config, String template, Promise promise){
-      WritableNativeMap returnResult = new WritableNativeMap();
-      String templateName = "NormalizeDocument_Color";
-      if (!template.equals("")) {
-        templateName = template;
-      }
-      try {
-        String filePath = str;
-        Bitmap bitmap = null;
-        File file = new File(str);
-        if (file.exists() == false) { //convert uri to path
-          Uri uri = Uri.parse(str);
-          filePath = uri.getPath();
-        }else{
-          bitmap = BitmapUtils.base642Bitmap(str);
+    private void normalizeFileImpl(String str, Boolean isBase64, ReadableMap quad, ReadableMap config, String template, Promise promise){
+        WritableNativeMap returnResult = new WritableNativeMap();
+        String templateName = "NormalizeDocument_Color";
+        if (!template.equals("")) {
+            templateName = template;
         }
-        ReadableArray points = quad.getArray("points");
-        Quadrilateral quadrilateral = new Quadrilateral();
-        quadrilateral.points = convertPoints(points);
-        SimplifiedCaptureVisionSettings settings = cvr.getSimplifiedSettings(templateName);
-        settings.roi = quadrilateral;
-        settings.roiMeasuredInPercentage = false;
-        cvr.updateSettings(templateName,settings);
-        CapturedResult capturedResult;
-        if (bitmap != null) {
-          capturedResult = cvr.capture(bitmap,templateName);
-        }else{
-          capturedResult = cvr.capture(filePath,templateName);
-        }
-        NormalizedImageResultItem result = (NormalizedImageResultItem) capturedResult.getItems()[0];
+        try {
+            String filePath = str;
+            Bitmap bitmap = null;
+            if (isBase64) {
+                bitmap = BitmapUtils.base642Bitmap(str);
+            }else{
+                File file = new File(str);
+                if (file.exists() == false) { //convert uri to path
+                    Uri uri = Uri.parse(str);
+                    filePath = uri.getPath();
+                }
+            }
 
-        if (config.hasKey("saveNormalizationResultAsFile")) {
-          if (config.getBoolean("saveNormalizationResultAsFile")) {
-            File cacheDir = mContext.getCacheDir();
-            String fileName = System.currentTimeMillis() + ".jpg";
-            File output = new File(cacheDir,fileName);
-            new ImageManager().saveToFile(result.getImageData(),output.getAbsolutePath(),true);
-            returnResult.putString("imageURL",output.getAbsolutePath());
-          }
+            ReadableArray points = quad.getArray("points");
+            Quadrilateral quadrilateral = new Quadrilateral();
+            quadrilateral.points = convertPoints(points);
+            SimplifiedCaptureVisionSettings settings = cvr.getSimplifiedSettings(templateName);
+            settings.roi = quadrilateral;
+            settings.roiMeasuredInPercentage = false;
+            cvr.updateSettings(templateName,settings);
+            CapturedResult capturedResult;
+            if (bitmap != null) {
+                capturedResult = cvr.capture(bitmap,templateName);
+            }else{
+                capturedResult = cvr.capture(filePath,templateName);
+            }
+            NormalizedImageResultItem result = (NormalizedImageResultItem) capturedResult.getItems()[0];
+
+            if (config.hasKey("saveNormalizationResultAsFile")) {
+                if (config.getBoolean("saveNormalizationResultAsFile")) {
+                    File cacheDir = mContext.getCacheDir();
+                    String fileName = System.currentTimeMillis() + ".jpg";
+                    File output = new File(cacheDir,fileName);
+                    new ImageManager().saveToFile(result.getImageData(),output.getAbsolutePath(),true);
+                    returnResult.putString("imageURL",output.getAbsolutePath());
+                }
+            }
+            if (config.hasKey("includeNormalizationResultAsBase64")) {
+                if (config.getBoolean("includeNormalizationResultAsBase64")) {
+                    Bitmap bm = result.getImageData().toBitmap();
+                    String base64 = BitmapUtils.bitmap2Base64(bm);
+                    returnResult.putString("imageBase64",base64);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            promise.reject("DDN",e.getMessage());
+            return;
         }
-        if (config.hasKey("includeNormalizationResultAsBase64")) {
-          if (config.getBoolean("includeNormalizationResultAsBase64")) {
-            Bitmap bm = result.getImageData().toBitmap();
-            String base64 = BitmapUtils.bitmap2Base64(bm);
-            returnResult.putString("imageBase64",base64);
-          }
-        }
-      } catch (Exception e) {
-        e.printStackTrace();
-        promise.reject("DDN",e.getMessage());
-        return;
-      }
-      promise.resolve(returnResult);
+        promise.resolve(returnResult);
     }
 
     private Point[] convertPoints(ReadableArray quadPoints){
