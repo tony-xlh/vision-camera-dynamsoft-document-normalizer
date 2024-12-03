@@ -52,13 +52,13 @@ module.exports = {
    }, []);
    ```
    
-2. Scan documents from a file.
+2. Scan documents from a file (or use `detectBase64`).
 
    ```ts
    let detectionResults = await detectFile(photoPath);
    ```
 
-3. Normalize a document image with the detection result.
+3. Normalize a document image with the detection result (or use `normalizeBase64`).
 
    ```ts
    let normalizedImageResult = await normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
