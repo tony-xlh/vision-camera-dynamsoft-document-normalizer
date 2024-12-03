@@ -32,11 +32,26 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
     
     @objc(detectFile:template:withResolver:withRejecter:)
     func detectFile(path:String,template:String,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
-
-        var returned_results: [Any] = []
+        detectFileImpl(path,template,resolve,reject)
+    }
+    
+    @objc(detectBase64:template:withResolver:withRejecter:)
+    func detectBase64(base64:String,template:String,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+        detectFileImpl(base64,template,resolve,reject)
+    }
+    
+    func detectFileImpl(_ str:String,_ template:String,_ resolve:RCTPromiseResolveBlock,_ reject:RCTPromiseRejectBlock) -> Void {
         
-        let imageURL = URL(fileURLWithPath: path.replacingOccurrences(of: "file://", with: ""))
-        var image = UIImage(contentsOfFile: imageURL.path)!
+        var returned_results: [Any] = []
+        let imageURL = URL(fileURLWithPath: str.replacingOccurrences(of: "file://", with: ""))
+        let fileExists = FileManager.default.fileExists(atPath: imageURL.path)
+        var image:UIImage
+        if (fileExists) {
+            image = UIImage(contentsOfFile: imageURL.path)!
+        }else{
+            image = Utils.convertBase64ToImage(str)!
+        }
+
         image = BitmapUtils.normalizedImage(image)
         var templateName:String
         if template != "" {
@@ -55,12 +70,19 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
         }
 
         resolve(returned_results)
-
     }
     
     @objc(normalizeFile:quad:config:template:withResolver:withRejecter:)
     func normalizeFile(path:String,quad:[String:Any], config:[String:Any],template:String,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
-
+        normalizeFileImpl(path,quad,config,template,resolve,reject)
+    }
+    
+    @objc(normalizeBase64:quad:config:template:withResolver:withRejecter:)
+    func normalizeBase64(base64:String,quad:[String:Any], config:[String:Any],template:String,resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+        normalizeFileImpl(base64,quad,config,template,resolve,reject)
+    }
+    
+    func normalizeFileImpl(_ str:String,_ quad:[String:Any], _ config:[String:Any],_ template:String,_ resolve:RCTPromiseResolveBlock,_ reject:RCTPromiseRejectBlock) -> Void {
         var templateName:String
         if template != "" {
             templateName = template
@@ -68,9 +90,16 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
             templateName = "NormalizeDocument_Color"
         }
         var returned_result:[String:String] = [:]
+
+        let imageURL = URL(fileURLWithPath: str.replacingOccurrences(of: "file://", with: ""))
+        let fileExists = FileManager.default.fileExists(atPath: imageURL.path)
+        var image:UIImage
+        if (fileExists) {
+            image = UIImage(contentsOfFile: imageURL.path)!
+        }else{
+            image = Utils.convertBase64ToImage(str)!
+        }
         
-        let imageURL = URL(fileURLWithPath: path.replacingOccurrences(of: "file://", with: ""))
-        var image = UIImage(contentsOfFile: imageURL.path)!
         image = BitmapUtils.normalizedImage(image)
         let points = quad["points"] as! [[String:NSNumber]]
         let quad = Quadrilateral.init(pointArray: convertPoints(points))

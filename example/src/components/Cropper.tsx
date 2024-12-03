@@ -53,7 +53,10 @@ export default function Cropper(props:CropperProps) {
   }
 
   const detectFile = async (path:string) => {
+    console.log("detectFile");
+    console.log(path);
     let results = await DDN.detectFile(path);
+    console.log(results);
     if (results.length>0 && results[0]) {
       pointsRef.current = results[0].location.points;
       updatePointsData();

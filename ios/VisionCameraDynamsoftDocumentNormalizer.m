@@ -16,6 +16,18 @@ RCT_EXTERN_METHOD(detectFile:(NSString *)path
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(detectBase64:(NSString *)base64
+                  template: (NSString *)template
+                 withResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(normalizeBase64:(NSString *)base64
+                  quad:(NSDictionary *)quad
+                  config:(NSDictionary *)config
+                  template: (NSString *)template
+                 withResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(normalizeFile:(NSString *)path
                   quad:(NSDictionary *)quad
                   config:(NSDictionary *)config

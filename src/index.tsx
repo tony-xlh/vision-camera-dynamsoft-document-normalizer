@@ -46,6 +46,20 @@ export function normalizeFile(url:string, quad:Quadrilateral, config: Normalizat
 }
 
 /**
+ * Detect documents in an image file encoded as base64
+ */
+export function detectBase64(base64:string,template?:string): Promise<DetectedQuadResult[]> {
+  return VisionCameraDynamsoftDocumentNormalizer.detectBase64(base64,template ?? "");
+}
+
+/**
+ * Normalize an image file encoded as base64
+ */
+export function normalizeBase64(base64:string, quad:Quadrilateral, config: NormalizationConfig, template?:string): Promise<NormalizedImageResult> {
+  return VisionCameraDynamsoftDocumentNormalizer.normalizeBase64(base64, quad, config, template ?? "");
+}
+
+/**
  * Rotate an image file. Android only.
  */
  export function rotateFile(url:string, degrees:number): Promise<NormalizedImageResult> {
