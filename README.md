@@ -7,6 +7,8 @@ It can detect document boundaries and run perspective transformation to get a no
 
 [Demo video](https://user-images.githubusercontent.com/5462205/200720562-a7b91e06-cf6c-4235-a8cd-ef200012a42a.MP4)
 
+If you do not want to use Vision Camera, you can use the [offical React Native package](https://github.com/Dynamsoft/capture-vision-react-native-samples) by Dynamsoft.
+
 ## Versions
 
 For vision-camera v2, use versions 0.x.
