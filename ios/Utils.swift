@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import DynamsoftDocumentNormalizer
+import DynamsoftCaptureVisionBundle
 
 class Utils {
     

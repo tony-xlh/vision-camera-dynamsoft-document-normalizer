@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import DynamsoftDocumentNormalizer
+import DynamsoftCaptureVisionBundle
 
 @objc(DetectionFrameProcessorPlugin)
 public class DetectionFrameProcessorPlugin: FrameProcessorPlugin {

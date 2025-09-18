@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import RadioForm from 'react-native-simple-radio-button';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import type { DetectedQuadResult } from "vision-camera-dynamsoft-document-normalizer";
-import Share, { ShareOptions } from 'react-native-share';
-
-const radio_props = [
-  {label: 'Binary', value: 0 },
-  {label: 'Gray', value: 1 },
-  {label: 'Color', value: 2 }
-];
+import Share, { type ShareOptions } from 'react-native-share';
 
 export interface ResultViewerProps{
   photoPath:string;
@@ -17,14 +10,11 @@ export interface ResultViewerProps{
   onBack?: () => void;
 }
 
-let normalizedResult:any = {};
-
 export default function ResultViewer(props:ResultViewerProps) {
   const [normalizedImagePath, setNormalizedImagePath] = useState<undefined|string>(undefined);
 
   useEffect(() => {
-    normalizedResult = {};
-    normalize(0);
+    normalize();
   }, []);
 
   const share = () => {
@@ -40,34 +30,20 @@ export default function ResultViewer(props:ResultViewerProps) {
     }
   }
 
-  const normalize = async (value:number) => {
-    console.log(value);
-    if (normalizedResult[value]) {
-      setNormalizedImagePath(normalizedResult[value]);
-    }else{
-      let templateName = "";
-      if (value === 0) {
-        templateName = "NormalizeDocument_Binary";
-      } else if (value === 1) {
-        templateName = "NormalizeDocument_Gray";
-      } else {
-        templateName = "NormalizeDocument_Color";
+  const normalize = async () => {
+    let points = props.points;
+    let detectionResult:DetectedQuadResult = {
+      confidenceAsDocumentBoundary:90,
+      area:0,
+      location:{
+        points:[points[0]!,points[1]!,points[2]!,points[3]!]
       }
-      console.log("update settings done");
-      let points = props.points;
-      let detectionResult:DetectedQuadResult = {
-        confidenceAsDocumentBoundary:90,
-        location:{
-          points:[points[0]!,points[1]!,points[2]!,points[3]!]
-        }
-      }
-      let photoPath = props.photoPath;
-      let normalizedImageResult = await DDN.normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true},templateName);
-      console.log(normalizedImageResult);
-      if (normalizedImageResult.imageURL) {
-        normalizedResult[value] = normalizedImageResult.imageURL;
-        setNormalizedImagePath(normalizedImageResult.imageURL)
-      }
+    }
+    let photoPath = props.photoPath;
+    let normalizedImageResult = await DDN.normalizeFile(photoPath, detectionResult.location,{saveNormalizationResultAsFile:true});
+    console.log(normalizedImageResult);
+    if (normalizedImageResult.imageURL) {
+      setNormalizedImagePath(normalizedImageResult.imageURL)
     }
   }
 
@@ -88,17 +64,6 @@ export default function ResultViewer(props:ResultViewerProps) {
             <Text style={{fontSize: 15, color: "black", alignSelf: "center"}}>Back</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.radioContainer}>
-          <RadioForm
-            radio_props={radio_props}
-            initial={0}
-            formHorizontal={true}
-            labelHorizontal={false}
-            
-            onPress={(value) => {normalize(value)}}
-          />
-        </View>
-        
       </View>
     </SafeAreaView>
   );
