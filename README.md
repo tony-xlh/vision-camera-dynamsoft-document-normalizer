@@ -1,7 +1,7 @@
 
 # vision-camera-dynamsoft-document-normalizer
 
-A React Native Vision Camera frame processor plugin for [Dynamsoft Document Normalizer](https://www.dynamsoft.com/document-normalizer/docs/).
+A React Native Vision Camera frame processor plugin for [Dynamsoft Document Normalizer](https://www.dynamsoft.com/document-normalizer/overview/).
 
 It can detect document boundaries and run perspective transformation to get a normalized image.
 
