@@ -21,7 +21,7 @@ For vision-camera v4, use versions >= 3.0.0.
 
 | Product      | Android |    iOS |
 | ----------- | ----------- | -----------  | 
-| Dynamsoft Document Normalizer    | 2.6       | 2.6     |
+| Dynamsoft Capture Vision    | 3.0       | 3.0     |
 
 ## Installation
 
