@@ -96,11 +96,6 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation project(':react-native-vision-camera')
   // DDN
-  implementation 'com.dynamsoft:dynamsoftcapturevisionrouter:2.4.30'
-  implementation 'com.dynamsoft:dynamsoftcore:3.4.30'
-  implementation 'com.dynamsoft:dynamsoftdocumentnormalizer:2.6.10'
-  implementation 'com.dynamsoft:dynamsoftimageprocessing:2.4.31'
-  implementation 'com.dynamsoft:dynamsoftlicense:3.4.40'
-  implementation 'com.dynamsoft:dynamsoftutility:1.4.30'
+  implementation 'com.dynamsoft:capturevisionbundle:3.0.5000'
 }
 
