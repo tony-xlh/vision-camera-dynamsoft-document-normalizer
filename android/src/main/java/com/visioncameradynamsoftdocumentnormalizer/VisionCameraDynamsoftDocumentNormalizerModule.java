@@ -21,6 +21,8 @@ import com.dynamsoft.cvr.SimplifiedCaptureVisionSettings;
 import com.dynamsoft.ddn.DetectedQuadResultItem;
 import com.dynamsoft.ddn.DocumentNormalizerException;
 import com.dynamsoft.ddn.DeskewedImageResultItem;
+import com.dynamsoft.ddn.EnhancedImageResultItem;
+import com.dynamsoft.ddn.ProcessedDocumentResult;
 import com.dynamsoft.license.LicenseManager;
 import com.dynamsoft.license.LicenseVerificationListener;
 import com.dynamsoft.utility.ImageIO;
@@ -225,7 +227,9 @@ public class VisionCameraDynamsoftDocumentNormalizerModule extends ReactContextB
             }else{
                 capturedResult = cvr.capture(filePath,templateName);
             }
-            DeskewedImageResultItem result = (DeskewedImageResultItem) capturedResult.getItems()[0];
+
+            ProcessedDocumentResult processedDocumentResult = capturedResult.getProcessedDocumentResult();
+            EnhancedImageResultItem result = processedDocumentResult.getEnhancedImageResultItems()[0];
 
             if (config.hasKey("saveNormalizationResultAsFile")) {
                 if (config.getBoolean("saveNormalizationResultAsFile")) {

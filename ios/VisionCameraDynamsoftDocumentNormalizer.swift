@@ -101,26 +101,27 @@ class VisionCameraDynamsoftDocumentNormalizer: NSObject,LicenseVerificationListe
         try? VisionCameraDynamsoftDocumentNormalizer.cvr.updateSettings(templateName, settings: settings!)
         
         let capturedResult =  VisionCameraDynamsoftDocumentNormalizer.cvr.captureFromImage(image, templateName: templateName)
-        let results = capturedResult.items
-        if results != nil {
-            if results?.count ?? 0 > 0 {
-                let normalizedImageResult:DeskewedImageResultItem = results![0] as! DeskewedImageResultItem
-                let normalizedUIImage = try? normalizedImageResult.imageData?.toUIImage()
-                if config["saveNormalizationResultAsFile"] != nil {
-                    if config["saveNormalizationResultAsFile"] as! Bool == true {
-                        let url = FileManager.default.temporaryDirectory
-                                                .appendingPathComponent(UUID().uuidString)
-                                                .appendingPathExtension("jpeg")
-                        try? normalizedUIImage?.jpegData(compressionQuality: 1.0)?.write(to: url)
-                        returned_result["imageURL"] = url.path
-                    }
-                }
-                if config["includeNormalizationResultAsBase64"] != nil {
-                    if config["includeNormalizationResultAsBase64"] as! Bool == true {
-                        let base64 = Utils.getBase64FromImage(normalizedUIImage!)
-                        returned_result["imageBase64"] = base64
-                    }
-                }
+        guard let items = capturedResult.items else { return }
+          for item in items {
+            if item.type == .enhancedImage {
+              let normalizedImageResult:EnhancedImageResultItem = item as! EnhancedImageResultItem
+              let normalizedUIImage = try? normalizedImageResult.imageData?.toUIImage()
+              if config["saveNormalizationResultAsFile"] != nil {
+                  if config["saveNormalizationResultAsFile"] as! Bool == true {
+                      let url = FileManager.default.temporaryDirectory
+                                              .appendingPathComponent(UUID().uuidString)
+                                              .appendingPathExtension("jpeg")
+                      try? normalizedUIImage?.jpegData(compressionQuality: 1.0)?.write(to: url)
+                      returned_result["imageURL"] = url.path
+                  }
+              }
+              if config["includeNormalizationResultAsBase64"] != nil {
+                  if config["includeNormalizationResultAsBase64"] as! Bool == true {
+                      let base64 = Utils.getBase64FromImage(normalizedUIImage!)
+                      returned_result["imageBase64"] = base64
+                  }
+              }
+              break
             }
         }
         resolve(returned_result)

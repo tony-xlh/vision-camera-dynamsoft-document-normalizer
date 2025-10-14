@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Scanner from './components/Scanner';
-import type { PhotoFile } from 'react-native-vision-camera';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import Cropper from './components/Cropper';
 import ResultViewer from './components/ResultViewer';
 import { useEffect } from 'react';
+import type { PhotoFile } from 'react-native-vision-camera';
+import { blackWhite } from './Templates';
 
 export default function App() {
   const [showScanner,setShowScanner] = React.useState(false);
@@ -26,6 +27,10 @@ export default function App() {
         Alert.alert("DDN","License invalid");
       }else{
         setStatus("");
+        let useBlackAndWhite = true;
+        if (useBlackAndWhite) {
+          await DDN.initRuntimeSettingsFromString(blackWhite)
+        }
       }
     })();
   }, []);
