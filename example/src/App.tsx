@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, SafeAreaView, StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
 import Scanner from './components/Scanner';
 import * as DDN from "vision-camera-dynamsoft-document-normalizer";
 import Cropper from './components/Cropper';
 import ResultViewer from './components/ResultViewer';
 import { useEffect } from 'react';
 import type { PhotoFile } from 'react-native-vision-camera';
-import { blackWhite } from './Templates';
+import { blackWhite, originalColor } from './Templates';
 
 export default function App() {
   const [showScanner,setShowScanner] = React.useState(false);
@@ -16,7 +16,7 @@ export default function App() {
   const [photoPath,setPhotoPath] = React.useState<string>("");
   const [points,setPoints] = React.useState<DDN.Point[]>([]);
   const [status,setStatus] = React.useState<string>("Initializing...");
-
+  const [scanInBlackWhite,setScanInBlackWhite] = React.useState(false);
   useEffect(() => {
     (async () => {
       let license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="; //one-day public trial
@@ -27,10 +27,6 @@ export default function App() {
         Alert.alert("DDN","License invalid");
       }else{
         setStatus("");
-        let useBlackAndWhite = true;
-        if (useBlackAndWhite) {
-          await DDN.initRuntimeSettingsFromString(blackWhite)
-        }
       }
     })();
   }, []);
@@ -51,6 +47,16 @@ export default function App() {
     }else{
       Alert.alert("Error","Failed to take a photo. Please try again.");
       setShowScanner(false);
+    }
+  }
+
+  const updateTemplate = async () => {
+    const newValue = !scanInBlackWhite;
+    setScanInBlackWhite(newValue);
+    if (newValue) {
+      await DDN.initRuntimeSettingsFromString(blackWhite);
+    }else{
+      await DDN.initRuntimeSettingsFromString(originalColor);
     }
   }
 
@@ -92,6 +98,10 @@ export default function App() {
           >
             <Text style={styles.buttonText}>Scan Document</Text>
           </TouchableOpacity>
+          <View style={styles.option}>
+            <Text>Black and White</Text>
+            <Switch value={scanInBlackWhite} onChange={() => updateTemplate()}></Switch>
+          </View>
           <Text>{status}</Text>
         </>
         )
@@ -120,4 +130,8 @@ const styles = StyleSheet.create({
   buttonText:{
     color: "#FFFFFF",
   },
+  option:{
+    flex:1,
+    alignItems: 'flex-start',
+  }
 });
