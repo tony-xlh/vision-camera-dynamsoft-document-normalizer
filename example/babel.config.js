@@ -4,6 +4,7 @@ const pak = require('../package.json');
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
+    '@babel/plugin-transform-optional-chaining',
     [
       'module-resolver',
       {
