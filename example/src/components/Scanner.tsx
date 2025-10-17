@@ -180,20 +180,38 @@ export default function Scanner(props:ScannerProps) {
     console.log("detect frame");
     console.log(frame.toString());
     if (takenShared.value === false) {
-      runAtTargetFps(3,() => {
-        'worklet'
-        try {
-          const results = DDN.detect(frame);
-          console.log(results);
-          if (Object.keys(results).length>0) {
-            frameWidth.value = frame.width;
-            frameHeight.value = frame.height;
-            convertAndSetResultsJS(results);
+      if (Platform.OS === "android") {
+        runAsync(frame,() => {
+          'worklet'
+          try {
+            const results = DDN.detect(frame);
+            console.log(results);
+            if (Object.keys(results).length>0) {
+              frameWidth.value = frame.width;
+              frameHeight.value = frame.height;
+              convertAndSetResultsJS(results);
+            }
+          } catch (error) {
+            console.log(error);
           }
-        } catch (error) {
-          console.log(error);
-        }
-      })
+        })
+      }else{
+        runAtTargetFps(3,() => {
+          'worklet'
+          try {
+            const results = DDN.detect(frame);
+            console.log(results);
+            if (Object.keys(results).length>0) {
+              frameWidth.value = frame.width;
+              frameHeight.value = frame.height;
+              convertAndSetResultsJS(results);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        })
+      }
+      
     }
   }, [])
 
