@@ -180,7 +180,7 @@ export default function Scanner(props:ScannerProps) {
     console.log("detect frame");
     console.log(frame.toString());
     if (takenShared.value === false) {
-      runAsync(frame,() => {
+      runAtTargetFps(3,() => {
         'worklet'
         try {
           const results = DDN.detect(frame);

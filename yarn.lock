@@ -10946,9 +10946,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vision-camera@npm:4.3.2":
-  version: 4.3.2
-  resolution: "react-native-vision-camera@npm:4.3.2"
+"react-native-vision-camera@npm:4.7.0":
+  version: 4.7.0
+  resolution: "react-native-vision-camera@npm:4.7.0"
   peerDependencies:
     "@shopify/react-native-skia": "*"
     react: "*"
@@ -10962,7 +10962,7 @@ __metadata:
       optional: true
     react-native-worklets-core:
       optional: true
-  checksum: a4a93e053e3005c007da7e6be5d7160c16015548052e29ff362a7f23c6030a4db536e2a081a56e82e8922613fc1480e4b29cc71ac53635dea31fe7577344096e
+  checksum: 75dbfca8cf1f1104a687ed5e0860908f6534802f3170b9c4f2c0858c5c4a4e5d9baaca2a3291ca93411fad1ef5c87bd9c4c709f31bfb4043a7982602f8e91fa0
   languageName: node
   linkType: hard
 
@@ -13129,7 +13129,7 @@ __metadata:
     react-native-share: ^12.2.0
     react-native-simple-radio-button: 2.7.4
     react-native-svg: 15.3.0
-    react-native-vision-camera: 4.3.2
+    react-native-vision-camera: 4.7.0
     react-native-worklets-core: 1.6.2
   languageName: unknown
   linkType: soft

@@ -50,6 +50,7 @@ public class DetectionFrameProcessorPlugin: FrameProcessorPlugin {
 
         let capturedResult = VisionCameraDynamsoftDocumentNormalizer.cvr.captureFromImage(image, templateName: templateName)
         let results = capturedResult.items
+
         if results != nil {
             for result in results! {
                 returned_results.append(Utils.wrapDetectionResult(result:result as! DetectedQuadResultItem))
