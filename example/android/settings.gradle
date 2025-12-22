@@ -4,3 +4,19 @@ extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autoli
 rootProject.name = 'VisionCameraDynamsoftDocumentNormalizerExample'
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
+
+// 手动添加包引用
+include ':vision-camera-dynamsoft-document-normalizer'
+project(':vision-camera-dynamsoft-document-normalizer').projectDir = new File(rootProject.projectDir, '../../android')
+
+include ':react-native-share'
+project(':react-native-share').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-share/android')
+
+include ':react-native-svg'
+project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
+
+include ':react-native-vision-camera'
+project(':react-native-vision-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vision-camera/android')
+
+include ':react-native-worklets-core'
+project(':react-native-worklets-core').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-worklets-core/android')
